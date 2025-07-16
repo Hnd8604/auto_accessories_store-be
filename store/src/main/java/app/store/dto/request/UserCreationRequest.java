@@ -4,6 +4,8 @@ package app.store.dto.request;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.time.LocalDate;
+
 @Data
 @Builder
 @NoArgsConstructor
@@ -16,6 +18,6 @@ public class UserCreationRequest {
     String firstName;
     String lastName;
     String phoneNumber;
-    String dob;
+    LocalDate dob;
     String address;
 }

@@ -22,7 +22,4 @@ public class Product {
     double price;
     String category;
     int stockQuantity;
-    String imageUrl;
-
-
 }

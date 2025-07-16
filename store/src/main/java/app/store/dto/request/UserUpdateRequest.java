@@ -3,6 +3,7 @@ package app.store.dto.request;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Data
@@ -11,12 +12,13 @@ import java.util.List;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class UserUpdateRequest {
+    String username;
     String password;
     String email;
     String firstName;
     String lastName;
     String phoneNumber;
-    String dob;
+    LocalDate dob;
     String address;
     List<String> roles;
 }

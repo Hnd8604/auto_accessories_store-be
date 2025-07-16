@@ -4,6 +4,7 @@ package app.store.dto.response;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.time.LocalDate;
 import java.util.Set;
 
 @Data
@@ -18,7 +19,7 @@ public class UserResponse {
     String firstName;
     String lastName;
     String phoneNumber;
-    String dob; // Consider using LocalDate for date handling
+    LocalDate dob; // Consider using LocalDate for date handling
     String address;
     Set<RoleResponse> roles;
 

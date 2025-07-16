@@ -14,7 +14,7 @@ public interface UserMapper {
     User toUser(UserCreationRequest request);
     UserResponse toUserResponse(User user);
 
-    @Mapping(target = "id", ignore = true) // Ignore the ID field during update
+    @Mapping(target = "userId", ignore = true) // Ignore the ID field during update
     @Mapping(target = "roles", ignore = true) // Ignore roles during update
     void updateUser(@MappingTarget User user, UserUpdateRequest request);
 }
