@@ -4,6 +4,8 @@ import app.store.dto.request.ProductCreationRequest;
 import app.store.dto.request.ProductUpdateRequest;
 import app.store.dto.response.ProductResponse;
 import app.store.entity.Product;
+import app.store.exception.AppException;
+import app.store.exception.ErrorCode;
 import app.store.mapper.ProductMapper;
 import app.store.repository.ProductRepository;
 import lombok.AccessLevel;
@@ -32,23 +34,23 @@ public class ProductService {
     @Transactional
     public ProductResponse updateProduct(String productId, ProductUpdateRequest request) {
         Product product = productRepository.findById(productId).
-                orElseThrow(() -> new RuntimeException("Product not found"));
+                orElseThrow(() -> new AppException(ErrorCode.PRODUCT_NOT_EXISTED));
 
                 productMapper.updateProduct(product, request);
         return productMapper.toProductResponse(productRepository.save(product));
     }
     @Transactional
     public ProductResponse deleteProduct(String productId) {
-        Product product = productRepository.findById(productId)
-                .orElseThrow(() -> new RuntimeException("Product not found"));
+        Product product = productRepository.findById(productId).
+                orElseThrow(() -> new AppException(ErrorCode.PRODUCT_NOT_EXISTED));
 
         productRepository.delete(product);
         return productMapper.toProductResponse(product);
     }
     @Transactional
     public ProductResponse getProduct(String productId) {
-        Product product = productRepository.findById(productId)
-                .orElseThrow(() -> new RuntimeException("Product not found"));
+        Product product = productRepository.findById(productId).
+                orElseThrow(() -> new AppException(ErrorCode.PRODUCT_NOT_EXISTED));
 
         return productMapper.toProductResponse(product);
     }

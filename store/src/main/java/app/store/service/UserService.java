@@ -5,6 +5,8 @@ import app.store.dto.request.UserUpdateRequest;
 import app.store.dto.response.UserResponse;
 import app.store.entity.User;
 import app.store.enums.Role;
+import app.store.exception.AppException;
+import app.store.exception.ErrorCode;
 import app.store.mapper.UserMapper;
 import app.store.repository.UserRepository;
 import lombok.AccessLevel;
@@ -27,6 +29,10 @@ public class UserService {
     public UserResponse createUser(UserCreationRequest request) {
         User user = userMapper.toUser(request);
 
+        if( userRepository.existsByUsername(user.getUsername())) {
+            throw new AppException(ErrorCode.USER_EXISTED);
+        }
+
         HashSet<String> roles = new HashSet<>();
         roles.add(Role.USER.name());
         //user.setRoles(roles);
@@ -36,7 +42,7 @@ public class UserService {
     @Transactional
     public UserResponse updateUser(String userId, UserUpdateRequest request) {
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(()-> new AppException(ErrorCode.USER_NOT_EXISTED));
 
         userMapper.updateUser(user, request);
 
@@ -46,7 +52,8 @@ public class UserService {
     @Transactional
     public UserResponse deleteUser(String userId) {
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(()-> new AppException(ErrorCode.USER_NOT_EXISTED));
+
 
         userRepository.delete(user);
 
@@ -55,7 +62,8 @@ public class UserService {
 
     public UserResponse getUser(String userId) {
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(()-> new AppException(ErrorCode.USER_NOT_EXISTED));
+
 
         return userMapper.toUserResponse(user);
     }

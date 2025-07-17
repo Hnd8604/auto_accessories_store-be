@@ -13,5 +13,11 @@ spring:
     show-sql: true
     hibernate:
       ddl-auto: update
+  main:
+    banner-mode: off
+
+logging:
+  level:
+    root: warn
 
 

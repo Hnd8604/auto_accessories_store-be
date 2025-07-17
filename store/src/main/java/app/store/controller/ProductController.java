@@ -2,7 +2,9 @@ package app.store.controller;
 
 import app.store.dto.request.ProductCreationRequest;
 import app.store.dto.request.ProductUpdateRequest;
+import app.store.dto.response.ApiResponse;
 import app.store.dto.response.ProductResponse;
+import app.store.dto.response.UserResponse;
 import app.store.service.ProductService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -21,28 +23,42 @@ public class ProductController {
     ProductService productService;
 
     @PostMapping
-    ProductResponse createProduct(@RequestBody ProductCreationRequest request) {
-        return productService.createProduct(request);
+    ApiResponse<ProductResponse> createProduct(@RequestBody ProductCreationRequest request) {
+        ApiResponse<ProductResponse> apiResponse = new ApiResponse<>();
+
+        apiResponse.setResult(productService.createProduct(request));
+        return apiResponse;
     }
 
     @PutMapping("/{productId}")
-    ProductResponse updateProduct(@PathVariable String productId, @RequestBody ProductUpdateRequest request) {
-        return productService.updateProduct(productId, request);
+    ApiResponse<ProductResponse> updateProduct(@PathVariable String productId, @RequestBody ProductUpdateRequest request) {
+        ApiResponse<ProductResponse> apiResponse = new ApiResponse<>();
+
+        apiResponse.setResult(productService.updateProduct(productId, request));
+        return apiResponse;
     }
 
     @DeleteMapping("/{productId}")
-    ProductResponse deleteProduct(@PathVariable String productId) {
-        return productService.deleteProduct(productId);
+    ApiResponse<ProductResponse> deleteProduct(@PathVariable String productId) {
+        ApiResponse<ProductResponse> apiResponse = new ApiResponse<>();
+
+        apiResponse.setResult(productService.deleteProduct(productId));
+        return apiResponse;
     }
 
     @GetMapping
-    List<ProductResponse> getAllProducts() {
-        return productService.getAllProducts();
+    ApiResponse<List<ProductResponse>> getAllProducts() {
+        return ApiResponse.<List<ProductResponse>>builder()
+                .result(productService.getAllProducts())
+                .build();
     }
 
 
     @GetMapping("/{productId}")
-    ProductResponse getProduct(@PathVariable String productId) {
-        return productService.getProduct(productId);
+    ApiResponse<ProductResponse> getProduct(@PathVariable String productId) {
+        ApiResponse<ProductResponse> apiResponse = new ApiResponse<>();
+
+        apiResponse.setResult(productService.getProduct(productId));
+        return apiResponse;
     }
 }
