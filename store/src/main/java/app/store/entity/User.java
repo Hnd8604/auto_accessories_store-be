@@ -10,6 +10,7 @@ import java.util.Set;
 
 @Getter
 @Setter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
@@ -28,5 +29,6 @@ public class User {
     String address;
     @ManyToMany
     Set<Role> roles;
+
 
 }

@@ -18,6 +18,10 @@ spring:
 
 logging:
   level:
-    root: warn
+    root: info
 
+jwt:
+  signerKey: "Ipw5iOxpnL0VXwmcTK7OQHjLR5g/gHjB9ispYoUp+RY+yjksxO2jYEuf+asL9LQ1"
+  valid-duration: 60 #in seconds
+  refreshable-duration: 500
 

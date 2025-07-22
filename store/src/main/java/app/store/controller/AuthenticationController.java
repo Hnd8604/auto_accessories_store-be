@@ -1,9 +1,15 @@
 package app.store.controller;
 
 import app.store.dto.request.AuthenticationRequest;
+import app.store.dto.request.IntrospectRequest;
+import app.store.dto.request.LogoutRequest;
+import app.store.dto.request.RefreshRequest;
 import app.store.dto.response.ApiResponse;
 import app.store.dto.response.AuthenticationResponse;
+import app.store.dto.response.IntrospectResponse;
+import app.store.dto.response.RefreshResponse;
 import app.store.service.AuthenticationService;
+import com.nimbusds.jose.JOSEException;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -12,19 +18,50 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.text.ParseException;
+
 @RestController
 @RequestMapping("/auth")
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class AuthenticationController {
     AuthenticationService authenticationService;
-    @PostMapping("/log-in")
+    @PostMapping("/token")
     ApiResponse<AuthenticationResponse> authenticate(@RequestBody AuthenticationRequest request) {
-        boolean result = authenticationService.authenticate(request);
+        var result = authenticationService.authenticate(request);
         return ApiResponse.<AuthenticationResponse>builder()
-                .result(AuthenticationResponse.builder()
-                        .authenticated(result)
-                        .build())
+                .result(result)
+                .build();
+
+    }
+
+    @PostMapping("/refresh")
+    ApiResponse<RefreshResponse> re(@RequestBody RefreshRequest request) throws ParseException, JOSEException {
+        var result = authenticationService.refreshToken(request);
+        return ApiResponse.<RefreshResponse>builder()
+                .result(result)
+                .build();
+
+    }
+
+    @PostMapping("/introspect")
+    ApiResponse<IntrospectResponse> introsepect(@RequestBody IntrospectRequest request)
+            throws ParseException, JOSEException {
+
+        var result = authenticationService.introspect(request);
+        return ApiResponse.<IntrospectResponse>builder()
+                .result(result)
+                .build();
+
+    }
+
+
+    @PostMapping("/logout")
+    ApiResponse<Void> logout(@RequestBody LogoutRequest request)
+            throws ParseException, JOSEException {
+
+        authenticationService.logout(request);
+        return ApiResponse.<Void>builder()
                 .build();
 
     }

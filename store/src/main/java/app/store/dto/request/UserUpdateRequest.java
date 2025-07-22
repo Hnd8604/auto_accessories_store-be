@@ -1,10 +1,11 @@
 package app.store.dto.request;
 
+import app.store.validator.DobConstraint;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.time.LocalDate;
-import java.util.List;
+import java.util.Set;
 
 @Data
 @Builder
@@ -18,7 +19,8 @@ public class UserUpdateRequest {
     String firstName;
     String lastName;
     String phoneNumber;
+    @DobConstraint(min = 2, message = "INVALID_DATE_OF_BIRTH")
     LocalDate dob;
     String address;
-    List<String> roles;
+    Set<String> roles;
 }

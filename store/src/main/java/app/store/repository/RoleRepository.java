@@ -1,10 +1,10 @@
 package app.store.repository;
 
-import app.store.entity.Product;
+import app.store.entity.Role;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface ProductRepository extends JpaRepository<Product, String> {
+public interface RoleRepository extends JpaRepository<Role, String> {
 
 }

@@ -16,6 +16,9 @@ public enum ErrorCode {
     UNAUTHENTICATED(1006, "Unauthenticated", HttpStatus.UNAUTHORIZED),
     UNAUTHORIZED(1007, "You do not have permission", HttpStatus.FORBIDDEN),
     PRODUCT_NOT_EXISTED(2005, "Product not existed", HttpStatus.NOT_FOUND),
+    INVALID_DATE_OF_BIRTH(1008, "Your age must be at least {min}", HttpStatus.BAD_REQUEST),
+    ROLE_NOT_EXISTED(1005, "Role not existed", HttpStatus.NOT_FOUND),
+    PERMISSION_NOT_EXISTED(1005, "Permission not existed", HttpStatus.NOT_FOUND),
     ;
 
     private ErrorCode(int code, String message, HttpStatusCode statusCode) {
@@ -23,6 +26,8 @@ public enum ErrorCode {
         this.message = message;
         this.statusCode = statusCode;
     }
+
+
     private HttpStatusCode statusCode;
     private int code;
     private String message;

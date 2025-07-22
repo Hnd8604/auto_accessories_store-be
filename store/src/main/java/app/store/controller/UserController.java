@@ -10,6 +10,8 @@ import jakarta.validation.Valid;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -34,6 +36,8 @@ public class UserController {
     ApiResponse<UserResponse> updateUser(@PathVariable String userId, @RequestBody UserUpdateRequest request) {
         ApiResponse<UserResponse> apiResponse = new ApiResponse<>();
 
+
+
         apiResponse.setResult(userService.updateUser(userId, request));
         return apiResponse;
     }
@@ -47,7 +51,14 @@ public class UserController {
 
     @GetMapping
     ApiResponse<List<UserResponse>> getAllUsers(){
-       return ApiResponse.<List<UserResponse>>builder()
+        var authentication = SecurityContextHolder.getContext().getAuthentication();
+        log.info("Username: {}", authentication.getName());
+        authentication.getAuthorities().forEach(grantedAuthority -> {
+            log.info(grantedAuthority.getAuthority());
+        });
+
+
+        return ApiResponse.<List<UserResponse>>builder()
                 .result(userService.getAllUsers())
                 .build();
     }
@@ -57,6 +68,13 @@ public class UserController {
     ApiResponse<UserResponse> getUser(@PathVariable String userId) {
         ApiResponse<UserResponse> apiResponse = new ApiResponse<>();
         apiResponse.setResult(userService.getUser(userId));
+        return apiResponse;
+    }
+
+    @GetMapping("/myInfo")
+    ApiResponse<UserResponse> getMyInfo() {
+        ApiResponse<UserResponse> apiResponse = new ApiResponse<>();
+        apiResponse.setResult(userService.getMyInfo());
         return apiResponse;
     }
 }
