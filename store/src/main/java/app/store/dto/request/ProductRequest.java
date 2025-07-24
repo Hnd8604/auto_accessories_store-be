@@ -1,17 +1,20 @@
 package app.store.dto.request;
 
+
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+
+import java.math.BigDecimal;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class ProductUpdateRequest {
+public class ProductRequest {
     String productName;
     String description;
-    double price;
-    String category;
+    BigDecimal price;
+    String categoryName;
     int stockQuantity;
 }

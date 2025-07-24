@@ -1,4 +1,4 @@
-package app.store.dto.request;
+package app.store.dto.request.auth;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -8,6 +8,7 @@ import lombok.experimental.FieldDefaults;
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class RefreshRequest {
+public class LogoutRequest {
+    String accessToken;
     String refreshToken;
 }

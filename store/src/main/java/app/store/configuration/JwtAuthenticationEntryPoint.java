@@ -2,7 +2,7 @@ package app.store.configuration;
 
 import java.io.IOException;
 
-import app.store.dto.response.ApiResponse;
+import app.store.dto.response.auth.ApiResponse;
 import app.store.exception.ErrorCode;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

@@ -1,10 +1,10 @@
 package app.store.mapper;
 
-import app.store.dto.request.UserCreationRequest;
-import app.store.dto.request.UserUpdateRequest;
+import app.store.dto.request.user.UserCreationRequest;
+import app.store.dto.request.user.UserUpdateRequest;
 import app.store.dto.response.PermissionResponse;
 import app.store.dto.response.RoleResponse;
-import app.store.dto.response.UserResponse;
+import app.store.dto.response.user.UserResponse;
 import app.store.entity.Permission;
 import app.store.entity.Role;
 import app.store.entity.User;
@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2025-07-19T23:00:02+0700",
+    date = "2025-07-24T21:54:17+0700",
     comments = "version: 1.5.5.Final, compiler: javac, environment: Java 21.0.6 (Oracle Corporation)"
 )
 @Component

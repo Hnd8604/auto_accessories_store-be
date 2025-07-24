@@ -4,7 +4,7 @@ import java.text.ParseException;
 import java.util.Objects;
 import javax.crypto.spec.SecretKeySpec;
 
-import app.store.dto.request.IntrospectRequest;
+import app.store.dto.request.auth.IntrospectRequest;
 import app.store.service.AuthenticationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;

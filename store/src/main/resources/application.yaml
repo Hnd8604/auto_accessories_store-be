@@ -22,6 +22,6 @@ logging:
 
 jwt:
   signerKey: "Ipw5iOxpnL0VXwmcTK7OQHjLR5g/gHjB9ispYoUp+RY+yjksxO2jYEuf+asL9LQ1"
-  access-duration: 60 #in seconds
-  refresh-duration: 500
+  access-duration: 6000 #in seconds
+  refresh-duration: 500000000
 

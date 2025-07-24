@@ -1,11 +1,11 @@
 package app.store.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -15,11 +15,16 @@ import lombok.experimental.FieldDefaults;
 @Entity
 public class Product {
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    String productId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    Long productId;
     String productName;
     String description;
-    double price;
-    String category;
+    BigDecimal price;
+
+    @ManyToOne
+    Category category;
     int stockQuantity;
+
+    LocalDateTime createdAt;
+    LocalDateTime updatedAt;
 }

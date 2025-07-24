@@ -2,9 +2,16 @@ package app.store.repository;
 
 import app.store.entity.Product;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-@Repository
-public interface ProductRepository extends JpaRepository<Product, String> {
+import java.util.List;
 
+@Repository
+public interface ProductRepository extends JpaRepository<Product, Long> {
+
+    // Hoặc sử dụng JPQL query
+    @Query("SELECT p FROM Product p WHERE p.category.categoryId = :categoryId")
+    List<Product> findProductsByCategoryId(@Param("categoryId") Long categoryId);
 }

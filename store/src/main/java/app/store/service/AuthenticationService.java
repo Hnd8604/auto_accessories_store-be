@@ -1,13 +1,13 @@
 package app.store.service;
 
 
-import app.store.dto.request.AuthenticationRequest;
-import app.store.dto.request.IntrospectRequest;
-import app.store.dto.request.LogoutRequest;
-import app.store.dto.request.RefreshRequest;
-import app.store.dto.response.AuthenticationResponse;
-import app.store.dto.response.IntrospectResponse;
-import app.store.dto.response.RefreshResponse;
+import app.store.dto.request.auth.AuthenticationRequest;
+import app.store.dto.request.auth.IntrospectRequest;
+import app.store.dto.request.auth.LogoutRequest;
+import app.store.dto.request.auth.RefreshRequest;
+import app.store.dto.response.auth.AuthenticationResponse;
+import app.store.dto.response.auth.IntrospectResponse;
+import app.store.dto.response.auth.RefreshResponse;
 import app.store.entity.InvalidatedToken;
 import app.store.entity.User;
 import app.store.exception.AppException;
@@ -26,9 +26,7 @@ import lombok.experimental.FieldDefaults;
 import lombok.experimental.NonFinal;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.data.redis.RedisProperties;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;

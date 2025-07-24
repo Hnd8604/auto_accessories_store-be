@@ -1,16 +1,14 @@
 package app.store.controller;
 
-import app.store.dto.request.UserCreationRequest;
-import app.store.dto.request.UserUpdateRequest;
-import app.store.dto.response.ApiResponse;
-import app.store.dto.response.UserResponse;
-import app.store.entity.User;
+import app.store.dto.request.user.UserCreationRequest;
+import app.store.dto.request.user.UserUpdateRequest;
+import app.store.dto.response.auth.ApiResponse;
+import app.store.dto.response.user.UserResponse;
 import app.store.service.UserService;
 import jakarta.validation.Valid;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 

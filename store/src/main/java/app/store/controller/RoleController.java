@@ -2,7 +2,7 @@ package app.store.controller;
 
 
 import app.store.dto.request.RoleRequest;
-import app.store.dto.response.ApiResponse;
+import app.store.dto.response.auth.ApiResponse;
 import app.store.dto.response.RoleResponse;
 import app.store.service.RoleService;
 import lombok.AccessLevel;
@@ -32,23 +32,23 @@ public class RoleController {
                 .result(roleService.getAllRoles())
                 .build();
     }
-    @GetMapping("/{roleName}")
-    public ApiResponse<RoleResponse> getRole(@PathVariable String roleName) {
+    @GetMapping("/{roleId}")
+    public ApiResponse<RoleResponse> getRole(@PathVariable String roleId) {
         return ApiResponse.<RoleResponse>builder()
-                .result(roleService.getRole(roleName))
+                .result(roleService.getRole(roleId))
                 .build();
     }
 
-    @PutMapping("/{roleName}")
-    public ApiResponse<RoleResponse> updateRole(@PathVariable String roleName, @RequestBody RoleRequest request) {
+    @PutMapping("/{roleId}")
+    public ApiResponse<RoleResponse> updateRole(@PathVariable String roleId, @RequestBody RoleRequest request) {
         return ApiResponse.<RoleResponse>builder()
-                .result(roleService.updateRole(roleName, request))
+                .result(roleService.updateRole(roleId, request))
                 .build();
     }
 
-    @DeleteMapping("/{roleName}")
-    public ApiResponse<Void> deleteRole(@PathVariable String roleName) {
-        roleService.deleteRole(roleName);
+    @DeleteMapping("/{roleId}")
+    public ApiResponse<Void> deleteRole(@PathVariable String roleId) {
+        roleService.deleteRole(roleId);
         return ApiResponse.<Void>builder().build();
     }
 }

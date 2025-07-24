@@ -1,10 +1,9 @@
 package app.store.service;
 
-import app.store.dto.request.UserCreationRequest;
-import app.store.dto.request.UserUpdateRequest;
-import app.store.dto.response.UserResponse;
+import app.store.dto.request.user.UserCreationRequest;
+import app.store.dto.request.user.UserUpdateRequest;
+import app.store.dto.response.user.UserResponse;
 import app.store.entity.User;
-import app.store.enums.Role;
 import app.store.exception.AppException;
 import app.store.exception.ErrorCode;
 import app.store.mapper.UserMapper;
@@ -14,8 +13,6 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.access.prepost.PostAuthorize;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;

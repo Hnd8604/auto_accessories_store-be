@@ -1,6 +1,7 @@
-package app.store.dto.response;
+package app.store.dto.response.auth;
 
 
+import app.store.entity.User;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -9,8 +10,10 @@ import lombok.experimental.FieldDefaults;
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class RefreshResponse {
+public class AuthenticationResponse {
+    User user;
     String accessToken;
+    String refreshToken;
     boolean authenticated;
 
 }

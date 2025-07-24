@@ -1,6 +1,7 @@
-package app.store.dto.request;
+package app.store.dto.response.user;
 
-import app.store.validator.DobConstraint;
+
+import app.store.dto.response.RoleResponse;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -12,15 +13,15 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class UserUpdateRequest {
+public class UserResponse {
+    String userId;
     String username;
-    String password;
     String email;
     String firstName;
     String lastName;
     String phoneNumber;
-    @DobConstraint(min = 2, message = "INVALID_DATE_OF_BIRTH")
-    LocalDate dob;
+    LocalDate dob; // Consider using LocalDate for date handling
     String address;
-    Set<String> roles;
+    Set<RoleResponse> roles;
+
 }

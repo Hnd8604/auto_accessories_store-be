@@ -1,10 +1,7 @@
 package app.store.service;
 
 import app.store.dto.request.RoleRequest;
-import app.store.dto.request.UserUpdateRequest;
 import app.store.dto.response.RoleResponse;
-import app.store.dto.response.UserResponse;
-import app.store.entity.User;
 import app.store.exception.AppException;
 import app.store.exception.ErrorCode;
 import app.store.mapper.RoleMapper;
@@ -51,8 +48,8 @@ public class RoleService {
 //    }
 
     @Transactional
-    public RoleResponse updateRole(String roleName, RoleRequest request) {
-        var role = roleRepository.findById(roleName)
+    public RoleResponse updateRole(String roleId, RoleRequest request) {
+        var role = roleRepository.findById(roleId)
                 .orElseThrow(() -> new AppException(ErrorCode.ROLE_NOT_EXISTED));
 
         roleMapper.updateRole(role, request);
@@ -62,8 +59,8 @@ public class RoleService {
         return roleMapper.toRoleResponse(roleRepository.save(role));
     }
 
-    public RoleResponse getRole(String roleName) {
-        var role = roleRepository.findById(roleName)
+    public RoleResponse getRole(String roleId) {
+        var role = roleRepository.findById(roleId)
                 .orElseThrow(() -> new AppException(ErrorCode.ROLE_NOT_EXISTED));
         return roleMapper.toRoleResponse(role);
     }
@@ -76,7 +73,7 @@ public class RoleService {
                 .toList();
     }
 
-    public void deleteRole(String roleName) {
-        roleRepository.deleteById(roleName);
+    public void deleteRole(String roleId) {
+        roleRepository.deleteById(roleId);
     }
 }

@@ -1,4 +1,4 @@
-package app.store.dto.request;
+package app.store.dto.request.auth;
 
 
 import lombok.*;

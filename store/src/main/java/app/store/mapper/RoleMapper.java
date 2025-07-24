@@ -1,10 +1,8 @@
 package app.store.mapper;
 
 import app.store.dto.request.RoleRequest;
-import app.store.dto.request.UserUpdateRequest;
 import app.store.dto.response.RoleResponse;
 import app.store.entity.Role;
-import app.store.entity.User;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;

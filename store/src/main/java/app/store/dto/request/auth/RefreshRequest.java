@@ -1,5 +1,4 @@
-package app.store.dto.response;
-
+package app.store.dto.request.auth;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -9,6 +8,6 @@ import lombok.experimental.FieldDefaults;
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class IntrospectResponse {
-    boolean valid;
+public class RefreshRequest {
+    String refreshToken;
 }

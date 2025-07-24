@@ -1,13 +1,13 @@
 package app.store.controller;
 
-import app.store.dto.request.AuthenticationRequest;
-import app.store.dto.request.IntrospectRequest;
-import app.store.dto.request.LogoutRequest;
-import app.store.dto.request.RefreshRequest;
-import app.store.dto.response.ApiResponse;
-import app.store.dto.response.AuthenticationResponse;
-import app.store.dto.response.IntrospectResponse;
-import app.store.dto.response.RefreshResponse;
+import app.store.dto.request.auth.AuthenticationRequest;
+import app.store.dto.request.auth.IntrospectRequest;
+import app.store.dto.request.auth.LogoutRequest;
+import app.store.dto.request.auth.RefreshRequest;
+import app.store.dto.response.auth.ApiResponse;
+import app.store.dto.response.auth.AuthenticationResponse;
+import app.store.dto.response.auth.IntrospectResponse;
+import app.store.dto.response.auth.RefreshResponse;
 import app.store.service.AuthenticationService;
 import com.nimbusds.jose.JOSEException;
 import lombok.AccessLevel;

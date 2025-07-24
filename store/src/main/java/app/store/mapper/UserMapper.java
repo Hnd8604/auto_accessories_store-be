@@ -1,8 +1,8 @@
 package app.store.mapper;
 
-import app.store.dto.request.UserCreationRequest;
-import app.store.dto.request.UserUpdateRequest;
-import app.store.dto.response.UserResponse;
+import app.store.dto.request.user.UserCreationRequest;
+import app.store.dto.request.user.UserUpdateRequest;
+import app.store.dto.response.user.UserResponse;
 import app.store.entity.User;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;

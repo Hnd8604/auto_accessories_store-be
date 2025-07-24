@@ -1,6 +1,7 @@
 package app.store.dto.response;
 
 
+import app.store.entity.Category;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -10,10 +11,10 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class ProductResponse {
-    String productId;
+    Long productId;
     String productName;
     String description;
     double price;
-    String category;
+    Category category;
     int stockQuantity;
 }

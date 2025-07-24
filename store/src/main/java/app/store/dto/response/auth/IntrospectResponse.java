@@ -1,4 +1,5 @@
-package app.store.dto.request;
+package app.store.dto.response.auth;
+
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -8,7 +9,6 @@ import lombok.experimental.FieldDefaults;
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class LogoutRequest {
-    String accessToken;
-    String refreshToken;
+public class IntrospectResponse {
+    boolean valid;
 }

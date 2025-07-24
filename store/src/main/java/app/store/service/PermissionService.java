@@ -33,16 +33,16 @@ public class PermissionService {
         return permissions.stream().map(permissionMapper::toPermissionResponse).toList();
 
     }
-    public PermissionResponse updatePermission(String permissionName, PermissionRequest request) {
-        Permission permission = permissionRepository.findById(permissionName)
+    public PermissionResponse updatePermission(String permissionId, PermissionRequest request) {
+        Permission permission = permissionRepository.findById(permissionId)
                 .orElseThrow(() -> new AppException(ErrorCode.PERMISSION_NOT_EXISTED));
 
         permissionMapper.updatePermission(permission, request);
         return permissionMapper.toPermissionResponse(permissionRepository.save(permission));
     }
 
-    public void deletePermission(String permissionName) {
-        permissionRepository.deleteById(permissionName);
+    public void deletePermission(String permissionId) {
+        permissionRepository.deleteById(permissionId);
     }
 
 }

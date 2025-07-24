@@ -1,6 +1,6 @@
 package app.store.exception;
 
-import app.store.dto.response.ApiResponse;
+import app.store.dto.response.auth.ApiResponse;
 import jakarta.validation.ConstraintViolation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;

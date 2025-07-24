@@ -1,4 +1,4 @@
-package app.store.dto.response;
+package app.store.dto.response.auth;
 
 
 import com.fasterxml.jackson.annotation.JsonInclude;
