@@ -1,4 +1,4 @@
-package app.store.service;
+package app.store.service.implementation;
 
 
 import app.store.dto.request.auth.AuthenticationRequest;
@@ -14,6 +14,7 @@ import app.store.exception.AppException;
 import app.store.exception.ErrorCode;
 import app.store.repository.InvalidatedRepository;
 import app.store.repository.UserRepository;
+import app.store.service.interfaces.AuthenticationService;
 import com.nimbusds.jose.*;
 import com.nimbusds.jose.crypto.MACSigner;
 import com.nimbusds.jose.crypto.MACVerifier;
@@ -42,7 +43,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @Slf4j
-public class AuthenticationService {
+public class AuthenticationServiceImpl implements AuthenticationService {
     UserRepository userRepository;
     InvalidatedRepository invalidatedRepository;
 
@@ -58,6 +59,7 @@ public class AuthenticationService {
     @Value("${jwt.refresh-duration}")
     protected long REFRESH_DURATION;
 
+    @Override
     public IntrospectResponse introspect(IntrospectRequest request) throws JOSEException, ParseException {
         var token = request.getToken();
         boolean isValid = true;
@@ -73,6 +75,7 @@ public class AuthenticationService {
                 .build();
     }
 
+    @Override
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
         var user = userRepository.findByUsername(request.getUsername())
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
@@ -93,11 +96,13 @@ public class AuthenticationService {
                 .build();
     }
 
+    @Override
     public void logout(LogoutRequest request) throws ParseException, JOSEException {
         invalidateToken(request.getAccessToken(), "accessToken");
         invalidateToken(request.getRefreshToken(), "refreshToken");
     }
 
+    @Override
     public void invalidateToken(String token, String type)throws ParseException, JOSEException{
         try {
             SignedJWT signToken = verifyToken(token);
@@ -115,6 +120,7 @@ public class AuthenticationService {
             log.info("Token already expired or invalidated");
         }
     }
+
     private SignedJWT verifyToken(String token) throws JOSEException, ParseException {
         JWSVerifier verifier = new MACVerifier(SIGNER_KEY.getBytes());
 
@@ -132,6 +138,7 @@ public class AuthenticationService {
         return signedJWT;
     }
 
+    @Override
     public RefreshResponse refreshToken(RefreshRequest request) throws ParseException, JOSEException {
         var signJWT = verifyToken(request.getRefreshToken());
 
@@ -181,6 +188,7 @@ public class AuthenticationService {
         }
     }
 
+
     private String generateRefreshToken(User user) {
         JWSHeader header = new JWSHeader(JWSAlgorithm.HS512);
 
@@ -205,6 +213,7 @@ public class AuthenticationService {
             throw new RuntimeException(e);
         }
     }
+
 
     private String buildScope(User user) {
         StringJoiner stringJoiner = new StringJoiner(" ");

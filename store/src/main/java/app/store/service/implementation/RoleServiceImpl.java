@@ -1,4 +1,4 @@
-package app.store.service;
+package app.store.service.implementation;
 
 import app.store.dto.request.RoleRequest;
 import app.store.dto.response.RoleResponse;
@@ -7,6 +7,7 @@ import app.store.exception.ErrorCode;
 import app.store.mapper.RoleMapper;
 import app.store.repository.PermissionRepository;
 import app.store.repository.RoleRepository;
+import app.store.service.interfaces.RoleService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -21,10 +22,12 @@ import java.util.List;
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @Slf4j
-public class RoleService {
+public class RoleServiceImpl implements RoleService {
     RoleRepository roleRepository;
     PermissionRepository permissionRepository;
     RoleMapper roleMapper;
+
+    @Override
     public RoleResponse createRole(RoleRequest request) {
         var role = roleMapper.toRole(request); // we have to use var keyword because we had ignored permission when mapping
 
@@ -35,19 +38,9 @@ public class RoleService {
         return roleMapper.toRoleResponse(role);
     }
 
-//    @Transactional
-//    public Role updateUser(String userId, UserUpdateRequest request) {
-//        User user = userRepository.findById(userId)
-//                .orElseThrow(()-> new AppException(ErrorCode.USER_NOT_EXISTED));
-//
-//        userMapper.updateUser(user, request);
-//        user.setPassword(passwordEncoder.encode(request.getPassword()));
-//        var roles = roleRepository.findAllById(request.getRoles());
-//        user.setRoles(new HashSet<>(roles));
-//        return userMapper.toUserResponse(userRepository.save(user));
-//    }
 
     @Transactional
+    @Override
     public RoleResponse updateRole(String roleId, RoleRequest request) {
         var role = roleRepository.findById(roleId)
                 .orElseThrow(() -> new AppException(ErrorCode.ROLE_NOT_EXISTED));
@@ -59,20 +52,21 @@ public class RoleService {
         return roleMapper.toRoleResponse(roleRepository.save(role));
     }
 
+    @Override
     public RoleResponse getRole(String roleId) {
         var role = roleRepository.findById(roleId)
                 .orElseThrow(() -> new AppException(ErrorCode.ROLE_NOT_EXISTED));
         return roleMapper.toRoleResponse(role);
     }
 
-
+    @Override
     public List<RoleResponse> getAllRoles() {
         return roleRepository.findAll()
                 .stream()
                 .map(roleMapper::toRoleResponse)
                 .toList();
     }
-
+    @Override
     public void deleteRole(String roleId) {
         roleRepository.deleteById(roleId);
     }

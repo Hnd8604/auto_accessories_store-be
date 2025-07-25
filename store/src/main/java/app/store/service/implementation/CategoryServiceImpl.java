@@ -1,10 +1,11 @@
-package app.store.service;
+package app.store.service.implementation;
 
 import app.store.dto.response.CategoryResponse;
 import app.store.dto.request.CategoryRequest;
 import app.store.entity.Category;
 import app.store.mapper.CategoryMapper;
 import app.store.repository.CategoryRepository;
+import app.store.service.interfaces.CategoryService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -17,10 +18,11 @@ import java.util.List;
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @Slf4j
-public class CategoryService {
+public class CategoryServiceImpl implements CategoryService {
     CategoryMapper categoryMapper;
     CategoryRepository categoryRepository;
 
+    @Override
     public CategoryResponse createCategory(CategoryRequest request) {
 
 
@@ -28,16 +30,19 @@ public class CategoryService {
         return categoryMapper.toCategoryResponse(categoryRepository.save(category));
     }
 
+    @Override
     public CategoryResponse getCategoryById(Long categoryId) {
         return categoryRepository.findById(categoryId)
                 .map(categoryMapper::toCategoryResponse)
                 .orElseThrow(() -> new RuntimeException("Category not found"));
     }
+    @Override
     public List<CategoryResponse> getAllCategories() {
         return categoryRepository.findAll().stream()
                 .map(categoryMapper::toCategoryResponse)
                 .toList();
     }
+    @Override
     public CategoryResponse updateCategory(Long categoryId, CategoryRequest request) {
         Category category = categoryRepository.findById(categoryId)
                 .orElseThrow(() -> new RuntimeException("Category not found"));
@@ -45,6 +50,7 @@ public class CategoryService {
         return categoryMapper.toCategoryResponse(categoryRepository.save(category));
     }
 
+    @Override
     public void deleteCategory(Long categoryId) {
         if (!categoryRepository.existsById(categoryId)) {
             throw new RuntimeException("Category not found");

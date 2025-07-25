@@ -1,4 +1,4 @@
-package app.store.service;
+package app.store.service.implementation;
 
 import app.store.dto.request.ProductRequest;
 import app.store.dto.response.ProductResponse;
@@ -9,13 +9,15 @@ import app.store.exception.ErrorCode;
 import app.store.mapper.ProductMapper;
 import app.store.repository.CategoryRepository;
 import app.store.repository.ProductRepository;
+import app.store.service.interfaces.ProductService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
+import org.springframework.data.domain.Pageable;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -23,11 +25,12 @@ import java.util.List;
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @Slf4j
-public class ProductService {
+public class ProductServiceImpl implements ProductService {
     ProductMapper productMapper;
     ProductRepository productRepository;
     CategoryRepository categoryRepository;
 
+    @Override
     public ProductResponse createProduct(ProductRequest request) {
         Product product = productMapper.toProduct(request);
         Category category = categoryRepository.findByCategoryName(request.getCategoryName());
@@ -38,6 +41,7 @@ public class ProductService {
     }
 
     @Transactional
+    @Override
     public ProductResponse updateProduct(Long productId, ProductRequest request) {
         Product product = productRepository.findById(productId).
                 orElseThrow(() -> new AppException(ErrorCode.PRODUCT_NOT_EXISTED));
@@ -45,7 +49,9 @@ public class ProductService {
                 productMapper.updateProduct(product, request);
         return productMapper.toProductResponse(productRepository.save(product));
     }
+
     @Transactional
+    @Override
     public ProductResponse deleteProduct(Long productId) {
         Product product = productRepository.findById(productId).
                 orElseThrow(() -> new AppException(ErrorCode.PRODUCT_NOT_EXISTED));
@@ -54,24 +60,24 @@ public class ProductService {
         return productMapper.toProductResponse(product);
     }
     @Transactional
+    @Override
     public ProductResponse getProduct(Long productId) {
         Product product = productRepository.findById(productId).
                 orElseThrow(() -> new AppException(ErrorCode.PRODUCT_NOT_EXISTED));
 
         return productMapper.toProductResponse(product);
     }
-
+    @Override
     public List<ProductResponse> getProductsByCategoryId(Long categoryId) {
 
         return productRepository.findProductsByCategoryId(categoryId).stream()
                 .map(productMapper::toProductResponse)
                 .toList();
     }
-
-    public List<ProductResponse> getAllProducts() {
-        return productRepository.findAll().stream()
-                .map(productMapper::toProductResponse)
-                .toList();
+    @Override
+    public Page<ProductResponse> getAllProducts(Pageable pageable) {
+        return productRepository.findAll(pageable)
+                .map(productMapper::toProductResponse);
     }
 
 

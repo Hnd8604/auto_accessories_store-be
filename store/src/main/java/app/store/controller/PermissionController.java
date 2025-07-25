@@ -4,7 +4,7 @@ package app.store.controller;
 import app.store.dto.request.PermissionRequest;
 import app.store.dto.response.auth.ApiResponse;
 import app.store.dto.response.PermissionResponse;
-import app.store.service.PermissionService;
+import app.store.service.implementation.PermissionServiceImpl;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -19,11 +19,11 @@ import java.util.List;
 @Slf4j
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class PermissionController {
-    PermissionService permissionService;
+    PermissionServiceImpl permissionServiceImpl;
     @PostMapping
     ApiResponse<PermissionResponse> createPermission(@RequestBody PermissionRequest request) {
         return ApiResponse.<PermissionResponse>builder()
-                .result(permissionService.createPermission(request))
+                .result(permissionServiceImpl.createPermission(request))
                 .build();
     }
 
@@ -32,19 +32,19 @@ public class PermissionController {
     ApiResponse<PermissionResponse> updatePermission(@PathVariable String permissionName,
                                                       @RequestBody PermissionRequest request) {
         return ApiResponse.<PermissionResponse>builder()
-                .result(permissionService.updatePermission(permissionName, request))
+                .result(permissionServiceImpl.updatePermission(permissionName, request))
                 .build();
     }
     @GetMapping
     ApiResponse<List<PermissionResponse>> getPermissions() {
         return ApiResponse.<List<PermissionResponse>>builder()
-                .result(permissionService.getAllPermissions())
+                .result(permissionServiceImpl.getAllPermissions())
                 .build();
     }
 
     @DeleteMapping("/{permissionName}")
     ApiResponse<Void> deletePermission(@PathVariable String  permissionName) {
-        permissionService.deletePermission(permissionName);
+        permissionServiceImpl.deletePermission(permissionName);
         return ApiResponse.<Void>builder().build();
     }
 

@@ -4,7 +4,7 @@ import app.store.dto.request.user.UserCreationRequest;
 import app.store.dto.request.user.UserUpdateRequest;
 import app.store.dto.response.auth.ApiResponse;
 import app.store.dto.response.user.UserResponse;
-import app.store.service.UserService;
+import app.store.service.implementation.UserServiceImpl;
 import jakarta.validation.Valid;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -20,13 +20,13 @@ import java.util.List;
 @Slf4j
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class UserController {
-    UserService userService;
+    UserServiceImpl userServiceImpl;
 
     @PostMapping
     ApiResponse<UserResponse> createUser(@RequestBody @Valid UserCreationRequest request) {
         ApiResponse<UserResponse> apiResponse = new ApiResponse<>();
 
-        apiResponse.setResult(userService.createUser(request));
+        apiResponse.setResult(userServiceImpl.createUser(request));
         return apiResponse;
     }
 
@@ -36,14 +36,14 @@ public class UserController {
 
 
 
-        apiResponse.setResult(userService.updateUser(userId, request));
+        apiResponse.setResult(userServiceImpl.updateUser(userId, request));
         return apiResponse;
     }
 
     @DeleteMapping("/{userId}")
     ApiResponse<UserResponse> deleteUser(@PathVariable String userId) {
         ApiResponse<UserResponse> apiResponse = new ApiResponse<>();
-        apiResponse.setResult(userService.deleteUser(userId));
+        apiResponse.setResult(userServiceImpl.deleteUser(userId));
         return apiResponse;
     }
 
@@ -57,7 +57,7 @@ public class UserController {
 
 
         return ApiResponse.<List<UserResponse>>builder()
-                .result(userService.getAllUsers())
+                .result(userServiceImpl.getAllUsers())
                 .build();
     }
 
@@ -65,14 +65,14 @@ public class UserController {
     @GetMapping("/{userId}")
     ApiResponse<UserResponse> getUser(@PathVariable String userId) {
         ApiResponse<UserResponse> apiResponse = new ApiResponse<>();
-        apiResponse.setResult(userService.getUser(userId));
+        apiResponse.setResult(userServiceImpl.getUser(userId));
         return apiResponse;
     }
 
     @GetMapping("/myInfo")
     ApiResponse<UserResponse> getMyInfo() {
         ApiResponse<UserResponse> apiResponse = new ApiResponse<>();
-        apiResponse.setResult(userService.getMyInfo());
+        apiResponse.setResult(userServiceImpl.getMyInfo());
         return apiResponse;
     }
 }
