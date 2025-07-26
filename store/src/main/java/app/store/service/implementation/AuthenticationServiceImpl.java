@@ -90,6 +90,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         var refreshToken = generateRefreshToken(user);
 
         return AuthenticationResponse.builder()
+                .user(user)
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
                 .authenticated(true)

@@ -1,12 +1,14 @@
 //package app.store.entity;
 //
 //
+//import jakarta.persistence.CascadeType;
 //import jakarta.persistence.Entity;
-//import jakarta.persistence.GeneratedValue;
-//import jakarta.persistence.GenerationType;
-//import jakarta.persistence.Id;
+//import jakarta.persistence.OneToMany;
+//import jakarta.persistence.OneToOne;
 //import lombok.*;
 //import lombok.experimental.FieldDefaults;
+//
+//import java.util.List;
 //
 //@Getter
 //@Setter
@@ -15,9 +17,10 @@
 //@AllArgsConstructor
 //@Entity
 //@FieldDefaults(level = AccessLevel.PRIVATE)
-//public class Cart {
-//    @Id
-//    @GeneratedValue(strategy = GenerationType.UUID)
-//    String cartId;
+//public class Cart extends BaseEntityLong{
+//    @OneToMany(cascade = CascadeType.ALL)
+//    List<CartItem> cartItems;
 //
+//    @OneToOne
+//    private User user;
 //}
