@@ -41,7 +41,7 @@ public class UserServiceImpl implements UserService {
             throw new AppException(ErrorCode.USER_EXISTED);
         }
         user.setPassword(passwordEncoder.encode(request.getPassword()));
-        var role = roleRepository.findById("USER")
+        var role = roleRepository.findByName("USER")
                 .orElseThrow(()-> new RuntimeException());
         user.setRoles(Set.of(role));
 
@@ -69,7 +69,7 @@ public class UserServiceImpl implements UserService {
 
         userMapper.updateUser(user, request);
         user.setPassword(passwordEncoder.encode(request.getPassword()));
-        var roles = roleRepository.findAllById(request.getRoles());
+        var roles = roleRepository.findByNameIn(request.getRoles());
         user.setRoles(new HashSet<>(roles));
         return userMapper.toUserResponse(userRepository.save(user));
     }

@@ -12,7 +12,7 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class ProductRequest {
-    String productName;
+    String name;
     String description;
     BigDecimal price;
     String categoryName;

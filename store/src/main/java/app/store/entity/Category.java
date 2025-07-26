@@ -14,11 +14,9 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @Entity
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class Category {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long categoryId;
-    String categoryName;
+public class Category extends BaseEntityLong {
+
+    String name;
     String description;
 
 }

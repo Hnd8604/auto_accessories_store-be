@@ -14,8 +14,8 @@ import java.util.Set;
 @AllArgsConstructor
 @Entity
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class Role {
-    @Id
+public class Role extends BaseEntityLong {
+
     String name;
     String description;
 

@@ -31,7 +31,7 @@ public class RoleServiceImpl implements RoleService {
     public RoleResponse createRole(RoleRequest request) {
         var role = roleMapper.toRole(request); // we have to use var keyword because we had ignored permission when mapping
 
-        var permissions = permissionRepository.findAllById(request.getPermissions());
+        var permissions = permissionRepository.findByNameIn(request.getPermissions());
         role.setPermissions(new HashSet<>(permissions));
 
         role = roleRepository.save(role);
@@ -41,20 +41,20 @@ public class RoleServiceImpl implements RoleService {
 
     @Transactional
     @Override
-    public RoleResponse updateRole(String roleId, RoleRequest request) {
-        var role = roleRepository.findById(roleId)
+    public RoleResponse updateRole(String id, RoleRequest request) {
+        var role = roleRepository.findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.ROLE_NOT_EXISTED));
 
         roleMapper.updateRole(role, request);
-        var permissions = permissionRepository.findAllById(request.getPermissions());
+        var permissions = permissionRepository.findByNameIn(request.getPermissions());
         role.setPermissions(new HashSet<>(permissions));
 
         return roleMapper.toRoleResponse(roleRepository.save(role));
     }
 
     @Override
-    public RoleResponse getRole(String roleId) {
-        var role = roleRepository.findById(roleId)
+    public RoleResponse getRole(String id) {
+        var role = roleRepository.findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.ROLE_NOT_EXISTED));
         return roleMapper.toRoleResponse(role);
     }
@@ -67,7 +67,7 @@ public class RoleServiceImpl implements RoleService {
                 .toList();
     }
     @Override
-    public void deleteRole(String roleId) {
-        roleRepository.deleteById(roleId);
+    public void deleteRole(String id) {
+        roleRepository.deleteById(id);
     }
 }

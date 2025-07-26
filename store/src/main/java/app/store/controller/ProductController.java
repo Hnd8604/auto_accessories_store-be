@@ -52,14 +52,14 @@ public class ProductController {
     ApiResponse<Page<ProductResponse>> getAllProducts(
             @RequestParam(value = "page", defaultValue = "0") int page,
             @RequestParam(value = "size", defaultValue = "2") int size,
-            @RequestParam(value = "sort", defaultValue = "productName,asc") String sort
+            @RequestParam(value = "sort", defaultValue = "name,asc") String sort
     ) {
         Sort pageSort;
         String[] sortPart = sort.split(",");
         String direction = sortPart.length > 1 ? sortPart[1] : "asc";
         String sortField = sortPart[0].trim();
         Sort.Direction sortDirection = Sort.Direction.fromString(direction.toUpperCase());
-        String actualSortField = "productName".equalsIgnoreCase(sortField) ? "productName" : sortField;
+        String actualSortField = "name".equalsIgnoreCase(sortField) ? "name" : sortField;
 
         pageSort = Sort.by(sortDirection, actualSortField);
 

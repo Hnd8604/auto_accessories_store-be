@@ -13,11 +13,9 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
-public class Product {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long productId;
-    String productName;
+public class Product extends BaseEntityLong {
+
+    String name;
     String description;
     BigDecimal price;
 
@@ -25,6 +23,4 @@ public class Product {
     Category category;
     int stockQuantity;
 
-    LocalDateTime createdAt;
-    LocalDateTime updatedAt;
 }

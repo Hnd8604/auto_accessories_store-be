@@ -33,17 +33,16 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ProductResponse createProduct(ProductRequest request) {
         Product product = productMapper.toProduct(request);
-        Category category = categoryRepository.findByCategoryName(request.getCategoryName());
+        Category category = categoryRepository.findByName(request.getCategoryName());
         product.setCategory(category);
-        product.setCreatedAt(LocalDateTime.now());
-        product.setUpdatedAt(LocalDateTime.now());
+
         return productMapper.toProductResponse(productRepository.save(product));
     }
 
     @Transactional
     @Override
-    public ProductResponse updateProduct(Long productId, ProductRequest request) {
-        Product product = productRepository.findById(productId).
+    public ProductResponse updateProduct(Long id, ProductRequest request) {
+        Product product = productRepository.findById(id).
                 orElseThrow(() -> new AppException(ErrorCode.PRODUCT_NOT_EXISTED));
 
                 productMapper.updateProduct(product, request);
@@ -52,8 +51,8 @@ public class ProductServiceImpl implements ProductService {
 
     @Transactional
     @Override
-    public ProductResponse deleteProduct(Long productId) {
-        Product product = productRepository.findById(productId).
+    public ProductResponse deleteProduct(Long id) {
+        Product product = productRepository.findById(id).
                 orElseThrow(() -> new AppException(ErrorCode.PRODUCT_NOT_EXISTED));
 
         productRepository.delete(product);
@@ -61,8 +60,8 @@ public class ProductServiceImpl implements ProductService {
     }
     @Transactional
     @Override
-    public ProductResponse getProduct(Long productId) {
-        Product product = productRepository.findById(productId).
+    public ProductResponse getProduct(Long id) {
+        Product product = productRepository.findById(id).
                 orElseThrow(() -> new AppException(ErrorCode.PRODUCT_NOT_EXISTED));
 
         return productMapper.toProductResponse(product);

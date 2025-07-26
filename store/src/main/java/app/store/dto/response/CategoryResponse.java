@@ -10,7 +10,7 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 
 public class CategoryResponse {
-    String categoryId;
-    String categoryName;
+    String id;
+    String name;
     String description;
 }

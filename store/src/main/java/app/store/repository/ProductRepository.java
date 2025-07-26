@@ -12,6 +12,6 @@ import java.util.List;
 public interface ProductRepository extends JpaRepository<Product, Long> {
 
     // Hoặc sử dụng JPQL query
-    @Query("SELECT p FROM Product p WHERE p.category.categoryId = :categoryId")
+    @Query("SELECT p FROM Product p WHERE p.category.id = :categoryId")
     List<Product> findProductsByCategoryId(@Param("categoryId") Long categoryId);
 }

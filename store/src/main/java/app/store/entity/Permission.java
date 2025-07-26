@@ -12,8 +12,7 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @Entity
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class Permission {
-    @Id
+public class Permission extends BaseEntityLong {
     String name;
     String description;
 

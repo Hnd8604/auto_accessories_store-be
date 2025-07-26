@@ -16,10 +16,8 @@ import java.util.Set;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
-public class User {
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    String userId;
+public class User extends BaseEntityUUID {
+
     String username;
     String password;
     String email;
