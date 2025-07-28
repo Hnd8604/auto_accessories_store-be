@@ -1,7 +1,5 @@
 package app.store.entity;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToMany;
+import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -19,6 +17,9 @@ public class Role extends BaseEntityLong {
     String name;
     String description;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
+            @JoinTable(name = "role_permissions",
+                    joinColumns = @JoinColumn(name = "role_id"),
+                    inverseJoinColumns = @JoinColumn(name = "permissions_id"))
     Set<Permission> permissions;
 }

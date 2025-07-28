@@ -26,7 +26,12 @@ public class User extends BaseEntityUUID {
     String phoneNumber;
     LocalDate dob;
     String address;
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "user_roles",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "roles_id")
+    )
     Set<Role> roles;
     LocalDateTime createdAt;
 
