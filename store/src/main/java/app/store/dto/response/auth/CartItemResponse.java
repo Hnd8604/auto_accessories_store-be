@@ -16,6 +16,7 @@ public class CartItemResponse {
     Long cartId;
     Long productId;
     String productName;
-    int quantity;BigDecimal pricePerUnit;
+    int quantity;
+    BigDecimal pricePerUnit;
     BigDecimal totalPrice;
 }

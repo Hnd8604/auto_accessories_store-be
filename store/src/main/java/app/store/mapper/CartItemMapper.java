@@ -12,7 +12,7 @@ import java.math.BigDecimal;
 @Mapper(componentModel = "spring")
 public interface CartItemMapper {
 
-    @Mapping(target = "id", source = "id")
+
     @Mapping(target = "cartId", source = "cart.id")
     @Mapping(target = "productId", source = "product.id")
     @Mapping(target = "productName", source = "product.name")
@@ -25,10 +25,9 @@ public interface CartItemMapper {
         return item.getProduct().getPrice().multiply(BigDecimal.valueOf(item.getQuantity()));
     }
 
-    // map DTO → Entity (CartItem)
-    @Mapping(target = "product", ignore = true) // gán sau
-    @Mapping(target = "cart", ignore = true)    // gán sau
-    @Mapping(target = "id", ignore = true)      // vì sẽ là entity mới
+
+    @Mapping(target = "product", ignore = true)
+    @Mapping(target = "cart", ignore = true)
     CartItem toCartItem(CartItemRequest request);
 
 }
