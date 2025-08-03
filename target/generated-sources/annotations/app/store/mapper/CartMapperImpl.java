@@ -2,8 +2,8 @@ package app.store.mapper;
 
 import app.store.dto.request.CartRequest;
 import app.store.dto.response.CartCreationResponse;
+import app.store.dto.response.CartItemResponse;
 import app.store.dto.response.CartResponse;
-import app.store.dto.response.auth.CartItemResponse;
 import app.store.entity.Cart;
 import app.store.entity.CartItem;
 import app.store.entity.User;
@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2025-07-30T07:56:34+0700",
+    date = "2025-08-03T15:17:10+0700",
     comments = "version: 1.5.5.Final, compiler: javac, environment: Java 21.0.6 (Oracle Corporation)"
 )
 @Component

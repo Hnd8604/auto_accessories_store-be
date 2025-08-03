@@ -23,7 +23,7 @@ public interface CartMapper {
         if (cart.getCartItems() == null) return BigDecimal.ZERO;
 
         return cart.getCartItems().stream()
-                .map(item -> item.getProduct().getPrice().multiply(BigDecimal.valueOf(item.getQuantity())))
+                .map(item -> item.getProduct().getUnitPrice().multiply(BigDecimal.valueOf(item.getQuantity())))
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 

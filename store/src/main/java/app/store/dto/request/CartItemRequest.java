@@ -3,7 +3,8 @@ package app.store.dto.request;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
-@Data
+@Getter
+@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -11,5 +12,5 @@ import lombok.experimental.FieldDefaults;
 public class CartItemRequest {
     Long cartId;
     Long productId;
-    int quantity;
+    Integer quantity;
 }

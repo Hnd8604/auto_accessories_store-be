@@ -1,6 +1,5 @@
 package app.store.dto.response;
 
-import app.store.dto.response.auth.CartItemResponse;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -15,7 +14,7 @@ import java.util.List;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class CartResponse {
     BigDecimal totalPrice;
-    int totalItems;
+    Integer totalItems;
     //BigDecimal price; add after has voucher
     String userId;
     List<CartItemResponse> items;

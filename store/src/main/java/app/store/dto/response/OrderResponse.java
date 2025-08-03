@@ -1,0 +1,28 @@
+package app.store.dto.response;
+
+import app.store.enums.OrderStatus;
+import app.store.enums.PaymentStatus;
+import lombok.*;
+import lombok.experimental.FieldDefaults;
+
+import java.math.BigDecimal;
+import java.util.List;
+
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@FieldDefaults(level = AccessLevel.PRIVATE)
+public class OrderResponse {
+    String id;
+    String userId;
+    BigDecimal totalPrice;
+    String nameRecipient;
+    String phoneRecipient;
+    String addressRecipient;
+    String note;
+    OrderStatus status;
+    PaymentStatus paymentStatus;
+    List<OrderDetailResponse> orderDetails;
+}

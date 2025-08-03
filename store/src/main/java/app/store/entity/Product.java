@@ -17,10 +17,10 @@ public class Product extends BaseEntityLong {
 
     String name;
     String description;
-    BigDecimal price;
+    BigDecimal unitPrice;
 
     @ManyToOne
     Category category;
-    int stockQuantity;
+    Integer stockQuantity;
 
 }

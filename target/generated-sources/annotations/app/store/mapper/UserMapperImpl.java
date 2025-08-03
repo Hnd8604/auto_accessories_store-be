@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2025-07-30T07:56:33+0700",
+    date = "2025-08-03T15:17:10+0700",
     comments = "version: 1.5.5.Final, compiler: javac, environment: Java 21.0.6 (Oracle Corporation)"
 )
 @Component
@@ -35,8 +35,6 @@ public class UserMapperImpl implements UserMapper {
         user.firstName( request.getFirstName() );
         user.lastName( request.getLastName() );
         user.phoneNumber( request.getPhoneNumber() );
-        user.dob( request.getDob() );
-        user.address( request.getAddress() );
 
         return user.build();
     }
@@ -55,8 +53,6 @@ public class UserMapperImpl implements UserMapper {
         userResponse.firstName( user.getFirstName() );
         userResponse.lastName( user.getLastName() );
         userResponse.phoneNumber( user.getPhoneNumber() );
-        userResponse.dob( user.getDob() );
-        userResponse.address( user.getAddress() );
         userResponse.roles( roleSetToRoleResponseSet( user.getRoles() ) );
 
         return userResponse.build();
@@ -74,8 +70,6 @@ public class UserMapperImpl implements UserMapper {
         user.setFirstName( request.getFirstName() );
         user.setLastName( request.getLastName() );
         user.setPhoneNumber( request.getPhoneNumber() );
-        user.setDob( request.getDob() );
-        user.setAddress( request.getAddress() );
     }
 
     protected PermissionResponse permissionToPermissionResponse(Permission permission) {

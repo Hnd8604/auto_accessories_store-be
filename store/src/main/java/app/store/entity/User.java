@@ -24,8 +24,6 @@ public class User extends BaseEntityUUID {
     String firstName;
     String lastName;
     String phoneNumber;
-    LocalDate dob;
-    String address;
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "user_roles",

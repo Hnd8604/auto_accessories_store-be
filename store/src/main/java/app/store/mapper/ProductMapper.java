@@ -14,8 +14,7 @@ public interface ProductMapper {
     Product toProduct(ProductRequest request);
     ProductResponse toProductResponse(Product product);
 
-    @Mapping(target = "id", ignore = true)
+
     @Mapping(target = "category", ignore = true)
-    @Mapping(target = "createdAt", ignore = true) // Giữ nguyên createdAt
     void updateProduct(@MappingTarget Product product, ProductRequest request);
 }

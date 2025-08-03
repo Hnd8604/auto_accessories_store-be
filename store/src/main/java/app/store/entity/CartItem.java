@@ -20,5 +20,5 @@ public class CartItem extends BaseEntityLong{
     @JoinColumn(name = "product_id")
     Product product;
 
-    int quantity;
+    Integer quantity;
 }

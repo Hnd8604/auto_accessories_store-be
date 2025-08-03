@@ -1,11 +1,12 @@
-package app.store.dto.response.auth;
+package app.store.dto.response;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.math.BigDecimal;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -16,7 +17,7 @@ public class CartItemResponse {
     Long cartId;
     Long productId;
     String productName;
-    int quantity;
-    BigDecimal pricePerUnit;
+    Integer quantity;
+    BigDecimal unitPrice;
     BigDecimal totalPrice;
 }

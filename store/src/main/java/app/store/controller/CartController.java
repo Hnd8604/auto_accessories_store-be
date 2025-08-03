@@ -6,7 +6,7 @@ import app.store.dto.request.CartRequest;
 import app.store.dto.response.CartCreationResponse;
 import app.store.dto.response.CartResponse;
 import app.store.dto.response.auth.ApiResponse;
-import app.store.dto.response.auth.CartItemResponse;
+import app.store.dto.response.CartItemResponse;
 import app.store.service.implementation.CartItemServiceImpl;
 import app.store.service.implementation.CartServiceImpl;
 
@@ -17,7 +17,6 @@ import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
-import java.nio.file.Path;
 import java.text.ParseException;
 import java.util.List;
 

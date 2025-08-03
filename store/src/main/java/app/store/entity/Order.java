@@ -1,31 +1,52 @@
-//package app.store.entity;
-//
-//import jakarta.persistence.*;
-//import lombok.*;
-//import lombok.experimental.FieldDefaults;
-//
-//import java.math.BigDecimal;
-//import java.time.LocalDateTime;
-//
-//@Entity
-//@Getter
-//@Setter
-//@NoArgsConstructor
-//@AllArgsConstructor
-//@FieldDefaults(level = AccessLevel.PRIVATE)
-//public class Order {
-//    @Id
-//    @GeneratedValue(strategy = GenerationType.IDENTITY)
-//    Long orderId;
-//
-//    @ManyToOne
-//    User customer;
-//
-//    BigDecimal totalAmount;
-//
-//    @Enumerated(EnumType.STRING)
-//  //  OrderStatus status; // PENDING, CONFIRMED, SHIPPED, DELIVERED
-//
-//    String shippingAddress;
-//    LocalDateTime orderDate;
-//}
+package app.store.entity;
+
+import app.store.enums.OrderStatus;
+import app.store.enums.PaymentStatus;
+import jakarta.persistence.*;
+import lombok.*;
+import lombok.experimental.FieldDefaults;
+
+import java.math.BigDecimal;
+import java.util.List;
+
+@Entity
+@Table(name = "orders")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE)
+public class Order extends BaseEntityUUID {
+
+   // Many-to-One: each order belongs to one user
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(nullable = false)
+    User user;
+
+    @Column(nullable = false)
+    BigDecimal totalPrice;
+
+    @Column(nullable = false)
+    String nameRecipient;
+
+    @Column(nullable = false)
+    String phoneRecipient;
+
+    @Column(nullable = false)
+    String addressRecipient;
+
+    String note;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    OrderStatus status;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    PaymentStatus paymentStatus;
+
+    // One-to-Many: an order has many order details
+    @OneToMany(mappedBy = "order", fetch = FetchType.LAZY,
+            cascade = CascadeType.ALL, orphanRemoval = true)
+    List<OrderDetail> orderDetails;
+}

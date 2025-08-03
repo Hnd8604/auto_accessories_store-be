@@ -3,7 +3,7 @@ package app.store.dto.response;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
-import java.util.Set;
+import java.math.BigDecimal;
 
 @Getter
 @Setter
@@ -11,9 +11,10 @@ import java.util.Set;
 @AllArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class RoleResponse {
-    String name;
-    String description;
-    Set<PermissionResponse> permissions;
+public class OrderDetailResponse {
+    String id;
+    String orderId;
+    String productId;
+    BigDecimal unitPrice;
+    Integer quantity;
 }
-

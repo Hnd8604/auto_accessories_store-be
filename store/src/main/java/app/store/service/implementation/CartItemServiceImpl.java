@@ -2,7 +2,7 @@ package app.store.service.implementation;
 
 import app.store.dto.request.CartItemRequest;
 import app.store.dto.request.CartItemUpdateRequest;
-import app.store.dto.response.auth.CartItemResponse;
+import app.store.dto.response.CartItemResponse;
 import app.store.entity.Cart;
 import app.store.entity.CartItem;
 import app.store.entity.Product;
@@ -43,7 +43,7 @@ public class CartItemServiceImpl implements CartItemService {
     }
 
     @Override
-    public void removeItemFromCart(Long cartId, Long itemId) {
+    public CartItemResponse removeItemFromCart(Long cartId, Long itemId) {
         CartItem item = cartItemRepository.findById(itemId)
                 .orElseThrow(() -> new RuntimeException("CartItem not found"));
 
@@ -51,6 +51,7 @@ public class CartItemServiceImpl implements CartItemService {
             throw new IllegalArgumentException("Item does not belong to cart " + cartId);
         }
         cartItemRepository.delete(item);
+        return cartItemMapper.toCartItemResponse(item);
     }
 
 
@@ -70,9 +71,7 @@ public class CartItemServiceImpl implements CartItemService {
     public List<CartItemResponse> getAllItemsInCart(Long cartId) {
         Cart cart = cartRepository.findById(cartId)
                 .orElseThrow(() -> new RuntimeException("Cart not found with id: " + cartId));
-
         List<CartItem> items = cart.getCartItems(); // cần đảm bảo mối quan hệ 2 chiều đã cấu hình
-
         return items.stream()
                 .map(cartItemMapper::toCartItemResponse)
                 .toList();

@@ -5,7 +5,10 @@ import app.store.entity.Category;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
-@Data
+import java.math.BigDecimal;
+
+@Getter
+@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -14,7 +17,7 @@ public class ProductResponse {
     Long id;
     String name;
     String description;
-    double price;
+    BigDecimal unitPrice;
     Category category;
-    int stockQuantity;
+    Integer stockQuantity;
 }

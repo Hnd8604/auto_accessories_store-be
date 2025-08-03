@@ -20,8 +20,5 @@ public class UserResponse {
     String firstName;
     String lastName;
     String phoneNumber;
-    LocalDate dob; // Consider using LocalDate for date handling
-    String address;
     Set<RoleResponse> roles;
-
 }

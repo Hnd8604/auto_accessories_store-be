@@ -7,7 +7,8 @@ import lombok.experimental.FieldDefaults;
 import java.time.LocalDate;
 import java.util.Set;
 
-@Data
+@Getter
+@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -20,7 +21,5 @@ public class UserUpdateRequest {
     String lastName;
     String phoneNumber;
     @DobConstraint(min = 2, message = "INVALID_DATE_OF_BIRTH")
-    LocalDate dob;
-    String address;
     Set<String> roles;
 }

@@ -1,8 +1,8 @@
 package app.store.dto.request;
 
+
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-
 
 @Getter
 @Setter
@@ -10,7 +10,10 @@ import lombok.experimental.FieldDefaults;
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class PermissionRequest {
-    String name;
-    String description;
+public class OrderCreationRequest {
+    String userId;
+    String nameRecipient;
+    String phoneRecipient;
+    String addressRecipient;
+    String note;
 }

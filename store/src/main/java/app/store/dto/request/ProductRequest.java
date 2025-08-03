@@ -6,7 +6,8 @@ import lombok.experimental.FieldDefaults;
 
 import java.math.BigDecimal;
 
-@Data
+@Getter
+@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -14,7 +15,7 @@ import java.math.BigDecimal;
 public class ProductRequest {
     String name;
     String description;
-    BigDecimal price;
+    BigDecimal unitPrice;
     String categoryName;
-    int stockQuantity;
+    Integer stockQuantity;
 }
