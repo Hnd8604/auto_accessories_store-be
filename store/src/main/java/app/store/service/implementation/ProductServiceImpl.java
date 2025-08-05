@@ -2,11 +2,13 @@ package app.store.service.implementation;
 
 import app.store.dto.request.ProductRequest;
 import app.store.dto.response.ProductResponse;
+import app.store.entity.Branch;
 import app.store.entity.Category;
 import app.store.entity.Product;
 import app.store.exception.AppException;
 import app.store.exception.ErrorCode;
 import app.store.mapper.ProductMapper;
+import app.store.repository.BranchRepository;
 import app.store.repository.CategoryRepository;
 import app.store.repository.ProductRepository;
 import app.store.service.interfaces.ProductService;
@@ -29,13 +31,17 @@ public class ProductServiceImpl implements ProductService {
     ProductMapper productMapper;
     ProductRepository productRepository;
     CategoryRepository categoryRepository;
-
+    BranchRepository branchRepository;
     @Override
     public ProductResponse createProduct(ProductRequest request) {
         Product product = productMapper.toProduct(request);
-        Category category = categoryRepository.findByName(request.getCategoryName());
-        product.setCategory(category);
+        Category category = categoryRepository.findById(request.getCategoryId())
+                .orElseThrow(() -> new AppException(ErrorCode.CATEGORY_NOT_EXISTED));
+        Branch branch = branchRepository.findById(request.getBranchId())
+                .orElseThrow(() -> new RuntimeException("Branch not found with id: " + request.getBranchId()));
 
+        product.setCategory(category);
+        product.setBranch(branch);
         return productMapper.toProductResponse(productRepository.save(product));
     }
 
@@ -46,17 +52,24 @@ public class ProductServiceImpl implements ProductService {
                 orElseThrow(() -> new AppException(ErrorCode.PRODUCT_NOT_EXISTED));
 
                 productMapper.updateProduct(product, request);
+        Category category = categoryRepository.findById(request.getCategoryId())
+                .orElseThrow(() -> new AppException(ErrorCode.CATEGORY_NOT_EXISTED));
+        Branch branch = branchRepository.findById(request.getBranchId())
+                .orElseThrow(() -> new RuntimeException("Branch not found with id: " + request.getBranchId()));
+
+        product.setCategory(category);
+        product.setBranch(branch);
         return productMapper.toProductResponse(productRepository.save(product));
     }
 
     @Transactional
     @Override
-    public ProductResponse deleteProduct(Long id) {
+    public void deleteProduct(Long id) {
         Product product = productRepository.findById(id).
                 orElseThrow(() -> new AppException(ErrorCode.PRODUCT_NOT_EXISTED));
 
         productRepository.delete(product);
-        return productMapper.toProductResponse(product);
+
     }
     @Transactional
     @Override
@@ -68,16 +81,20 @@ public class ProductServiceImpl implements ProductService {
     }
     @Override
     public List<ProductResponse> getProductsByCategoryId(Long categoryId) {
-
         return productRepository.findProductsByCategoryId(categoryId).stream()
                 .map(productMapper::toProductResponse)
                 .toList();
     }
     @Override
+    public List<ProductResponse> getProductsByBranchId(Long branchId) {
+        return productRepository.findProductsByBranchId(branchId).stream()
+                .map(productMapper::toProductResponse)
+                .toList();
+    }
+
+    @Override
     public Page<ProductResponse> getAllProducts(Pageable pageable) {
         return productRepository.findAll(pageable)
                 .map(productMapper::toProductResponse);
     }
-
-
 }

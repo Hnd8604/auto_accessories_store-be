@@ -10,8 +10,8 @@ import java.util.Optional;
 import java.util.Set;
 
 @Repository
-public interface PermissionRepository extends JpaRepository<Permission, String> {
-    Optional<Permission> findByName(String name);
+public interface PermissionRepository extends JpaRepository<Permission, Long> {
+
     List<Permission> findByNameIn(Set<String> names);
 
 }

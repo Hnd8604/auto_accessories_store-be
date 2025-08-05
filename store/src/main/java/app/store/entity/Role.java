@@ -13,7 +13,6 @@ import java.util.Set;
 @Entity
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class Role extends BaseEntityLong {
-
     String name;
     String description;
 

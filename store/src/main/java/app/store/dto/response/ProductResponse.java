@@ -1,6 +1,7 @@
 package app.store.dto.response;
 
 
+import app.store.entity.Branch;
 import app.store.entity.Category;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -18,6 +19,7 @@ public class ProductResponse {
     String name;
     String description;
     BigDecimal unitPrice;
-    Category category;
+    String categoryName;
+    String branchName;
     Integer stockQuantity;
 }

@@ -26,26 +26,24 @@ public class ProductController {
 
     @PostMapping
     ApiResponse<ProductResponse> createProduct(@RequestBody ProductRequest request) {
-        ApiResponse<ProductResponse> apiResponse = new ApiResponse<>();
 
-        apiResponse.setResult(productServiceImpl.createProduct(request));
-        return apiResponse;
+        return ApiResponse.<ProductResponse>builder()
+                .result(productServiceImpl.createProduct(request))
+                .build();
     }
 
     @PutMapping("/{productId}")
     ApiResponse<ProductResponse> updateProduct(@PathVariable Long productId, @RequestBody ProductRequest request) {
-        ApiResponse<ProductResponse> apiResponse = new ApiResponse<>();
-
-        apiResponse.setResult(productServiceImpl.updateProduct(productId, request));
-        return apiResponse;
+        return ApiResponse.<ProductResponse>builder()
+                .result(productServiceImpl.updateProduct(productId, request))
+                .build();
     }
 
     @DeleteMapping("/{productId}")
-    ApiResponse<ProductResponse> deleteProduct(@PathVariable Long productId) {
-        ApiResponse<ProductResponse> apiResponse = new ApiResponse<>();
+    ApiResponse<Void> deleteProduct(@PathVariable Long productId) {
 
-        apiResponse.setResult(productServiceImpl.deleteProduct(productId));
-        return apiResponse;
+     productServiceImpl.deleteProduct(productId);
+        return ApiResponse.<Void>builder().build();
     }
 
     @GetMapping
@@ -69,18 +67,26 @@ public class ProductController {
                 .build();
     }
 
-    @GetMapping("/category/{categoryId}")
-    ApiResponse<List<ProductResponse>> getAllProductsByCategory(@PathVariable Long categoryId) {
-        ApiResponse<List<ProductResponse>> apiResponse = new ApiResponse<>();
+    @GetMapping("/categories/{categoryId}")
+    ApiResponse<List<ProductResponse>> getAllProductsByCategoryId(@PathVariable Long categoryId) {
 
-        apiResponse.setResult(productServiceImpl.getProductsByCategoryId(categoryId));
-        return apiResponse;
+        return ApiResponse.<List<ProductResponse>>builder()
+                .result(productServiceImpl.getProductsByCategoryId(categoryId))
+                .build();
     }
+
+    @GetMapping("/branches/{branchId}")
+    ApiResponse<List<ProductResponse>> getAllProductsByBranchId(@PathVariable Long branchId) {
+
+        return ApiResponse.<List<ProductResponse>>builder()
+                .result(productServiceImpl.getProductsByBranchId(branchId))
+                .build();
+    }
+
     @GetMapping("/{productId}")
     ApiResponse<ProductResponse> getProduct(@PathVariable Long productId) {
-        ApiResponse<ProductResponse> apiResponse = new ApiResponse<>();
-
-        apiResponse.setResult(productServiceImpl.getProduct(productId));
-        return apiResponse;
+        return ApiResponse.<ProductResponse>builder()
+                .result(productServiceImpl.getProduct(productId))
+                .build();
     }
 }

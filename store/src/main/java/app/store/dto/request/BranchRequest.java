@@ -1,10 +1,7 @@
 package app.store.dto.request;
 
-
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-
-import java.math.BigDecimal;
 
 @Getter
 @Setter
@@ -12,11 +9,7 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class ProductRequest {
+public class BranchRequest {
     String name;
     String description;
-    BigDecimal unitPrice;
-    Long categoryId;
-    Long branchId;
-    Integer stockQuantity;
 }

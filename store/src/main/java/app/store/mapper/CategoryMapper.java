@@ -7,11 +7,15 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring",uses = {ProductMapper.class})
 public interface CategoryMapper {
+    @Mapping(target = "products", ignore = true)
     Category toCategory(CategoryRequest request);
+
+    @Mapping(target = "products", source = "products")
     CategoryResponse toCategoryResponse(Category category);
 
     @Mapping(target = "id", ignore = true) // Ignore the ID field during update
+    @Mapping(target = "products", ignore = true)
     void updateCategory(@MappingTarget Category category, CategoryRequest request);
 }

@@ -1,11 +1,10 @@
 package app.store.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+
+import java.util.List;
 
 @Getter
 @Setter
@@ -15,8 +14,8 @@ import lombok.experimental.FieldDefaults;
 @Entity
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class Category extends BaseEntityLong {
-
     String name;
     String description;
-
+    @OneToMany(mappedBy ="category", cascade = CascadeType.ALL)
+    List<Product> products;
 }

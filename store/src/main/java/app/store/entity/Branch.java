@@ -1,5 +1,6 @@
-package app.store.dto.response;
+package app.store.entity;
 
+import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -7,14 +8,14 @@ import java.util.List;
 
 @Getter
 @Setter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
+@Entity
 @FieldDefaults(level = AccessLevel.PRIVATE)
-
-public class CategoryResponse {
-    String id;
+public class Branch extends BaseEntityLong{
     String name;
     String description;
-    List<ProductResponse> products;
+    @OneToMany(mappedBy ="branch", cascade = CascadeType.ALL)
+    List<Product> products;
 }

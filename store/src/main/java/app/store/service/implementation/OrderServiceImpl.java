@@ -115,10 +115,10 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public OrderResponse deleteOrder(String orderId) {
+    public void deleteOrder(String orderId) {
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(() -> new RuntimeException("Order not found"));
         orderRepository.delete(order);
-        return orderMapper.toOrderResponse(order);
+
     }
 }

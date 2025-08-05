@@ -76,14 +76,13 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
-    public UserResponse deleteUser(String userId) {
+    public void deleteUser(String userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(()-> new AppException(ErrorCode.USER_NOT_EXISTED));
 
 
         userRepository.delete(user);
 
-        return userMapper.toUserResponse(user);
     }
 
 

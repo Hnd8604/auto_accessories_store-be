@@ -15,5 +15,5 @@ public interface OrderService {
     OrderResponse updateOrderByAdmin(String orderId, OrderUpdateByAdminRequest request); // admin
     OrderResponse updateOrderByUser(String orderId, OrderUpdateByUserRequest request);
     OrderResponse cancelOrder(String orderId); // user
-    OrderResponse deleteOrder(String orderId); // admin
+    void deleteOrder(String orderId); // admin
 }

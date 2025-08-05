@@ -10,9 +10,10 @@ import java.util.List;
 public interface ProductService {
     ProductResponse createProduct(ProductRequest request);
     ProductResponse updateProduct(Long productId, ProductRequest request);
-    ProductResponse deleteProduct(Long productId);
+    void deleteProduct(Long productId);
     ProductResponse getProduct(Long productId);
     List<ProductResponse> getProductsByCategoryId(Long categoryId);
+    List<ProductResponse> getProductsByBranchId(Long branchId);
     Page<ProductResponse> getAllProducts(Pageable pageable);
 
 }

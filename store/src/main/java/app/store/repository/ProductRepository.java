@@ -14,4 +14,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     // Hoặc sử dụng JPQL query
     @Query("SELECT p FROM Product p WHERE p.category.id = :categoryId")
     List<Product> findProductsByCategoryId(@Param("categoryId") Long categoryId);
+    @Query("SELECT p FROM Product p WHERE p.branch.id = :branchId")
+    List<Product> findProductsByBranchId(@Param("branchId") Long branchId);
+
 }

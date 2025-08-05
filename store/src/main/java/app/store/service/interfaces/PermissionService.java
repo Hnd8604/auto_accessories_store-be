@@ -8,8 +8,8 @@ import java.util.List;
 public interface PermissionService {
     PermissionResponse createPermission(PermissionRequest request);
     List<PermissionResponse> getAllPermissions();
-    PermissionResponse updatePermission(String id, PermissionRequest request);
-    void deletePermission(String id);
+    PermissionResponse updatePermission(Long id, PermissionRequest request);
+    void deletePermission(Long id);
 
 
 }

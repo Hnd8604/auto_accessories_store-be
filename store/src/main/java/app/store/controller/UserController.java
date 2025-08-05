@@ -24,38 +24,26 @@ public class UserController {
 
     @PostMapping
     ApiResponse<UserResponse> createUser(@RequestBody @Valid UserCreationRequest request) {
-        ApiResponse<UserResponse> apiResponse = new ApiResponse<>();
-
-        apiResponse.setResult(userServiceImpl.createUser(request));
-        return apiResponse;
+        return ApiResponse.<UserResponse>builder()
+                .result(userServiceImpl.createUser(request))
+                .build();
     }
 
     @PutMapping("/{userId}")
     ApiResponse<UserResponse> updateUser(@PathVariable String userId, @RequestBody UserUpdateRequest request) {
-        ApiResponse<UserResponse> apiResponse = new ApiResponse<>();
-
-
-
-        apiResponse.setResult(userServiceImpl.updateUser(userId, request));
-        return apiResponse;
+        return ApiResponse.<UserResponse>builder()
+                .result(userServiceImpl.updateUser(userId, request))
+                .build();
     }
 
     @DeleteMapping("/{userId}")
-    ApiResponse<UserResponse> deleteUser(@PathVariable String userId) {
-        ApiResponse<UserResponse> apiResponse = new ApiResponse<>();
-        apiResponse.setResult(userServiceImpl.deleteUser(userId));
-        return apiResponse;
+    ApiResponse<Void> deleteUser(@PathVariable String userId) {
+        userServiceImpl.deleteUser(userId);
+      return ApiResponse.<Void>builder().build();
     }
 
     @GetMapping
     ApiResponse<List<UserResponse>> getAllUsers(){
-        var authentication = SecurityContextHolder.getContext().getAuthentication();
-        log.info("Username: {}", authentication.getName());
-        authentication.getAuthorities().forEach(grantedAuthority -> {
-            log.info(grantedAuthority.getAuthority());
-        });
-
-
         return ApiResponse.<List<UserResponse>>builder()
                 .result(userServiceImpl.getAllUsers())
                 .build();
@@ -64,15 +52,15 @@ public class UserController {
 
     @GetMapping("/{userId}")
     ApiResponse<UserResponse> getUser(@PathVariable String userId) {
-        ApiResponse<UserResponse> apiResponse = new ApiResponse<>();
-        apiResponse.setResult(userServiceImpl.getUser(userId));
-        return apiResponse;
+        return ApiResponse.<UserResponse>builder()
+                .result(userServiceImpl.getUser(userId))
+                .build();
     }
 
     @GetMapping("/my-info")
     ApiResponse<UserResponse> getMyInfo() {
-        ApiResponse<UserResponse> apiResponse = new ApiResponse<>();
-        apiResponse.setResult(userServiceImpl.getMyInfo());
-        return apiResponse;
+        return ApiResponse.<UserResponse>builder()
+                .result(userServiceImpl.getMyInfo())
+                .build();
     }
 }

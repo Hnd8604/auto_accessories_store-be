@@ -43,7 +43,7 @@ public class CartItemServiceImpl implements CartItemService {
     }
 
     @Override
-    public CartItemResponse removeItemFromCart(Long cartId, Long itemId) {
+    public void removeItemFromCart(Long cartId, Long itemId) {
         CartItem item = cartItemRepository.findById(itemId)
                 .orElseThrow(() -> new RuntimeException("CartItem not found"));
 
@@ -51,7 +51,6 @@ public class CartItemServiceImpl implements CartItemService {
             throw new IllegalArgumentException("Item does not belong to cart " + cartId);
         }
         cartItemRepository.delete(item);
-        return cartItemMapper.toCartItemResponse(item);
     }
 
 

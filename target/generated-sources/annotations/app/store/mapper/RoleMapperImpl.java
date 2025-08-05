@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2025-08-03T15:17:09+0700",
+    date = "2025-08-05T22:15:35+0700",
     comments = "version: 1.5.5.Final, compiler: javac, environment: Java 21.0.6 (Oracle Corporation)"
 )
 @Component
@@ -40,6 +40,7 @@ public class RoleMapperImpl implements RoleMapper {
 
         RoleResponse.RoleResponseBuilder roleResponse = RoleResponse.builder();
 
+        roleResponse.id( role.getId() );
         roleResponse.name( role.getName() );
         roleResponse.description( role.getDescription() );
         roleResponse.permissions( permissionSetToPermissionResponseSet( role.getPermissions() ) );
@@ -64,6 +65,9 @@ public class RoleMapperImpl implements RoleMapper {
 
         PermissionResponse.PermissionResponseBuilder permissionResponse = PermissionResponse.builder();
 
+        if ( permission.getId() != null ) {
+            permissionResponse.id( String.valueOf( permission.getId() ) );
+        }
         permissionResponse.name( permission.getName() );
         permissionResponse.description( permission.getDescription() );
 

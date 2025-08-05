@@ -2,6 +2,7 @@ package app.store.service.implementation;
 
 import app.store.dto.response.CategoryResponse;
 import app.store.dto.request.CategoryRequest;
+import app.store.entity.Branch;
 import app.store.entity.Category;
 import app.store.mapper.CategoryMapper;
 import app.store.repository.CategoryRepository;
@@ -40,6 +41,7 @@ public class CategoryServiceImpl implements CategoryService {
                 .map(categoryMapper::toCategoryResponse)
                 .toList();
     }
+
     @Override
     public CategoryResponse updateCategory(Long id, CategoryRequest request) {
         Category category = categoryRepository.findById(id)
@@ -50,9 +52,9 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public void deleteCategory(Long id) {
-        if (!categoryRepository.existsById(id)) {
-            throw new RuntimeException("Category not found");
-        }
+        Category category = categoryRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Category not found"));
         categoryRepository.deleteById(id);
+
     }
 }

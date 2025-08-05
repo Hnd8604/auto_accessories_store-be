@@ -32,57 +32,50 @@ public class OrderController {
 
     @GetMapping("/{orderId}")
     ApiResponse<OrderResponse> getOrder(@PathVariable String orderId) {
-        OrderResponse orderResponse = orderServiceImpl.getOrderById(orderId);
         return ApiResponse.<OrderResponse>builder()
-                .result(orderResponse)
+                .result(orderServiceImpl.getOrderById(orderId))
                 .build();
     }
 
     @GetMapping("/my-orders")
     ApiResponse<List<OrderResponse>> getMyOrders() {
-        List<OrderResponse> orderResponses = orderServiceImpl.getMyOrders();
         return ApiResponse.<List<OrderResponse>>builder()
-                .result(orderResponses)
+                .result(orderServiceImpl.getMyOrders())
                 .build();
     }
 
     @PostMapping
     ApiResponse<OrderResponse> createOrderFromCart(@RequestBody OrderCreationRequest request) {
-        OrderResponse orderResponse = orderServiceImpl.createOrderFromCart(request);
         return ApiResponse.<OrderResponse>builder()
-                .result(orderResponse)
+                .result(orderServiceImpl.createOrderFromCart(request))
                 .build();
     }
 
     @PutMapping("/{orderId}/update-by-user")
     ApiResponse<OrderResponse> updateOrderByUser(@PathVariable String orderId, @RequestBody OrderUpdateByUserRequest request) {
-        OrderResponse orderResponse = orderServiceImpl.updateOrderByUser(orderId, request);
         return ApiResponse.<OrderResponse>builder()
-                .result(orderResponse)
+                .result(orderServiceImpl.updateOrderByUser(orderId, request))
                 .build();
     }
 
     @PutMapping("/{orderId}/update-by-admin")
     ApiResponse<OrderResponse> updateOrderByAdmin(@PathVariable String orderId, @RequestBody OrderUpdateByAdminRequest request) {
-        OrderResponse orderResponse = orderServiceImpl.updateOrderByAdmin(orderId, request);
         return ApiResponse.<OrderResponse>builder()
-                .result(orderResponse)
+                .result(orderServiceImpl.updateOrderByAdmin(orderId, request))
                 .build();
     }
 
     @PutMapping("{orderId}/cancel")
     ApiResponse<OrderResponse> cancelOrder(@PathVariable String orderId) {
-        OrderResponse orderResponse = orderServiceImpl.cancelOrder(orderId);
         return ApiResponse.<OrderResponse>builder()
-                .result(orderResponse)
+                .result(orderServiceImpl.cancelOrder(orderId))
                 .build();
     }
 
     @DeleteMapping("/{orderId}")
-    ApiResponse<OrderResponse> deleteOrder(@PathVariable String orderId) {
-        OrderResponse orderResponse = orderServiceImpl.deleteOrder(orderId);
-        return ApiResponse.<OrderResponse>builder()
-                .result(orderResponse)
+    ApiResponse<Void> deleteOrder(@PathVariable String orderId) {
+        orderServiceImpl.deleteOrder(orderId);
+        return ApiResponse.<Void>builder()
                 .build();
     }
 }
