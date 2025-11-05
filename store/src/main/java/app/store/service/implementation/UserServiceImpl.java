@@ -20,9 +20,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -45,7 +43,7 @@ public class UserServiceImpl implements UserService {
         user.setPassword(passwordEncoder.encode(request.getPassword()));
         var role = roleRepository.findByName("USER")
                 .orElseThrow(()-> new RuntimeException());
-        user.setRoles(Set.of(role));
+        user.setRole(role);
 
         // create cart when creating user
 
@@ -74,9 +72,18 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(()-> new AppException(ErrorCode.USER_NOT_EXISTED));
 
         userMapper.updateUser(user, request);
-        user.setPassword(passwordEncoder.encode(request.getPassword()));
-        var roles = roleRepository.findByNameIn(request.getRoles());
-        user.setRoles(new HashSet<>(roles));
+        
+        // Only update password if provided
+        if (request.getPassword() != null && !request.getPassword().isEmpty()) {
+            user.setPassword(passwordEncoder.encode(request.getPassword()));
+        }
+        
+        // Only update role if provided
+        if (request.getRoleId() != null && !request.getRoleId().isEmpty()) {
+            var role = roleRepository.findById(Long.valueOf(request.getRoleId()))
+                    .orElseThrow(() -> new AppException(ErrorCode.ROLE_NOT_EXISTED));
+            user.setRole(role);
+        }
         return userMapper.toUserResponse(userRepository.save(user));
     }
 

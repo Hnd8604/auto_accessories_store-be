@@ -15,6 +15,8 @@ import java.util.List;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class Brand extends BaseEntityLong{
     String name;
+
+    @Column(columnDefinition = "TEXT")
     String description;
     @OneToMany(mappedBy ="brand", cascade = CascadeType.ALL)
     List<Product> products;

@@ -11,11 +11,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.security.crypto.password.PasswordEncoder;
-
-
-import java.util.HashSet;
-import java.util.Set;
 
 @Configuration
 @RequiredArgsConstructor
@@ -29,29 +26,34 @@ public class ApplicationInitConfig {
     @Bean
     ApplicationRunner applicationRunner(UserRepository userRepository) {
         return args -> {
-
-            if (userRepository.findByUsername("admin").isEmpty()) {
-                var roles = new HashSet<Role>();
-                Role roleAdmin = new Role();
+            // Create roles if they don't exist
+            Role roleAdmin = roleRepository.findByName("ADMIN").orElse(null);
+            if (roleAdmin == null) {
+                roleAdmin = new Role();
                 roleAdmin.setName("ADMIN");
                 roleAdmin.setDescription("Admin role");
                 roleAdmin = roleRepository.save(roleAdmin);
+                log.info("Created ADMIN role");
+            }
 
-                Role roleUser = new Role();
+            Role roleUser = roleRepository.findByName("USER").orElse(null);
+            if (roleUser == null) {
+                roleUser = new Role();
                 roleUser.setName("USER");
                 roleUser.setDescription("User role");
                 roleUser = roleRepository.save(roleUser);
+                log.info("Created USER role");
+            }
 
-                roles.add(roleAdmin);
-                roles.add(roleUser);
-
+            // Create admin user if it doesn't exist
+            if (userRepository.findByUsername("admin").isEmpty()) {
                 User user = User.builder()
                         .username("admin")
                         .password(passwordEncoder.encode("admin"))
-                        .roles(roles)
+                        .role(roleAdmin) // Assign ADMIN role to admin user
                         .build();
-             userRepository.save(user);
-             log.warn("admin user has been created with password: admin, please change it after login");
+                userRepository.save(user);
+                log.warn("admin user has been created with password: admin, please change it after login");
             }
         };
     }

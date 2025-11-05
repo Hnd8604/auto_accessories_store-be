@@ -5,9 +5,6 @@ import app.store.dto.response.RoleResponse;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
-import java.time.LocalDate;
-import java.util.Set;
-
 @Data
 @Builder
 @NoArgsConstructor
@@ -20,5 +17,5 @@ public class UserResponse {
     String firstName;
     String lastName;
     String phoneNumber;
-    Set<RoleResponse> roles;
+    RoleResponse role;
 }

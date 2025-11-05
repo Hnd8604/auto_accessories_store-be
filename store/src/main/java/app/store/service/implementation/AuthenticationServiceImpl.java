@@ -9,9 +9,11 @@ import app.store.dto.response.auth.AuthenticationResponse;
 import app.store.dto.response.auth.IntrospectResponse;
 import app.store.dto.response.auth.RefreshResponse;
 import app.store.entity.InvalidatedToken;
+import app.store.entity.Role;
 import app.store.entity.User;
 import app.store.exception.AppException;
 import app.store.exception.ErrorCode;
+import app.store.mapper.UserMapper;
 import app.store.repository.InvalidatedRepository;
 import app.store.repository.UserRepository;
 import app.store.service.interfaces.AuthenticationService;
@@ -46,6 +48,7 @@ import java.util.UUID;
 public class AuthenticationServiceImpl implements AuthenticationService {
     UserRepository userRepository;
     InvalidatedRepository invalidatedRepository;
+    UserMapper userMapper;
 
     @NonFinal // Don't inject this field to constructor
     @Value("${jwt.signerKey}")
@@ -92,7 +95,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         var refreshToken = generateRefreshToken(user);
 
         return AuthenticationResponse.builder()
-                .user(user)
+                .user(userMapper.toUserResponse(user))
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
                 .authenticated(true)
@@ -220,13 +223,13 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     private String buildScope(User user) {
         StringJoiner stringJoiner = new StringJoiner(" ");
-        if (!CollectionUtils.isEmpty(user.getRoles()))
-            user.getRoles().forEach(role -> {
-                stringJoiner.add("ROLE_" + role.getName());
-                if(!CollectionUtils.isEmpty(role.getPermissions()))
+        if (user.getRole() != null) {
+            Role role = user.getRole();
+            stringJoiner.add("ROLE_" + role.getName());
+            if(!CollectionUtils.isEmpty(role.getPermissions()))
                 role.getPermissions()
                         .forEach(permission -> stringJoiner.add(permission.getName()));
-            });
-            return stringJoiner.toString();
+        }
+        return stringJoiner.toString();
     }
 }

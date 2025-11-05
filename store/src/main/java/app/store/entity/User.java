@@ -7,7 +7,6 @@ import lombok.experimental.FieldDefaults;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Set;
 
 @Getter
 @Setter
@@ -18,20 +17,20 @@ import java.util.Set;
 @Entity
 public class User extends BaseEntityUUID {
 
+    @Column(nullable = false, unique = true)
     String username;
+
+    @Column(nullable = false)
     String password;
     String email;
     String firstName;
     String lastName;
     String phoneNumber;
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(
-            name = "user_roles",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "roles_id")
-    )
-    Set<Role> roles;
-    LocalDateTime createdAt;
+    
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "role_id")
+    Role role;
+
 
 
 }

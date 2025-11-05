@@ -17,6 +17,8 @@ import java.util.List;
 public class Product extends BaseEntityLong {
 
     String name;
+
+    @Column(columnDefinition = "TEXT")
     String description;
     BigDecimal unitPrice;
     @ManyToOne(fetch = FetchType.LAZY)

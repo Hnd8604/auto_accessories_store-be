@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2025-11-05T08:19:39+0700",
+    date = "2025-11-05T23:11:35+0700",
     comments = "version: 1.5.5.Final, compiler: javac, environment: Java 21.0.6 (Oracle Corporation)"
 )
 @Component
@@ -53,7 +53,7 @@ public class UserMapperImpl implements UserMapper {
         userResponse.firstName( user.getFirstName() );
         userResponse.lastName( user.getLastName() );
         userResponse.phoneNumber( user.getPhoneNumber() );
-        userResponse.roles( roleSetToRoleResponseSet( user.getRoles() ) );
+        userResponse.role( roleToRoleResponse( user.getRole() ) );
 
         return userResponse.build();
     }
@@ -65,7 +65,6 @@ public class UserMapperImpl implements UserMapper {
         }
 
         user.setUsername( request.getUsername() );
-        user.setPassword( request.getPassword() );
         user.setEmail( request.getEmail() );
         user.setFirstName( request.getFirstName() );
         user.setLastName( request.getLastName() );
@@ -114,18 +113,5 @@ public class UserMapperImpl implements UserMapper {
         roleResponse.permissions( permissionSetToPermissionResponseSet( role.getPermissions() ) );
 
         return roleResponse.build();
-    }
-
-    protected Set<RoleResponse> roleSetToRoleResponseSet(Set<Role> set) {
-        if ( set == null ) {
-            return null;
-        }
-
-        Set<RoleResponse> set1 = new LinkedHashSet<RoleResponse>( Math.max( (int) ( set.size() / .75f ) + 1, 16 ) );
-        for ( Role role : set ) {
-            set1.add( roleToRoleResponse( role ) );
-        }
-
-        return set1;
     }
 }
