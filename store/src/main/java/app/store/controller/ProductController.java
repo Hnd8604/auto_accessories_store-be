@@ -75,11 +75,11 @@ public class ProductController {
                 .build();
     }
 
-    @GetMapping("/branches/{branchId}")
-    ApiResponse<List<ProductResponse>> getAllProductsByBranchId(@PathVariable Long branchId) {
+    @GetMapping("/brandes/{brandId}")
+    ApiResponse<List<ProductResponse>> getAllProductsByBrandId(@PathVariable Long brandId) {
 
         return ApiResponse.<List<ProductResponse>>builder()
-                .result(productServiceImpl.getProductsByBranchId(branchId))
+                .result(productServiceImpl.getProductsByBrandId(brandId))
                 .build();
     }
 

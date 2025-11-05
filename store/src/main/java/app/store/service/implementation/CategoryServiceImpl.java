@@ -2,7 +2,6 @@ package app.store.service.implementation;
 
 import app.store.dto.response.CategoryResponse;
 import app.store.dto.request.CategoryRequest;
-import app.store.entity.Branch;
 import app.store.entity.Category;
 import app.store.mapper.CategoryMapper;
 import app.store.repository.CategoryRepository;

@@ -13,9 +13,9 @@ import java.util.List;
 @AllArgsConstructor
 @Entity
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class Branch extends BaseEntityLong{
+public class Brand extends BaseEntityLong{
     String name;
     String description;
-    @OneToMany(mappedBy ="branch", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy ="brand", cascade = CascadeType.ALL)
     List<Product> products;
 }

@@ -23,13 +23,11 @@ public class Product extends BaseEntityLong {
     @JoinColumn(name = "category_id")
     Category category;
     Integer stockQuantity;
-//    @ManyToOne
-//    Branch branch;
-
+    
     @OneToMany(mappedBy ="product", cascade = CascadeType.ALL, orphanRemoval = true)
     List<ProductImage> productImages;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name= "branch_id")
-    Branch branch;
+    @JoinColumn(name= "brand_id")
+    Brand brand;
 }

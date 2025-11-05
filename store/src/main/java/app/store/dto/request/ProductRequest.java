@@ -17,6 +17,6 @@ public class ProductRequest {
     String description;
     BigDecimal unitPrice;
     Long categoryId;
-    Long branchId;
+    Long brandId;
     Integer stockQuantity;
 }

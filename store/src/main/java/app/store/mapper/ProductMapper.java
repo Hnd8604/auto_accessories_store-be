@@ -11,18 +11,18 @@ import org.mapstruct.MappingTarget;
 public interface ProductMapper {
     @Mapping(target = "category", ignore = true)
     @Mapping(target = "productImages", ignore = true)
-    @Mapping(target = "branch", ignore = true)
+    @Mapping(target = "brand", ignore = true)
     Product toProduct(ProductRequest request);
 
 
     @Mapping(target = "categoryName", source = "category.name")
-    @Mapping(target = "branchName", source = "branch.name")
+    @Mapping(target = "brandName", source = "brand.name")
     ProductResponse toProductResponse(Product product);
 
 
     @Mapping(target = "category", ignore = true)
     @Mapping(target = "productImages", ignore = true)
-    @Mapping(target = "branch", ignore = true)
+    @Mapping(target = "brand", ignore = true)
     @Mapping(target = "id", ignore = true) // Ignore the ID field during update
     void updateProduct(@MappingTarget Product product, ProductRequest request);
 }

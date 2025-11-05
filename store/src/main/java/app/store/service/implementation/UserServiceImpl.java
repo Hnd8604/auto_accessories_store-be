@@ -7,6 +7,7 @@ import app.store.entity.User;
 import app.store.exception.AppException;
 import app.store.exception.ErrorCode;
 import app.store.mapper.UserMapper;
+import app.store.repository.CartRepository;
 import app.store.repository.RoleRepository;
 import app.store.repository.UserRepository;
 import app.store.service.interfaces.UserService;
@@ -32,6 +33,7 @@ public class UserServiceImpl implements UserService {
     UserRepository userRepository;
     RoleRepository roleRepository;
     PasswordEncoder passwordEncoder;
+    private final CartRepository cartRepository;
 
     @Override
     public UserResponse createUser(UserCreationRequest request) {
@@ -44,6 +46,10 @@ public class UserServiceImpl implements UserService {
         var role = roleRepository.findByName("USER")
                 .orElseThrow(()-> new RuntimeException());
         user.setRoles(Set.of(role));
+
+        // create cart when creating user
+
+
 
         return userMapper.toUserResponse(userRepository.save(user));
     }

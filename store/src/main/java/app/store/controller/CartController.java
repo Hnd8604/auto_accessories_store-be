@@ -3,7 +3,7 @@ package app.store.controller;
 import app.store.dto.request.CartItemRequest;
 import app.store.dto.request.CartItemUpdateRequest;
 import app.store.dto.request.CartRequest;
-import app.store.dto.response.BranchResponse;
+import app.store.dto.response.BrandResponse;
 import app.store.dto.response.CartCreationResponse;
 import app.store.dto.response.CartResponse;
 import app.store.dto.response.auth.ApiResponse;

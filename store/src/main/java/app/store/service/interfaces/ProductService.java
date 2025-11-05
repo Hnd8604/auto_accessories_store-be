@@ -13,7 +13,7 @@ public interface ProductService {
     void deleteProduct(Long productId);
     ProductResponse getProduct(Long productId);
     List<ProductResponse> getProductsByCategoryId(Long categoryId);
-    List<ProductResponse> getProductsByBranchId(Long branchId);
+    List<ProductResponse> getProductsByBrandId(Long brandId);
     Page<ProductResponse> getAllProducts(Pageable pageable);
 
 }

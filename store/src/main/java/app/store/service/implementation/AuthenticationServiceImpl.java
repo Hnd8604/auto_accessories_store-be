@@ -83,8 +83,10 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
         boolean authenticated = passwordEncoder.matches(request.getPassword(), user.getPassword());
 
-        if (!authenticated)
+        if (!authenticated){
             throw new AppException(ErrorCode.UNAUTHENTICATED);
+        }
+
 
         var accessToken = generateAccessToken(user);
         var refreshToken = generateRefreshToken(user);
