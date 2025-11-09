@@ -12,5 +12,7 @@ public interface PermissionMapper {
     Permission toPermission(PermissionRequest request);
     PermissionResponse toPermissionResponse(Permission permission);
     @Mapping(target = "id", ignore = true)
+    @Mapping(target="createdAt", ignore = true)
+    @Mapping(target="updatedAt", ignore = true)
     void updatePermission(@MappingTarget Permission permission, PermissionRequest request);
 }

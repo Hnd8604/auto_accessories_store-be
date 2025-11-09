@@ -12,5 +12,7 @@ import lombok.experimental.FieldDefaults;
 public class ProductImageRequest {
     Long productId;
     String imageUrl;
-    String description;
+    String altText;
+    Boolean isPrimary;
+    Integer sortOrder;
 }

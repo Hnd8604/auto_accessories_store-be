@@ -1,17 +1,15 @@
-package app.store.dto.response;
+package app.store.dto.request;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 @Getter
 @Setter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class ProductImageResponse {
-    Long id;
-    Long productId;
+public class ProductImageUpdateRequest {
     String imageUrl;
     String altText;
     Boolean isPrimary;

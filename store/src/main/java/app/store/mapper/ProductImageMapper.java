@@ -1,6 +1,7 @@
 package app.store.mapper;
 
 import app.store.dto.request.ProductImageRequest;
+import app.store.dto.request.ProductImageUpdateRequest;
 import app.store.dto.response.ProductImageResponse;
 import app.store.entity.ProductImage;
 import org.mapstruct.Mapper;
@@ -18,6 +19,8 @@ public interface ProductImageMapper {
 
     @Mapping(target = "product", ignore = true)
     @Mapping(target = "id", ignore = true)
-    ProductImage updateProductImage(@MappingTarget ProductImage productImage, ProductImageRequest request);
+    @Mapping(target="createdAt", ignore = true)
+    @Mapping(target="updatedAt", ignore = true)
+    ProductImage updateProductImage(@MappingTarget ProductImage productImage, ProductImageUpdateRequest request);
 
 }

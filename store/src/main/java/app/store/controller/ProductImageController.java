@@ -1,6 +1,7 @@
 package app.store.controller;
 
 import app.store.dto.request.ProductImageRequest;
+import app.store.dto.request.ProductImageUpdateRequest;
 import app.store.dto.response.ProductImageResponse;
 import app.store.dto.response.auth.ApiResponse;
 import app.store.service.implementation.ProductImageServiceImpl;
@@ -8,9 +9,11 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/product-images")
@@ -48,7 +51,7 @@ public class ProductImageController {
     }
 
     @PutMapping("/{id}")
-    public ApiResponse<ProductImageResponse> updateProductImage(@PathVariable Long id, @RequestBody ProductImageRequest request) {
+    public ApiResponse<ProductImageResponse> updateProductImage(@PathVariable Long id, @RequestBody ProductImageUpdateRequest request) {
         return ApiResponse.<ProductImageResponse>builder()
                 .result(productImageServiceImpl.updateProductImage(id, request))
                 .build();
@@ -57,6 +60,14 @@ public class ProductImageController {
     @DeleteMapping("/{id}")
     public ApiResponse<Void> deleteProductImage(@PathVariable Long id) {
         productImageServiceImpl.deleteProductImage(id);
+        return ApiResponse.<Void>builder()
+                .build();
+    }
+    @PostMapping("/products/{productId}/images/{imageId}/set-primary")
+    public ApiResponse<Void> setPrimaryImage(
+            @PathVariable Long productId,
+            @PathVariable Long imageId) { // Đổi tên biến cho rõ
+        productImageServiceImpl.setPrimaryImage(imageId , productId);
         return ApiResponse.<Void>builder()
                 .build();
     }

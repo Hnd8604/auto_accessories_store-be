@@ -15,5 +15,7 @@ public interface RoleMapper {
 
     @Mapping(target = "permissions", ignore = true) // Ignore roles during update
     @Mapping(target = "id", ignore = true) // Ignore ID during update
+    @Mapping(target="createdAt", ignore = true)
+    @Mapping(target="updatedAt", ignore = true)
     void updateRole(@MappingTarget Role role, RoleRequest request);
 }

@@ -18,5 +18,7 @@ public class ProductImage extends BaseEntityLong{
     @JoinColumn(name= "product_id")
     Product product;
     String imageUrl;
-    String description;
+    String altText;
+    Boolean isPrimary;
+    Integer sortOrder;
 }

@@ -1,6 +1,7 @@
 package app.store.mapper;
 
 import app.store.dto.request.ProductImageRequest;
+import app.store.dto.request.ProductImageUpdateRequest;
 import app.store.dto.response.ProductImageResponse;
 import app.store.entity.Product;
 import app.store.entity.ProductImage;
@@ -9,7 +10,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2025-11-05T23:11:36+0700",
+    date = "2025-11-09T10:42:29+0700",
     comments = "version: 1.5.5.Final, compiler: javac, environment: Java 21.0.6 (Oracle Corporation)"
 )
 @Component
@@ -26,7 +27,9 @@ public class ProductImageMapperImpl implements ProductImageMapper {
         productImageResponse.productId( productImageProductId( productImage ) );
         productImageResponse.id( productImage.getId() );
         productImageResponse.imageUrl( productImage.getImageUrl() );
-        productImageResponse.description( productImage.getDescription() );
+        productImageResponse.altText( productImage.getAltText() );
+        productImageResponse.isPrimary( productImage.getIsPrimary() );
+        productImageResponse.sortOrder( productImage.getSortOrder() );
 
         return productImageResponse.build();
     }
@@ -40,19 +43,23 @@ public class ProductImageMapperImpl implements ProductImageMapper {
         ProductImage productImage = new ProductImage();
 
         productImage.setImageUrl( request.getImageUrl() );
-        productImage.setDescription( request.getDescription() );
+        productImage.setAltText( request.getAltText() );
+        productImage.setIsPrimary( request.getIsPrimary() );
+        productImage.setSortOrder( request.getSortOrder() );
 
         return productImage;
     }
 
     @Override
-    public ProductImage updateProductImage(ProductImage productImage, ProductImageRequest request) {
+    public ProductImage updateProductImage(ProductImage productImage, ProductImageUpdateRequest request) {
         if ( request == null ) {
             return productImage;
         }
 
         productImage.setImageUrl( request.getImageUrl() );
-        productImage.setDescription( request.getDescription() );
+        productImage.setAltText( request.getAltText() );
+        productImage.setIsPrimary( request.getIsPrimary() );
+        productImage.setSortOrder( request.getSortOrder() );
 
         return productImage;
     }
