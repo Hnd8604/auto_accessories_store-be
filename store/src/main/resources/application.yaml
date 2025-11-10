@@ -15,6 +15,10 @@ spring:
       ddl-auto: update
   main:
     banner-mode: off
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
 
 logging:
   level:
@@ -24,4 +28,7 @@ jwt:
   signerKey: "Ipw5iOxpnL0VXwmcTK7OQHjLR5g/gHjB9ispYoUp+RY+yjksxO2jYEuf+asL9LQ1"
   access-duration: 600000 #in seconds
   refresh-duration: 500000000
-
+cloudinary:
+  cloud-name: dsgftzhzt
+  api-key: 363524259282383
+  api-secret: Fgg6RVnlQNtIe1cfAgg5sKORENw

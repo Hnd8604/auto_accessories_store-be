@@ -16,6 +16,7 @@ import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 @Service
@@ -26,6 +27,7 @@ public class ProductImageServiceImpl implements ProductImageService {
     ProductImageRepository productImageRepository;
     ProductImageMapper productImageMapper;
     ProductRepository productRepository;
+    CloudinaryServiceImpl cloudinaryServiceImpl;
     private final ProductMapper productMapper;
 
     @Override
@@ -47,12 +49,20 @@ public class ProductImageServiceImpl implements ProductImageService {
                 .map(productImageMapper::toProductImageResponse).toList();
     }
 
+
     @Override
-    public ProductImageResponse createProductImage(ProductImageRequest request) {
+    public ProductImageResponse createProductImage(MultipartFile file, ProductImageRequest request) {
+
+        // Tạo ProductImage entity
         ProductImage productImage = productImageMapper.toProductImage(request);
         Product product = productRepository.findById(request.getProductId())
                 .orElseThrow(() -> new RuntimeException("Product not found with id: " + request.getProductId()));
+        // Upload ảnh lên Cloudinary
+        String imageUrl = cloudinaryServiceImpl.uploadImage(file);
+
         productImage.setProduct(product);
+        productImage.setImageUrl(imageUrl);
+
         return productImageMapper.toProductImageResponse(
                 productImageRepository.save(productImage));
     }
@@ -74,12 +84,16 @@ public class ProductImageServiceImpl implements ProductImageService {
     }
 
     @Override
-    public void deleteProductImage(Long id) {
-        ProductImage productImage = productImageRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Product image not found with id: " + id));
+    @Transactional
+    public void deleteProductImage(Long imageId) {
+        ProductImage productImage = productImageRepository.findById(imageId)
+                .orElseThrow(() -> new RuntimeException("Product image not found with id: " + imageId));
 
+        // Xóa ảnh trên Cloudinary
+        cloudinaryServiceImpl.deleteImage(productImage.getImageUrl());
+
+        // Xóa record trong database
         productImageRepository.delete(productImage);
-
     }
 
     @Override

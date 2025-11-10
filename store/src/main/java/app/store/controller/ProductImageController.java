@@ -9,8 +9,10 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Map;
@@ -43,10 +45,17 @@ public class ProductImageController {
                 .build();
     }
 
-    @PostMapping
-    public ApiResponse<ProductImageResponse> createProductImage(@RequestBody ProductImageRequest request) {
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ApiResponse<ProductImageResponse> createProductImage(
+            @RequestParam("file") MultipartFile file,
+            @RequestParam("productId") Long productId,
+            @RequestParam(value = "isPrimary", defaultValue = "false") Boolean isPrimary) {
+        ProductImageRequest request = ProductImageRequest.builder()
+                .productId(productId)
+                .isPrimary(isPrimary)
+                .build();
         return ApiResponse.<ProductImageResponse>builder()
-                .result(productImageServiceImpl.createProductImage(request))
+                .result(productImageServiceImpl.createProductImage(file, request))
                 .build();
     }
 
@@ -61,6 +70,7 @@ public class ProductImageController {
     public ApiResponse<Void> deleteProductImage(@PathVariable Long id) {
         productImageServiceImpl.deleteProductImage(id);
         return ApiResponse.<Void>builder()
+                .message("Product image deleted successfully")
                 .build();
     }
     @PostMapping("/products/{productId}/images/{imageId}/set-primary")
