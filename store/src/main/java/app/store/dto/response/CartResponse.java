@@ -13,8 +13,8 @@ import java.util.List;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class CartResponse {
-    BigDecimal totalPrice;
-    Integer totalItems;
+//    BigDecimal totalPrice;
+//    Integer totalItems;
     //BigDecimal price; add after has voucher
     String userId;
     List<CartItemResponse> items;

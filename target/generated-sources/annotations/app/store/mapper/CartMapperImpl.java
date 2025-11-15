@@ -1,7 +1,5 @@
 package app.store.mapper;
 
-import app.store.dto.request.CartRequest;
-import app.store.dto.response.CartCreationResponse;
 import app.store.dto.response.CartItemResponse;
 import app.store.dto.response.CartResponse;
 import app.store.entity.Cart;
@@ -15,7 +13,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2025-11-15T14:53:25+0700",
+    date = "2025-11-15T23:34:50+0700",
     comments = "version: 1.5.5.Final, compiler: javac, environment: Java 21.0.6 (Oracle Corporation)"
 )
 @Component
@@ -35,34 +33,7 @@ public class CartMapperImpl implements CartMapper {
         cartResponse.userId( cartUserId( cart ) );
         cartResponse.items( cartItemListToCartItemResponseList( cart.getCartItems() ) );
 
-        cartResponse.totalItems( cart.getCartItems() != null ? cart.getCartItems().size() : 0 );
-        cartResponse.totalPrice( calculateTotalPrice(cart) );
-
         return cartResponse.build();
-    }
-
-    @Override
-    public Cart toCart(CartRequest request) {
-        if ( request == null ) {
-            return null;
-        }
-
-        Cart.CartBuilder cart = Cart.builder();
-
-        return cart.build();
-    }
-
-    @Override
-    public CartCreationResponse toCartCreationResponse(Cart cart) {
-        if ( cart == null ) {
-            return null;
-        }
-
-        CartCreationResponse.CartCreationResponseBuilder cartCreationResponse = CartCreationResponse.builder();
-
-        cartCreationResponse.userId( cartUserId( cart ) );
-
-        return cartCreationResponse.build();
     }
 
     private String cartUserId(Cart cart) {

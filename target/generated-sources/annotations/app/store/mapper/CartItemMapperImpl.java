@@ -1,17 +1,15 @@
 package app.store.mapper;
 
-import app.store.dto.request.CartItemRequest;
 import app.store.dto.response.CartItemResponse;
 import app.store.entity.Cart;
 import app.store.entity.CartItem;
 import app.store.entity.Product;
-import java.math.BigDecimal;
 import javax.annotation.processing.Generated;
 import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2025-11-15T14:53:25+0700",
+    date = "2025-11-15T23:34:51+0700",
     comments = "version: 1.5.5.Final, compiler: javac, environment: Java 21.0.6 (Oracle Corporation)"
 )
 @Component
@@ -27,27 +25,10 @@ public class CartItemMapperImpl implements CartItemMapper {
 
         cartItemResponse.cartId( itemCartId( item ) );
         cartItemResponse.productId( itemProductId( item ) );
-        cartItemResponse.productName( itemProductName( item ) );
-        cartItemResponse.unitPrice( itemProductUnitPrice( item ) );
         cartItemResponse.id( item.getId() );
         cartItemResponse.quantity( item.getQuantity() );
 
-        cartItemResponse.totalPrice( calculateTotal(item) );
-
         return cartItemResponse.build();
-    }
-
-    @Override
-    public CartItem toCartItem(CartItemRequest request) {
-        if ( request == null ) {
-            return null;
-        }
-
-        CartItem.CartItemBuilder cartItem = CartItem.builder();
-
-        cartItem.quantity( request.getQuantity() );
-
-        return cartItem.build();
     }
 
     private Long itemCartId(CartItem cartItem) {
@@ -78,35 +59,5 @@ public class CartItemMapperImpl implements CartItemMapper {
             return null;
         }
         return id;
-    }
-
-    private String itemProductName(CartItem cartItem) {
-        if ( cartItem == null ) {
-            return null;
-        }
-        Product product = cartItem.getProduct();
-        if ( product == null ) {
-            return null;
-        }
-        String name = product.getName();
-        if ( name == null ) {
-            return null;
-        }
-        return name;
-    }
-
-    private BigDecimal itemProductUnitPrice(CartItem cartItem) {
-        if ( cartItem == null ) {
-            return null;
-        }
-        Product product = cartItem.getProduct();
-        if ( product == null ) {
-            return null;
-        }
-        BigDecimal unitPrice = product.getUnitPrice();
-        if ( unitPrice == null ) {
-            return null;
-        }
-        return unitPrice;
     }
 }

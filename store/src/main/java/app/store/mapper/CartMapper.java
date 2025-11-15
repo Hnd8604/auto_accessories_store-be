@@ -14,23 +14,12 @@ import java.math.BigDecimal;
 public interface CartMapper {
     @Mapping(target = "userId", source = "user.id")
     @Mapping(target = "items", source = "cartItems")
-    @Mapping(target = "totalItems", expression = "java(cart.getCartItems() != null ? cart.getCartItems().size() : 0)")
-    @Mapping(target = "totalPrice", expression = "java(calculateTotalPrice(cart))")
     CartResponse toCartResponse(Cart cart);
 
+//    @Mapping(target = "cartItems", ignore = true)
+//    @Mapping(target = "user", ignore = true)
+//    Cart toCart(CartRequest request);
 
-    default BigDecimal calculateTotalPrice(Cart cart) {
-        if (cart.getCartItems() == null) return BigDecimal.ZERO;
-
-        return cart.getCartItems().stream()
-                .map(item -> item.getProduct().getUnitPrice().multiply(BigDecimal.valueOf(item.getQuantity())))
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
-    }
-
-    @Mapping(target = "cartItems", ignore = true)
-    @Mapping(target = "user", ignore = true)
-    Cart toCart(CartRequest request);
-
-    @Mapping(target = "userId", source = "user.id")
-    CartCreationResponse toCartCreationResponse(Cart cart);
+//    @Mapping(target = "userId", source = "user.id")
+//    CartCreationResponse toCartCreationResponse(Cart cart);
 }

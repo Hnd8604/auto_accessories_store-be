@@ -25,6 +25,6 @@ public class OrderDetail extends BaseEntityLong{
 
     @Column(nullable = false)
     Integer quantity;
-
-    BigDecimal unitPrice;
+//
+//    BigDecimal unitPrice;
 }

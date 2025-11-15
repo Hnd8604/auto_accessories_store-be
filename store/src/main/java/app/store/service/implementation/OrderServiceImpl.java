@@ -2,6 +2,7 @@ package app.store.service.implementation;
 
 import app.store.dto.request.OrderCreationRequest;
 
+import app.store.dto.request.OrderDetailRequest;
 import app.store.dto.request.OrderUpdateByAdminRequest;
 import app.store.dto.request.OrderUpdateByUserRequest;
 import app.store.dto.response.OrderResponse;
@@ -9,9 +10,7 @@ import app.store.entity.*;
 import app.store.enums.OrderStatus;
 import app.store.mapper.CartMapper;
 import app.store.mapper.OrderMapper;
-import app.store.repository.CartRepository;
-import app.store.repository.OrderRepository;
-import app.store.repository.UserRepository;
+import app.store.repository.*;
 import app.store.service.interfaces.OrderService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +19,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 @Service
@@ -30,9 +30,9 @@ public class OrderServiceImpl implements OrderService {
     OrderRepository orderRepository;
     OrderMapper orderMapper;
     UserRepository userRepository;
-    CartItemServiceImpl cartItemServiceImpl;
     CartRepository cartRepository;
-    CartMapper cartMapper;
+    ProductRepository productRepository;
+    CartItemRepository cartItemRepository;
 
     @Override
     public List<OrderResponse> getAllOrders() {
@@ -67,20 +67,48 @@ public class OrderServiceImpl implements OrderService {
                 .orElseThrow(() -> new RuntimeException("Cart not found for user"));
         List<OrderDetail> orderDetails = new ArrayList<>();
 
-        for( CartItem item : cart.getCartItems()) {
+        BigDecimal totalPrice = new BigDecimal(0);
+        for( OrderDetailRequest orderDetailRequest : orderRequest.getOrderDetails()) { // tao tung order detail tu request
+            Product product = productRepository.findById(orderDetailRequest.getProductId())
+                    .orElseThrow(() -> new RuntimeException("Product not found"));
+
+            if(orderDetailRequest.getQuantity() <= 0 || orderDetailRequest.getQuantity() > product.getStockQuantity()) {
+                throw new IllegalArgumentException("Quantity is not valid for product: " + product.getName());
+            }
             OrderDetail orderDetail = new OrderDetail();
-            orderDetail.setProduct(item.getProduct());
-            orderDetail.setQuantity(item.getQuantity());
+            orderDetail.setProduct(product);
+            orderDetail.setQuantity(orderDetailRequest.getQuantity());
             orderDetail.setOrder(order);
-            orderDetail.setUnitPrice(item.getProduct().getUnitPrice());
             orderDetails.add(orderDetail);
+
+
+            // cong tien
+            totalPrice = totalPrice.add(product.getUnitPrice().multiply(BigDecimal.valueOf(orderDetailRequest.getQuantity())));
+
+            // giam so luong trong gio hang
+            // tu cart->cartItem-> product -> giam so luong product trong cartItem, neu = 0 thi xoa luon cartItem di
+            CartItem cartItem = cart.getCartItems().stream()
+                    .filter(item -> item.getProduct().getId().equals(product.getId()))
+                    .findFirst()
+                    .orElse(null);
+            if(cartItem != null) {
+                cartItem.setQuantity(cartItem.getQuantity() - orderDetailRequest.getQuantity());
+
+                if (cartItem.getQuantity() == 0) {
+                    cart.getCartItems().remove(cartItem);
+                    cartItemRepository.delete(cartItem);
+                }
+            }
+            else {
+                throw new RuntimeException("CartItem not found for product: " + product.getName());
+            }
+
+        // giam so luong product
+            product.setStockQuantity(product.getStockQuantity() - orderDetailRequest.getQuantity());
         }
         order.setOrderDetails(orderDetails);
-        order.setTotalPrice(cartMapper.toCartResponse(cart).getTotalPrice());
+        order.setTotalPrice(totalPrice);
         order.setUser(user);
-
-        cart.getCartItems().clear();
-        cartRepository.save(cart);
         return orderMapper.toOrderResponse(orderRepository.save(order));
     }
 
@@ -109,9 +137,17 @@ public class OrderServiceImpl implements OrderService {
                 .orElseThrow(() -> new RuntimeException("Order not found"));
         if (order.getStatus() == OrderStatus.PENDING || order.getStatus() == OrderStatus.PROCESSING) {
             order.setStatus(OrderStatus.CANCELED);
-            return orderMapper.toOrderResponse(orderRepository.save(order));
+
         }
-        return orderMapper.toOrderResponse(order);
+        else {
+            throw new RuntimeException("Only orders with status PENDING or PROCESSING can be canceled");
+        }
+        List<OrderDetail> orderDetails = order.getOrderDetails();
+        for( OrderDetail orderDetail : orderDetails ) {
+            Product product = orderDetail.getProduct();
+            product.setStockQuantity(product.getStockQuantity() + orderDetail.getQuantity());
+        }
+        return orderMapper.toOrderResponse(orderRepository.save(order));
     }
 
     @Override
@@ -119,6 +155,5 @@ public class OrderServiceImpl implements OrderService {
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(() -> new RuntimeException("Order not found"));
         orderRepository.delete(order);
-
     }
 }

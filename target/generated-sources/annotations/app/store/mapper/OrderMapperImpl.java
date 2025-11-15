@@ -1,22 +1,18 @@
 package app.store.mapper;
 
 import app.store.dto.request.OrderCreationRequest;
-import app.store.dto.response.OrderDetailResponse;
 import app.store.dto.response.OrderResponse;
 import app.store.entity.Order;
-import app.store.entity.OrderDetail;
 import app.store.entity.User;
 import app.store.enums.OrderStatus;
 import app.store.enums.PaymentStatus;
-import java.util.ArrayList;
-import java.util.List;
 import javax.annotation.processing.Generated;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2025-11-15T14:53:25+0700",
+    date = "2025-11-15T23:34:51+0700",
     comments = "version: 1.5.5.Final, compiler: javac, environment: Java 21.0.6 (Oracle Corporation)"
 )
 @Component
@@ -34,16 +30,15 @@ public class OrderMapperImpl implements OrderMapper {
         OrderResponse.OrderResponseBuilder orderResponse = OrderResponse.builder();
 
         orderResponse.userId( orderUserId( order ) );
-        orderResponse.orderDetails( orderDetailListToOrderDetailResponseList( order.getOrderDetails() ) );
+        orderResponse.orderDetails( orderDetailMapper.toOrderDetailResponseList( order.getOrderDetails() ) );
         orderResponse.id( order.getId() );
+        orderResponse.totalPrice( order.getTotalPrice() );
         orderResponse.nameRecipient( order.getNameRecipient() );
         orderResponse.phoneRecipient( order.getPhoneRecipient() );
         orderResponse.addressRecipient( order.getAddressRecipient() );
         orderResponse.note( order.getNote() );
         orderResponse.status( order.getStatus() );
         orderResponse.paymentStatus( order.getPaymentStatus() );
-
-        orderResponse.totalPrice( calculateTotalPrice(order) );
 
         return orderResponse.build();
     }
@@ -80,18 +75,5 @@ public class OrderMapperImpl implements OrderMapper {
             return null;
         }
         return id;
-    }
-
-    protected List<OrderDetailResponse> orderDetailListToOrderDetailResponseList(List<OrderDetail> list) {
-        if ( list == null ) {
-            return null;
-        }
-
-        List<OrderDetailResponse> list1 = new ArrayList<OrderDetailResponse>( list.size() );
-        for ( OrderDetail orderDetail : list ) {
-            list1.add( orderDetailMapper.toOrderDetailResponse( orderDetail ) );
-        }
-
-        return list1;
     }
 }

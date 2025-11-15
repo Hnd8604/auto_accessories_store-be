@@ -15,6 +15,5 @@ public class OrderDetailResponse {
     String id;
     String orderId;
     String productId;
-    BigDecimal unitPrice;
     Integer quantity;
 }

@@ -1,12 +1,20 @@
 package app.store.service.implementation;
 
+import app.store.dto.request.CartItemRequest;
+import app.store.dto.request.CartItemUpdateRequest;
 import app.store.dto.request.CartRequest;
 import app.store.dto.response.CartCreationResponse;
+import app.store.dto.response.CartItemResponse;
 import app.store.dto.response.CartResponse;
 import app.store.entity.Cart;
+import app.store.entity.CartItem;
+import app.store.entity.Product;
 import app.store.entity.User;
+import app.store.mapper.CartItemMapper;
 import app.store.mapper.CartMapper;
+import app.store.repository.CartItemRepository;
 import app.store.repository.CartRepository;
+import app.store.repository.ProductRepository;
 import app.store.repository.UserRepository;
 import app.store.service.interfaces.CartService;
 import com.nimbusds.jose.JOSEException;
@@ -22,10 +30,11 @@ import java.text.ParseException;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @Slf4j
 public class CartServiceImpl implements CartService {
-    UserRepository userRepository;
     CartMapper cartMapper;
     CartRepository cartRepository;
-
+    ProductRepository productRepository;
+    CartItemRepository cartItemRepository;
+    CartItemMapper cartItemMapper;
     @Override
     public CartResponse getCartById(Long cartId) throws ParseException, JOSEException {
         Cart cart = cartRepository.findById(cartId)
@@ -34,4 +43,56 @@ public class CartServiceImpl implements CartService {
     }
 
 
+@Override
+public CartItemResponse addItemToCart(CartItemRequest request) {
+    Cart cart = cartRepository.findById(request.getCartId())
+            .orElseThrow(() -> new RuntimeException("Cart not found"));
+    Product product = productRepository.findById(request.getProductId())
+            .orElseThrow(() -> new RuntimeException("Product not found"));
+
+    // Check if the product is already in the cart
+    CartItem cartItem = cart.getCartItems().stream()
+            .filter(item -> item.getProduct().getId().equals(product.getId()))
+            .findFirst()
+            .orElse(null);
+
+    if (cartItem != null) {
+        // If item exists, update the quantity
+        int newQuantity = cartItem.getQuantity() + request.getQuantity();
+        if (newQuantity <= 0 || newQuantity > product.getStockQuantity()) {
+            throw new IllegalArgumentException("Quantity is not valid");
+        }
+        cartItem.setQuantity(newQuantity);
+    } else {
+        // If item does not exist, create a new one
+        if (request.getQuantity() <= 0 || request.getQuantity() > product.getStockQuantity()) {
+            throw new IllegalArgumentException("Quantity is not valid");
+        }
+        cartItem = new CartItem(); // neu bang null thi tao moi
+        cartItem.setCart(cart);
+        cartItem.setProduct(product);
+        cartItem.setQuantity(request.getQuantity());
+    }
+    cartItemRepository.save(cartItem);
+    return cartItemMapper.toCartItemResponse(cartItem);
+}
+    @Override
+    public void removeItemFromCart(Long cartId, Long itemId) {
+        CartItem item = cartItemRepository.findById(itemId)
+                .orElseThrow(() -> new RuntimeException("CartItem not found"));
+
+        if (!item.getCart().getId().equals(cartId)) {
+            throw new IllegalArgumentException("Item does not belong to cart " + cartId);
+        }
+        cartItemRepository.delete(item);
+    }
+
+    @Override
+    public CartItemResponse updateItemInCart(Long itemId, CartItemUpdateRequest request) {
+        CartItem cartItem = cartItemRepository.findById(itemId)
+                .orElseThrow(() -> new RuntimeException("Cart item not found"));
+        cartItem.setQuantity(request.getQuantity());
+        cartItemRepository.save(cartItem);
+        return cartItemMapper.toCartItemResponse(cartItem);
+    }
 }

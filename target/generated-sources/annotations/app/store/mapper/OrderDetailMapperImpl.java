@@ -1,17 +1,17 @@
 package app.store.mapper;
 
-import app.store.dto.request.OrderDetailRequest;
 import app.store.dto.response.OrderDetailResponse;
 import app.store.entity.Order;
 import app.store.entity.OrderDetail;
 import app.store.entity.Product;
-import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 import javax.annotation.processing.Generated;
 import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2025-11-15T14:53:25+0700",
+    date = "2025-11-15T23:34:51+0700",
     comments = "version: 1.5.5.Final, compiler: javac, environment: Java 21.0.6 (Oracle Corporation)"
 )
 @Component
@@ -30,7 +30,6 @@ public class OrderDetailMapperImpl implements OrderDetailMapper {
         if ( id1 != null ) {
             orderDetailResponse.productId( String.valueOf( id1 ) );
         }
-        orderDetailResponse.unitPrice( orderDetailProductUnitPrice( orderDetail ) );
         if ( orderDetail.getId() != null ) {
             orderDetailResponse.id( String.valueOf( orderDetail.getId() ) );
         }
@@ -40,16 +39,17 @@ public class OrderDetailMapperImpl implements OrderDetailMapper {
     }
 
     @Override
-    public OrderDetail toOrderDetail(OrderDetailRequest request) {
-        if ( request == null ) {
+    public List<OrderDetailResponse> toOrderDetailResponseList(List<OrderDetail> orderDetails) {
+        if ( orderDetails == null ) {
             return null;
         }
 
-        OrderDetail orderDetail = new OrderDetail();
+        List<OrderDetailResponse> list = new ArrayList<OrderDetailResponse>( orderDetails.size() );
+        for ( OrderDetail orderDetail : orderDetails ) {
+            list.add( toOrderDetailResponse( orderDetail ) );
+        }
 
-        orderDetail.setQuantity( request.getQuantity() );
-
-        return orderDetail;
+        return list;
     }
 
     private String orderDetailOrderId(OrderDetail orderDetail) {
@@ -80,20 +80,5 @@ public class OrderDetailMapperImpl implements OrderDetailMapper {
             return null;
         }
         return id;
-    }
-
-    private BigDecimal orderDetailProductUnitPrice(OrderDetail orderDetail) {
-        if ( orderDetail == null ) {
-            return null;
-        }
-        Product product = orderDetail.getProduct();
-        if ( product == null ) {
-            return null;
-        }
-        BigDecimal unitPrice = product.getUnitPrice();
-        if ( unitPrice == null ) {
-            return null;
-        }
-        return unitPrice;
     }
 }

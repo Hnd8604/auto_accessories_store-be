@@ -15,19 +15,11 @@ public interface CartItemMapper {
 
     @Mapping(target = "cartId", source = "cart.id")
     @Mapping(target = "productId", source = "product.id")
-    @Mapping(target = "productName", source = "product.name")
-    @Mapping(target = "unitPrice", source = "product.unitPrice")
-    @Mapping(target = "totalPrice", expression = "java(calculateTotal(item))")
     CartItemResponse toCartItemResponse(CartItem item);
 
-    default BigDecimal calculateTotal(CartItem item) {
-        if (item.getProduct() == null || item.getQuantity() == 0) return BigDecimal.ZERO;
-        return item.getProduct().getUnitPrice().multiply(BigDecimal.valueOf(item.getQuantity()));
-    }
 
-
-    @Mapping(target = "product", ignore = true)
-    @Mapping(target = "cart", ignore = true)
-    CartItem toCartItem(CartItemRequest request);
+//    @Mapping(target = "product", ignore = true)
+//    @Mapping(target = "cart", ignore = true)
+//    CartItem toCartItem(CartItemRequest request);
 
 }
