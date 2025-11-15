@@ -28,9 +28,9 @@ public class BrandServiceImpl implements BrandService {
     }
 
     @Override
-    public BrandResponse getBrandById(Long id) {
-        Brand brand = brandRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Brand not found with id: " + id));
+    public BrandResponse getBrandById(Long brandId) {
+        Brand brand = brandRepository.findById(brandId)
+                .orElseThrow(() -> new RuntimeException("Brand not found with id: " + brandId));
         return brandMapper.toBrandResponse(brand);
 
     }
@@ -42,17 +42,17 @@ public class BrandServiceImpl implements BrandService {
     }
 
     @Override
-    public BrandResponse updateBrand(Long id, BrandRequest brandRequest) {
-        Brand brand = brandRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Brand not found with id: " + id));
+    public BrandResponse updateBrand(Long brandId, BrandRequest brandRequest) {
+        Brand brand = brandRepository.findById(brandId)
+                .orElseThrow(() -> new RuntimeException("Brand not found with id: " + brandId));
         brandMapper.updateBrand(brand, brandRequest);
         return brandMapper.toBrandResponse(brandRepository.save(brand));
     }
 
     @Override
-    public void deleteBrand(Long id) {
-        Brand brand = brandRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Brand not found with id: " + id));
+    public void deleteBrand(Long brandId) {
+        Brand brand = brandRepository.findById(brandId)
+                .orElseThrow(() -> new RuntimeException("Brand not found with id: " + brandId));
         brandRepository.delete(brand);
 
     }

@@ -19,10 +19,11 @@ public interface ProductMapper {
     @Mapping(target = "brandName", source = "brand.name")
     ProductResponse toProductResponse(Product product);
 
-
+    @Mapping(target = "id", ignore = true) // Ignore the ID field during update
     @Mapping(target = "category", ignore = true)
     @Mapping(target = "productImages", ignore = true)
     @Mapping(target = "brand", ignore = true)
-    @Mapping(target = "id", ignore = true) // Ignore the ID field during update
+    @Mapping (target = "createdAt", ignore = true)
+    @Mapping (target = "updatedAt", ignore = true)
     void updateProduct(@MappingTarget Product product, ProductRequest request);
 }

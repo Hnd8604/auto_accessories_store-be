@@ -35,22 +35,22 @@ public class CategoryController {
                 .build();
     }
 
-    @GetMapping("/{id}")
-    ApiResponse<CategoryResponse> getCategory(@PathVariable Long id) {
+    @GetMapping("/{categoryId}")
+    ApiResponse<CategoryResponse> getCategory(@PathVariable Long categoryId) {
        return ApiResponse.<CategoryResponse>builder()
-                .result(categoryServiceImpl.getCategoryById(id))
+                .result(categoryServiceImpl.getCategoryById(categoryId))
                 .build();
     }
-    @PutMapping("/{id}")
-    ApiResponse<CategoryResponse> updateCategory(@PathVariable Long id, @RequestBody CategoryRequest request) {
+    @PutMapping("/{categoryId}")
+    ApiResponse<CategoryResponse> updateCategory(@PathVariable Long categoryId, @RequestBody CategoryRequest request) {
         return ApiResponse.<CategoryResponse>builder()
-                .result(categoryServiceImpl.updateCategory(id, request))
+                .result(categoryServiceImpl.updateCategory(categoryId, request))
                 .build();
     }
 
-    @DeleteMapping("/{id}")
-    ApiResponse<Void> deleteCategory(@PathVariable Long id) {
-        categoryServiceImpl.deleteCategory(id);
+    @DeleteMapping("/{categoryId}")
+    ApiResponse<Void> deleteCategory(@PathVariable Long categoryId) {
+        categoryServiceImpl.deleteCategory(categoryId);
         return ApiResponse.<Void>builder()
                 .build();
     }

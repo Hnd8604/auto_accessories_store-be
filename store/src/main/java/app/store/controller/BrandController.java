@@ -26,10 +26,10 @@ public class BrandController {
                 .result(BrandServiceImpl.getAllBrands())
                 .build();
     }
-    @GetMapping("/{id}")
-    ApiResponse<BrandResponse> getBrandById(@PathVariable String id) {
+    @GetMapping("/{brandId}")
+    ApiResponse<BrandResponse> getBrandById(@PathVariable String brandId) {
         return ApiResponse.<BrandResponse>builder()
-                .result(BrandServiceImpl.getBrandById(Long.parseLong(id)))
+                .result(BrandServiceImpl.getBrandById(Long.parseLong(brandId)))
                 .build();
     }
     @PostMapping
@@ -39,15 +39,15 @@ public class BrandController {
                 .build();
     }
 
-    @PutMapping("/{id}")
-    ApiResponse<BrandResponse> updateBrand(@PathVariable Long id,@RequestBody BrandRequest BrandRequest) {
+    @PutMapping("/{brandId}")
+    ApiResponse<BrandResponse> updateBrand(@PathVariable Long brandId,@RequestBody BrandRequest BrandRequest) {
         return ApiResponse.<BrandResponse>builder()
-                .result(BrandServiceImpl.updateBrand(id, BrandRequest))
+                .result(BrandServiceImpl.updateBrand(brandId, BrandRequest))
                 .build();
     }
-    @DeleteMapping("/{id}")
-    ApiResponse<Void> deleteBrand(@PathVariable Long id) {
-        BrandServiceImpl.deleteBrand(id);
+    @DeleteMapping("/{brandId}")
+    ApiResponse<Void> deleteBrand(@PathVariable Long brandId) {
+        BrandServiceImpl.deleteBrand(brandId);
         return ApiResponse.<Void>builder()
                 .build();
         }

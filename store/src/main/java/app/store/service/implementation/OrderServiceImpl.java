@@ -48,7 +48,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public List<OrderResponse> getMyOrders() {
+    public List<OrderResponse> getMyOrder() {
         var context = SecurityContextHolder.getContext();
         String name = context.getAuthentication().getName();
         List<Order> orders = orderRepository.getOrderByUserName(name);

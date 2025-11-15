@@ -28,11 +28,11 @@ public class PermissionController {
     }
 
 
-    @PutMapping("/{id}")
-    ApiResponse<PermissionResponse> updatePermission(@PathVariable Long id,
+    @PutMapping("/{permissionId}")
+    ApiResponse<PermissionResponse> updatePermission(@PathVariable Long permissionId,
                                                       @RequestBody PermissionRequest request) {
         return ApiResponse.<PermissionResponse>builder()
-                .result(permissionServiceImpl.updatePermission(id, request))
+                .result(permissionServiceImpl.updatePermission(permissionId, request))
                 .build();
     }
     @GetMapping
@@ -42,9 +42,9 @@ public class PermissionController {
                 .build();
     }
 
-    @DeleteMapping("/{id}")
-    ApiResponse<Void> deletePermission(@PathVariable Long  id) {
-        permissionServiceImpl.deletePermission(id);
+    @DeleteMapping("/{permissionId}")
+    ApiResponse<Void> deletePermission(@PathVariable Long  permissionId) {
+        permissionServiceImpl.deletePermission(permissionId);
         return ApiResponse.<Void>builder().build();
     }
 

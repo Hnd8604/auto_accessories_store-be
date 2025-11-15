@@ -19,5 +19,7 @@ public interface BrandMapper {
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "products", ignore = true)
+    @Mapping(target = "createdAt", ignore = true)
+    @Mapping(target = "updatedAt", ignore = true)
     void updateBrand(@MappingTarget Brand brand, BrandRequest brandRequest);
 }

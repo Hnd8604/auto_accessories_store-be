@@ -31,11 +31,11 @@ public class ProductImageController {
                 .result(productImageServiceImpl.getAllProductImages())
                 .build();
     }
-    @GetMapping("/{id}")
-    public ApiResponse<ProductImageResponse> getProductImageById(@PathVariable Long id) {
+    @GetMapping("/{imageId}")
+    public ApiResponse<ProductImageResponse> getProductImageById(@PathVariable Long imageId) {
 
         return ApiResponse.<ProductImageResponse>builder()
-                .result(productImageServiceImpl.getProductImageById(id))
+                .result(productImageServiceImpl.getProductImageById(imageId))
                 .build();
     }
     @GetMapping("/products/{productId}")
@@ -59,16 +59,16 @@ public class ProductImageController {
                 .build();
     }
 
-    @PutMapping("/{id}")
-    public ApiResponse<ProductImageResponse> updateProductImage(@PathVariable Long id, @RequestBody ProductImageUpdateRequest request) {
+    @PutMapping("/{imageId}")
+    public ApiResponse<ProductImageResponse> updateProductImage(@PathVariable Long imageId, @RequestBody ProductImageUpdateRequest request) {
         return ApiResponse.<ProductImageResponse>builder()
-                .result(productImageServiceImpl.updateProductImage(id, request))
+                .result(productImageServiceImpl.updateProductImage(imageId, request))
                 .build();
     }
 
-    @DeleteMapping("/{id}")
-    public ApiResponse<Void> deleteProductImage(@PathVariable Long id) {
-        productImageServiceImpl.deleteProductImage(id);
+    @DeleteMapping("/{imageId}")
+    public ApiResponse<Void> deleteProductImage(@PathVariable Long imageId) {
+        productImageServiceImpl.deleteProductImage(imageId);
         return ApiResponse.<Void>builder()
                 .message("Product image deleted successfully")
                 .build();

@@ -7,10 +7,10 @@ import java.util.List;
 
 public interface BrandService {
     List<BrandResponse> getAllBrands();
-    BrandResponse getBrandById(Long id);
+    BrandResponse getBrandById(Long brandId);
     BrandResponse createBrand(BrandRequest brandRequest);
-    BrandResponse updateBrand(Long id, BrandRequest brandRequest);
-    void deleteBrand(Long id);
+    BrandResponse updateBrand(Long brandId, BrandRequest brandRequest);
+    void deleteBrand(Long brandId);
 
 
 }

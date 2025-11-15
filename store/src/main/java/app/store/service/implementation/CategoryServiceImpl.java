@@ -29,8 +29,8 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public CategoryResponse getCategoryById(Long id) {
-        return categoryRepository.findById(id)
+    public CategoryResponse getCategoryById(Long categoryId) {
+        return categoryRepository.findById(categoryId)
                 .map(categoryMapper::toCategoryResponse)
                 .orElseThrow(() -> new RuntimeException("Category not found"));
     }
@@ -42,18 +42,18 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public CategoryResponse updateCategory(Long id, CategoryRequest request) {
-        Category category = categoryRepository.findById(id)
+    public CategoryResponse updateCategory(Long categoryId, CategoryRequest request) {
+        Category category = categoryRepository.findById(categoryId)
                 .orElseThrow(() -> new RuntimeException("Category not found"));
         categoryMapper.updateCategory(category, request);
         return categoryMapper.toCategoryResponse(categoryRepository.save(category));
     }
 
     @Override
-    public void deleteCategory(Long id) {
-        Category category = categoryRepository.findById(id)
+    public void deleteCategory(Long categoryId) {
+        Category category = categoryRepository.findById(categoryId)
                 .orElseThrow(() -> new RuntimeException("Category not found"));
-        categoryRepository.deleteById(id);
+        categoryRepository.deleteById(categoryId);
 
     }
 }

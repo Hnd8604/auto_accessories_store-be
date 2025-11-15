@@ -37,9 +37,9 @@ public class ProductImageServiceImpl implements ProductImageService {
     }
 
     @Override
-    public ProductImageResponse getProductImageById(Long id) {
-        ProductImage productImage = productImageRepository.findById(id).
-                orElseThrow(() -> new RuntimeException("Product image not found with id: " + id));  ;
+    public ProductImageResponse getProductImageById(Long imageId) {
+        ProductImage productImage = productImageRepository.findById(imageId).
+                orElseThrow(() -> new RuntimeException("Product image not found with id: " + imageId));  ;
         return productImageMapper.toProductImageResponse(productImage);
     }
 
@@ -68,10 +68,10 @@ public class ProductImageServiceImpl implements ProductImageService {
     }
 
     @Override
-    public ProductImageResponse updateProductImage(Long id, ProductImageUpdateRequest request) {
+    public ProductImageResponse updateProductImage(Long imageId, ProductImageUpdateRequest request) {
         // Tìm ProductImage cũ
-        ProductImage productImage = productImageRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Product image not found with id: " + id));
+        ProductImage productImage = productImageRepository.findById(imageId)
+                .orElseThrow(() -> new RuntimeException("Product image not found with id: " + imageId));
 
 //        // Tìm Product mới
 //        Product product = productRepository.findById(request.getProductId())

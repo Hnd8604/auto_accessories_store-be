@@ -47,8 +47,8 @@ public class ProductServiceImpl implements ProductService {
 
     @Transactional
     @Override
-    public ProductResponse updateProduct(Long id, ProductRequest request) {
-        Product product = productRepository.findById(id).
+    public ProductResponse updateProduct(Long productId, ProductRequest request) {
+        Product product = productRepository.findById(productId).
                 orElseThrow(() -> new AppException(ErrorCode.PRODUCT_NOT_EXISTED));
 
                 productMapper.updateProduct(product, request);
@@ -64,8 +64,8 @@ public class ProductServiceImpl implements ProductService {
 
     @Transactional
     @Override
-    public void deleteProduct(Long id) {
-        Product product = productRepository.findById(id).
+    public void deleteProduct(Long productId) {
+        Product product = productRepository.findById(productId).
                 orElseThrow(() -> new AppException(ErrorCode.PRODUCT_NOT_EXISTED));
 
         productRepository.delete(product);
@@ -73,8 +73,8 @@ public class ProductServiceImpl implements ProductService {
     }
     @Transactional
     @Override
-    public ProductResponse getProduct(Long id) {
-        Product product = productRepository.findById(id).
+    public ProductResponse getProduct(Long productId) {
+        Product product = productRepository.findById(productId).
                 orElseThrow(() -> new AppException(ErrorCode.PRODUCT_NOT_EXISTED));
 
         return productMapper.toProductResponse(product);

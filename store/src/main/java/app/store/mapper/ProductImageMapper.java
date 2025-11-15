@@ -17,10 +17,10 @@ public interface ProductImageMapper {
     @Mapping(target = "product", ignore = true)
     ProductImage toProductImage(ProductImageRequest request);
 
-    @Mapping(target = "product", ignore = true)
     @Mapping(target = "id", ignore = true)
+    @Mapping(target = "product", ignore = true)
     @Mapping(target="createdAt", ignore = true)
     @Mapping(target="updatedAt", ignore = true)
-    ProductImage updateProductImage(@MappingTarget ProductImage productImage, ProductImageUpdateRequest request);
+    void updateProductImage(@MappingTarget ProductImage productImage, ProductImageUpdateRequest request);
 
 }

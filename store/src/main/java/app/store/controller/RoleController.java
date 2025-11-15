@@ -32,23 +32,23 @@ public class RoleController {
                 .result(roleServiceImpl.getAllRoles())
                 .build();
     }
-    @GetMapping("/{id}")
-    public ApiResponse<RoleResponse> getRole(@PathVariable Long id) {
+    @GetMapping("/{roleId}")
+    public ApiResponse<RoleResponse> getRole(@PathVariable Long roleId) {
         return ApiResponse.<RoleResponse>builder()
-                .result(roleServiceImpl.getRole(id))
+                .result(roleServiceImpl.getRole(roleId))
                 .build();
     }
 
-    @PutMapping("/{id}")
-    public ApiResponse<RoleResponse> updateRole(@PathVariable Long id, @RequestBody RoleRequest request) {
+    @PutMapping("/{roleId}")
+    public ApiResponse<RoleResponse> updateRole(@PathVariable Long roleId, @RequestBody RoleRequest request) {
         return ApiResponse.<RoleResponse>builder()
-                .result(roleServiceImpl.updateRole(id, request))
+                .result(roleServiceImpl.updateRole(roleId, request))
                 .build();
     }
 
-    @DeleteMapping("/{id}")
-    public ApiResponse<Void> deleteRole(@PathVariable Long id) {
-        roleServiceImpl.deleteRole(id);
+    @DeleteMapping("/{roleId}")
+    public ApiResponse<Void> deleteRole(@PathVariable Long roleId) {
+        roleServiceImpl.deleteRole(roleId);
         return ApiResponse.<Void>builder().build();
     }
 }

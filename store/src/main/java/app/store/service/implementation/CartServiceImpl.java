@@ -36,8 +36,8 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public CartResponse getCartById(Long id) throws ParseException, JOSEException {
-        Cart cart = cartRepository.findById(id)
+    public CartResponse getCartById(Long cartId) throws ParseException, JOSEException {
+        Cart cart = cartRepository.findById(cartId)
                 .orElseThrow(() -> new RuntimeException("Cart not found"));
         return cartMapper.toCartResponse(cart);
     }

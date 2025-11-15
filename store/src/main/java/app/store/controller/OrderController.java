@@ -37,10 +37,10 @@ public class OrderController {
                 .build();
     }
 
-    @GetMapping("/my-orders")
-    ApiResponse<List<OrderResponse>> getMyOrders() {
+    @GetMapping("/my-order")
+    ApiResponse<List<OrderResponse>> getMyOrder() {
         return ApiResponse.<List<OrderResponse>>builder()
-                .result(orderServiceImpl.getMyOrders())
+                .result(orderServiceImpl.getMyOrder())
                 .build();
     }
 

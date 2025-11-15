@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2025-11-10T14:29:41+0700",
+    date = "2025-11-15T10:32:39+0700",
     comments = "version: 1.5.5.Final, compiler: javac, environment: Java 21.0.6 (Oracle Corporation)"
 )
 @Component
@@ -51,17 +51,15 @@ public class ProductImageMapperImpl implements ProductImageMapper {
     }
 
     @Override
-    public ProductImage updateProductImage(ProductImage productImage, ProductImageUpdateRequest request) {
+    public void updateProductImage(ProductImage productImage, ProductImageUpdateRequest request) {
         if ( request == null ) {
-            return productImage;
+            return;
         }
 
         productImage.setImageUrl( request.getImageUrl() );
         productImage.setAltText( request.getAltText() );
         productImage.setIsPrimary( request.getIsPrimary() );
         productImage.setSortOrder( request.getSortOrder() );
-
-        return productImage;
     }
 
     private Long productImageProductId(ProductImage productImage) {

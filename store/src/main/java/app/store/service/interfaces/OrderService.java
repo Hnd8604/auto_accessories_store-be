@@ -10,7 +10,7 @@ import java.util.List;
 public interface OrderService {
     List<OrderResponse> getAllOrders(); // admin
     OrderResponse getOrderById(String orderId); // admin, user
-    List<OrderResponse> getMyOrders(); // user
+    List<OrderResponse> getMyOrder(); // user
     OrderResponse createOrderFromCart(OrderCreationRequest orderRequest);
     OrderResponse updateOrderByAdmin(String orderId, OrderUpdateByAdminRequest request); // admin
     OrderResponse updateOrderByUser(String orderId, OrderUpdateByUserRequest request);
