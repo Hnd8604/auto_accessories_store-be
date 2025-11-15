@@ -10,7 +10,6 @@ import java.text.ParseException;
 
 public interface CartService {
 
-    CartCreationResponse createCart(CartRequest request) throws ParseException, JOSEException;
 
     CartResponse getCartById(Long cartId) throws ParseException, JOSEException;
 

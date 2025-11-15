@@ -18,6 +18,7 @@ public interface UserMapper {
 
     @Mapping(target = "id", ignore = true) // Ignore the ID field during update
     @Mapping(target = "role", ignore = true) // Ignore role during update
+    @Mapping(target = "cart", ignore = true) // Ignore cart during update
     @Mapping(target = "password", ignore = true) // Ignore password during update
     @Mapping(target = "createdAt", ignore = true) // Ignore createdAt during update
     @Mapping(target = "updatedAt", ignore = true) // Ignore updatedAt during update

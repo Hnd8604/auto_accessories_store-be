@@ -25,15 +25,6 @@ public class CartServiceImpl implements CartService {
     UserRepository userRepository;
     CartMapper cartMapper;
     CartRepository cartRepository;
-    @Override
-    public CartCreationResponse createCart(CartRequest request) throws ParseException, JOSEException {
-        User user = userRepository.findById(request.getUserId())
-                .orElseThrow(() -> new RuntimeException("User not found"));
-        Cart cart = new Cart();
-        cart.setUser(user);
-        cartRepository.save(cart);
-        return cartMapper.toCartCreationResponse(cart);
-    }
 
     @Override
     public CartResponse getCartById(Long cartId) throws ParseException, JOSEException {

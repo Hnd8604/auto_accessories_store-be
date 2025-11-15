@@ -26,7 +26,8 @@ public class User extends BaseEntityUUID {
     String firstName;
     String lastName;
     String phoneNumber;
-    
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    Cart cart;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "role_id")
     Role role;

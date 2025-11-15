@@ -28,12 +28,6 @@ import java.util.List;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class CartController {
     CartServiceImpl cartServiceImpl;
-    @PostMapping
-    ApiResponse<CartCreationResponse> createCart(@RequestBody CartRequest request) throws ParseException, JOSEException {
-        return ApiResponse.<CartCreationResponse>builder()
-                .result(cartServiceImpl.createCart(request))
-                .build();
-    }
 
     @GetMapping("/{cartId}")
     ApiResponse<CartResponse> getCartById(@PathVariable Long cartId) throws ParseException, JOSEException {

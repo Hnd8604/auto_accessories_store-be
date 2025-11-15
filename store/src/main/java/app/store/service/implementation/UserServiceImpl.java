@@ -3,6 +3,7 @@ package app.store.service.implementation;
 import app.store.dto.request.user.UserCreationRequest;
 import app.store.dto.request.user.UserUpdateRequest;
 import app.store.dto.response.user.UserResponse;
+import app.store.entity.Cart;
 import app.store.entity.User;
 import app.store.exception.AppException;
 import app.store.exception.ErrorCode;
@@ -34,6 +35,7 @@ public class UserServiceImpl implements UserService {
     private final CartRepository cartRepository;
 
     @Override
+    @Transactional
     public UserResponse createUser(UserCreationRequest request) {
         User user = userMapper.toUser(request);
 
@@ -41,13 +43,15 @@ public class UserServiceImpl implements UserService {
             throw new AppException(ErrorCode.USER_EXISTED);
         }
         user.setPassword(passwordEncoder.encode(request.getPassword()));
+
         var role = roleRepository.findByName("USER")
                 .orElseThrow(()-> new RuntimeException());
         user.setRole(role);
 
         // create cart when creating user
-
-
+        Cart cart = new Cart();
+        user.setCart(cart);
+        cart.setUser(user);
 
         return userMapper.toUserResponse(userRepository.save(user));
     }
