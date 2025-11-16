@@ -10,6 +10,8 @@ public enum ErrorCode {
 
 
     UNCATEGORIZED_EXCEPTION(9999, "Uncategorized error", HttpStatus.INTERNAL_SERVER_ERROR),
+    INVALID_ARGUMENT(9998, "Invalid argument: {message}", HttpStatus.BAD_REQUEST),
+
     INVALID_KEY(1001, "Uncategorized error", HttpStatus.BAD_REQUEST),
     USER_EXISTED(1002, "User existed", HttpStatus.BAD_REQUEST),
     USERNAME_INVALID(1003, "Username must be between 3 and 20 characters long", HttpStatus.BAD_REQUEST),

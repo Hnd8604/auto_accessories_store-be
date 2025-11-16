@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import java.util.Map;
 import java.util.Objects;
 
+import static org.springframework.http.ResponseEntity.badRequest;
+
 @ControllerAdvice
 @Slf4j
 public class GlobalExceptionHandler {
@@ -25,7 +27,7 @@ public class GlobalExceptionHandler {
       apiResponse.setCode(ErrorCode.UNCATEGORIZED_EXCEPTION.getCode());
       apiResponse.setMessage(exception.getMessage());
 
-      return ResponseEntity.badRequest().body(apiResponse);
+      return badRequest().body(apiResponse);
 
     }
 
@@ -37,7 +39,7 @@ public class GlobalExceptionHandler {
         apiResponse.setCode(errorCode.getCode());
         apiResponse.setMessage(exception.getMessage());
 
-        return ResponseEntity.badRequest().body(apiResponse);
+        return badRequest().body(apiResponse);
 
     }
 
@@ -51,6 +53,17 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(ErrorCode.UNAUTHORIZED.getStatusCode()).body(apiResponse);
     }
 
+    @ExceptionHandler(value = IllegalArgumentException.class)
+    ResponseEntity<ApiResponse> handlingIllegalArgumentException(IllegalArgumentException exception) {
+        ErrorCode errorCode = ErrorCode.INVALID_ARGUMENT;
+        ApiResponse apiResponse = new ApiResponse();
+
+        apiResponse.setCode(errorCode.getCode());
+        // Use the exception's message to provide specific details
+        apiResponse.setMessage(errorCode.getMessage().replace("{message}", exception.getMessage()));
+
+        return ResponseEntity.badRequest().body(apiResponse);
+    }
 
     @ExceptionHandler(value = MethodArgumentNotValidException.class)
     ResponseEntity<ApiResponse> handlingValidation(MethodArgumentNotValidException exception){
