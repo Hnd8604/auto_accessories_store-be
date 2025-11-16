@@ -3,6 +3,8 @@ package app.store.service.implementation;
 import app.store.dto.request.BrandRequest;
 import app.store.dto.response.BrandResponse;
 import app.store.entity.Brand;
+import app.store.exception.AppException;
+import app.store.exception.ErrorCode;
 import app.store.mapper.BrandMapper;
 import app.store.repository.BrandRepository;
 import app.store.service.interfaces.BrandService;
@@ -30,7 +32,7 @@ public class BrandServiceImpl implements BrandService {
     @Override
     public BrandResponse getBrandById(Long brandId) {
         Brand brand = brandRepository.findById(brandId)
-                .orElseThrow(() -> new RuntimeException("Brand not found with id: " + brandId));
+                .orElseThrow(() -> new AppException(ErrorCode.BRAND_NOT_EXISTED));
         return brandMapper.toBrandResponse(brand);
 
     }
@@ -44,7 +46,7 @@ public class BrandServiceImpl implements BrandService {
     @Override
     public BrandResponse updateBrand(Long brandId, BrandRequest brandRequest) {
         Brand brand = brandRepository.findById(brandId)
-                .orElseThrow(() -> new RuntimeException("Brand not found with id: " + brandId));
+                .orElseThrow(() -> new AppException(ErrorCode.BRAND_NOT_EXISTED));
         brandMapper.updateBrand(brand, brandRequest);
         return brandMapper.toBrandResponse(brandRepository.save(brand));
     }
@@ -52,7 +54,7 @@ public class BrandServiceImpl implements BrandService {
     @Override
     public void deleteBrand(Long brandId) {
         Brand brand = brandRepository.findById(brandId)
-                .orElseThrow(() -> new RuntimeException("Brand not found with id: " + brandId));
+                .orElseThrow(() -> new AppException(ErrorCode.BRAND_NOT_EXISTED));
         brandRepository.delete(brand);
 
     }

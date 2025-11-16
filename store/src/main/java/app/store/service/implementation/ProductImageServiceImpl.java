@@ -5,6 +5,8 @@ import app.store.dto.request.ProductImageUpdateRequest;
 import app.store.dto.response.ProductImageResponse;
 import app.store.entity.Product;
 import app.store.entity.ProductImage;
+import app.store.exception.AppException;
+import app.store.exception.ErrorCode;
 import app.store.mapper.ProductImageMapper;
 import app.store.mapper.ProductMapper;
 import app.store.repository.ProductImageRepository;
@@ -39,7 +41,7 @@ public class ProductImageServiceImpl implements ProductImageService {
     @Override
     public ProductImageResponse getProductImageById(Long imageId) {
         ProductImage productImage = productImageRepository.findById(imageId).
-                orElseThrow(() -> new RuntimeException("Product image not found with id: " + imageId));  ;
+                orElseThrow(() -> new AppException(ErrorCode.PRODUCT_IMAGE_NOT_EXISTED));  ;
         return productImageMapper.toProductImageResponse(productImage);
     }
 
@@ -56,7 +58,7 @@ public class ProductImageServiceImpl implements ProductImageService {
         // Tạo ProductImage entity
         ProductImage productImage = productImageMapper.toProductImage(request);
         Product product = productRepository.findById(request.getProductId())
-                .orElseThrow(() -> new RuntimeException("Product not found with id: " + request.getProductId()));
+                .orElseThrow(() -> new AppException(ErrorCode.PRODUCT_IMAGE_NOT_EXISTED));
         // Upload ảnh lên Cloudinary
         String imageUrl = cloudinaryServiceImpl.uploadImage(file);
 
@@ -71,7 +73,7 @@ public class ProductImageServiceImpl implements ProductImageService {
     public ProductImageResponse updateProductImage(Long imageId, ProductImageUpdateRequest request) {
         // Tìm ProductImage cũ
         ProductImage productImage = productImageRepository.findById(imageId)
-                .orElseThrow(() -> new RuntimeException("Product image not found with id: " + imageId));
+                .orElseThrow(() -> new AppException(ErrorCode.PRODUCT_IMAGE_NOT_EXISTED));
 
 //        // Tìm Product mới
 //        Product product = productRepository.findById(request.getProductId())
@@ -87,7 +89,7 @@ public class ProductImageServiceImpl implements ProductImageService {
     @Transactional
     public void deleteProductImage(Long imageId) {
         ProductImage productImage = productImageRepository.findById(imageId)
-                .orElseThrow(() -> new RuntimeException("Product image not found with id: " + imageId));
+                .orElseThrow(() -> new AppException(ErrorCode.PRODUCT_IMAGE_NOT_EXISTED));
 
         // Xóa ảnh trên Cloudinary
         cloudinaryServiceImpl.deleteImage(productImage.getImageUrl());
@@ -101,12 +103,12 @@ public class ProductImageServiceImpl implements ProductImageService {
     public void setPrimaryImage(Long imageId, Long productId) {
         // Bước 1: Kiểm tra sự tồn tại của Product
         if (!productRepository.existsById(productId)) {
-            throw new RuntimeException("Product not found with id: " + productId);
+            throw new AppException(ErrorCode.PRODUCT_NOT_EXISTED);
         }
 
         // Bước 2: Kiểm tra sự tồn tại của ProductImage
         ProductImage productImage = productImageRepository.findById(imageId)
-                .orElseThrow(() -> new RuntimeException("Product image not found with id: " + imageId));
+                .orElseThrow(() -> new AppException(ErrorCode.PRODUCT_IMAGE_NOT_EXISTED));
 
         // Bước 3: Kiểm tra xem image có thuộc về product không
         if (!productImage.getProduct().getId().equals(productId)) {

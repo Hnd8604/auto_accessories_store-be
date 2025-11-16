@@ -3,6 +3,8 @@ package app.store.service.implementation;
 import app.store.dto.response.CategoryResponse;
 import app.store.dto.request.CategoryRequest;
 import app.store.entity.Category;
+import app.store.exception.AppException;
+import app.store.exception.ErrorCode;
 import app.store.mapper.CategoryMapper;
 import app.store.repository.CategoryRepository;
 import app.store.service.interfaces.CategoryService;
@@ -32,7 +34,7 @@ public class CategoryServiceImpl implements CategoryService {
     public CategoryResponse getCategoryById(Long categoryId) {
         return categoryRepository.findById(categoryId)
                 .map(categoryMapper::toCategoryResponse)
-                .orElseThrow(() -> new RuntimeException("Category not found"));
+                .orElseThrow(() -> new AppException(ErrorCode.CATEGORY_NOT_EXISTED));
     }
     @Override
     public List<CategoryResponse> getAllCategories() {
@@ -44,7 +46,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public CategoryResponse updateCategory(Long categoryId, CategoryRequest request) {
         Category category = categoryRepository.findById(categoryId)
-                .orElseThrow(() -> new RuntimeException("Category not found"));
+                .orElseThrow(() -> new AppException(ErrorCode.CATEGORY_NOT_EXISTED));
         categoryMapper.updateCategory(category, request);
         return categoryMapper.toCategoryResponse(categoryRepository.save(category));
     }
@@ -52,7 +54,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public void deleteCategory(Long categoryId) {
         Category category = categoryRepository.findById(categoryId)
-                .orElseThrow(() -> new RuntimeException("Category not found"));
+                .orElseThrow(() -> new AppException(ErrorCode.CATEGORY_NOT_EXISTED));
         categoryRepository.deleteById(categoryId);
 
     }

@@ -38,7 +38,7 @@ public class ProductServiceImpl implements ProductService {
         Category category = categoryRepository.findById(request.getCategoryId())
                 .orElseThrow(() -> new AppException(ErrorCode.CATEGORY_NOT_EXISTED));
         Brand brand = brandRepository.findById(request.getBrandId())
-                .orElseThrow(() -> new RuntimeException("Brand not found with id: " + request.getBrandId()));
+                .orElseThrow(() -> new AppException(ErrorCode.BRAND_NOT_EXISTED));
 
         product.setCategory(category);
         product.setBrand(brand);
@@ -55,7 +55,7 @@ public class ProductServiceImpl implements ProductService {
         Category category = categoryRepository.findById(request.getCategoryId())
                 .orElseThrow(() -> new AppException(ErrorCode.CATEGORY_NOT_EXISTED));
         Brand brand = brandRepository.findById(request.getBrandId())
-                .orElseThrow(() -> new RuntimeException("Brand not found with id: " + request.getBrandId()));
+                .orElseThrow(() -> new AppException(ErrorCode.BRAND_NOT_EXISTED));
 
         product.setCategory(category);
         product.setBrand(brand);

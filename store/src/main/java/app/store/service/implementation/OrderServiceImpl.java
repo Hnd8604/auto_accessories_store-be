@@ -8,6 +8,8 @@ import app.store.dto.request.OrderUpdateByUserRequest;
 import app.store.dto.response.OrderResponse;
 import app.store.entity.*;
 import app.store.enums.OrderStatus;
+import app.store.exception.AppException;
+import app.store.exception.ErrorCode;
 import app.store.mapper.CartMapper;
 import app.store.mapper.OrderMapper;
 import app.store.repository.*;
@@ -43,7 +45,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public OrderResponse getOrderById(String orderId) {
         Order order = orderRepository.findById(orderId)
-                .orElseThrow(() -> new RuntimeException("Order not found"));
+                .orElseThrow(() -> new AppException(ErrorCode.ORDER_NOT_EXISTED));
         return orderMapper.toOrderResponse(order);
     }
 
@@ -60,17 +62,17 @@ public class OrderServiceImpl implements OrderService {
     public OrderResponse createOrderFromCart(OrderCreationRequest orderRequest) {
         Order order = orderMapper.createOrder(orderRequest);
         User user = userRepository.findById(orderRequest.getUserId())
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
 
         // lấy cartId theo UserId, lấy cartItem theo cartId
         Cart cart = cartRepository.findByUserId(user.getId())
-                .orElseThrow(() -> new RuntimeException("Cart not found for user"));
+                .orElseThrow(() -> new AppException(ErrorCode.CART_NOT_EXISTED));
         List<OrderDetail> orderDetails = new ArrayList<>();
 
         BigDecimal totalPrice = new BigDecimal(0);
         for( OrderDetailRequest orderDetailRequest : orderRequest.getOrderDetails()) { // tao tung order detail tu request
             Product product = productRepository.findById(orderDetailRequest.getProductId())
-                    .orElseThrow(() -> new RuntimeException("Product not found"));
+                    .orElseThrow(() -> new AppException(ErrorCode.PRODUCT_NOT_EXISTED));
 
             if(orderDetailRequest.getQuantity() <= 0 || orderDetailRequest.getQuantity() > product.getStockQuantity()) {
                 throw new IllegalArgumentException("Quantity is not valid for product: " + product.getName());
@@ -100,7 +102,7 @@ public class OrderServiceImpl implements OrderService {
                 }
             }
             else {
-                throw new RuntimeException("CartItem not found for product: " + product.getName());
+                throw new AppException(ErrorCode.CART_ITEM_NOT_EXISTED);
             }
 
         // giam so luong product
@@ -115,7 +117,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public OrderResponse updateOrderByAdmin(String orderId, OrderUpdateByAdminRequest request) {
         Order order = orderRepository.findById(orderId)
-                .orElseThrow(() -> new RuntimeException("Order not found"));
+                .orElseThrow(() -> new AppException(ErrorCode.ORDER_NOT_EXISTED));
         order.setStatus(request.getOrderStatus());
         order.setPaymentStatus(request.getPaymentStatus());
         return orderMapper.toOrderResponse(orderRepository.save(order));
@@ -124,7 +126,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public OrderResponse updateOrderByUser(String orderId, OrderUpdateByUserRequest request) {
         Order order = orderRepository.findById(orderId)
-                .orElseThrow(() -> new RuntimeException("Order not found"));
+                .orElseThrow(() -> new AppException(ErrorCode.ORDER_NOT_EXISTED));
         order.setNameRecipient(request.getNameRecipient());
         order.setAddressRecipient(request.getAddressRecipient());
         order.setPhoneRecipient(request.getPhoneRecipient());
@@ -134,7 +136,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public OrderResponse cancelOrder(String orderId) {
         Order order = orderRepository.findById(orderId)
-                .orElseThrow(() -> new RuntimeException("Order not found"));
+                .orElseThrow(() -> new AppException(ErrorCode.ORDER_NOT_EXISTED));
         if (order.getStatus() == OrderStatus.PENDING || order.getStatus() == OrderStatus.PROCESSING) {
             order.setStatus(OrderStatus.CANCELED);
 
@@ -153,7 +155,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public void deleteOrder(String orderId) {
         Order order = orderRepository.findById(orderId)
-                .orElseThrow(() -> new RuntimeException("Order not found"));
+                .orElseThrow(() -> new AppException(ErrorCode.ORDER_NOT_EXISTED));
         orderRepository.delete(order);
     }
 }

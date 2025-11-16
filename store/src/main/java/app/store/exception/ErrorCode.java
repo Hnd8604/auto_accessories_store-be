@@ -7,6 +7,8 @@ import org.springframework.http.HttpStatusCode;
 
 @Getter
 public enum ErrorCode {
+
+
     UNCATEGORIZED_EXCEPTION(9999, "Uncategorized error", HttpStatus.INTERNAL_SERVER_ERROR),
     INVALID_KEY(1001, "Uncategorized error", HttpStatus.BAD_REQUEST),
     USER_EXISTED(1002, "User existed", HttpStatus.BAD_REQUEST),
@@ -15,12 +17,29 @@ public enum ErrorCode {
     USER_NOT_EXISTED(1005, "User not existed", HttpStatus.NOT_FOUND),
     UNAUTHENTICATED(1006, "Unauthenticated", HttpStatus.UNAUTHORIZED),
     UNAUTHORIZED(1007, "You do not have permission", HttpStatus.FORBIDDEN),
-    PRODUCT_NOT_EXISTED(1005, "Product not existed", HttpStatus.NOT_FOUND),
+
     INVALID_DATE_OF_BIRTH(1008, "Your age must be at least {min}", HttpStatus.BAD_REQUEST),
     ROLE_NOT_EXISTED(1005, "Role not existed", HttpStatus.NOT_FOUND),
     PERMISSION_NOT_EXISTED(1005, "Permission not existed", HttpStatus.NOT_FOUND),
 
+    // user
+
+    // product
+    PRODUCT_NOT_EXISTED(1005, "Product not existed", HttpStatus.NOT_FOUND),
+    // category
     CATEGORY_NOT_EXISTED(1005, "Category not existed", HttpStatus.NOT_FOUND),
+    // brand
+    BRAND_NOT_EXISTED(1005, "Brand not existed", HttpStatus.NOT_FOUND),
+    // order
+    ORDER_NOT_EXISTED(1005, "Order not existed", HttpStatus.NOT_FOUND),
+    // cart
+    CART_NOT_EXISTED(1005, "Cart not existed", HttpStatus.NOT_FOUND),
+
+    // cart item
+    CART_ITEM_NOT_EXISTED(1005, "Cart item not existed", HttpStatus.NOT_FOUND),
+
+    // product image
+    PRODUCT_IMAGE_NOT_EXISTED(1005, "Product image not existed", HttpStatus.NOT_FOUND)
     ;
 
     private ErrorCode(int code, String message, HttpStatusCode statusCode) {

@@ -1,5 +1,6 @@
 package app.store.controller;
 
+import app.store.constant.ResponseMessage;
 import app.store.dto.request.auth.AuthenticationRequest;
 import app.store.dto.request.auth.IntrospectRequest;
 import app.store.dto.request.auth.LogoutRequest;
@@ -31,6 +32,7 @@ public class AuthenticationController {
         var result = authenticationServiceImpl.authenticate(request);
         return ApiResponse.<AuthenticationResponse>builder()
                 .result(result)
+                .message(ResponseMessage.AUTHENTICATE_SUCCESS)
                 .build();
 
     }
@@ -40,6 +42,7 @@ public class AuthenticationController {
         var result = authenticationServiceImpl.refreshToken(request);
         return ApiResponse.<RefreshResponse>builder()
                 .result(result)
+                .message(ResponseMessage.AUTHENTICATE_SUCCESS)
                 .build();
 
     }
@@ -51,6 +54,7 @@ public class AuthenticationController {
         var result = authenticationServiceImpl.introspect(request);
         return ApiResponse.<IntrospectResponse>builder()
                 .result(result)
+                .message(ResponseMessage.INTROSPECT_SUCCESS)
                 .build();
 
     }
@@ -62,6 +66,7 @@ public class AuthenticationController {
 
         authenticationServiceImpl.logout(request);
         return ApiResponse.<Void>builder()
+                .message(ResponseMessage.LOGOUT_SUCCESS)
                 .build();
 
     }

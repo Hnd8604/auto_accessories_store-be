@@ -10,6 +10,8 @@ import app.store.entity.Cart;
 import app.store.entity.CartItem;
 import app.store.entity.Product;
 import app.store.entity.User;
+import app.store.exception.AppException;
+import app.store.exception.ErrorCode;
 import app.store.mapper.CartItemMapper;
 import app.store.mapper.CartMapper;
 import app.store.repository.CartItemRepository;
@@ -38,7 +40,7 @@ public class CartServiceImpl implements CartService {
     @Override
     public CartResponse getCartById(Long cartId) throws ParseException, JOSEException {
         Cart cart = cartRepository.findById(cartId)
-                .orElseThrow(() -> new RuntimeException("Cart not found"));
+                .orElseThrow(() -> new AppException(ErrorCode.CART_NOT_EXISTED));
         return cartMapper.toCartResponse(cart);
     }
 
@@ -46,9 +48,9 @@ public class CartServiceImpl implements CartService {
 @Override
 public CartItemResponse addItemToCart(CartItemRequest request) {
     Cart cart = cartRepository.findById(request.getCartId())
-            .orElseThrow(() -> new RuntimeException("Cart not found"));
+            .orElseThrow(() -> new AppException(ErrorCode.CART_NOT_EXISTED));
     Product product = productRepository.findById(request.getProductId())
-            .orElseThrow(() -> new RuntimeException("Product not found"));
+            .orElseThrow(() -> new AppException(ErrorCode.PRODUCT_NOT_EXISTED));
 
     // Check if the product is already in the cart
     CartItem cartItem = cart.getCartItems().stream()
@@ -79,7 +81,7 @@ public CartItemResponse addItemToCart(CartItemRequest request) {
     @Override
     public void removeItemFromCart(Long cartId, Long itemId) {
         CartItem item = cartItemRepository.findById(itemId)
-                .orElseThrow(() -> new RuntimeException("CartItem not found"));
+                .orElseThrow(() -> new AppException(ErrorCode.CART_ITEM_NOT_EXISTED));
 
         if (!item.getCart().getId().equals(cartId)) {
             throw new IllegalArgumentException("Item does not belong to cart " + cartId);
@@ -90,7 +92,7 @@ public CartItemResponse addItemToCart(CartItemRequest request) {
     @Override
     public CartItemResponse updateItemInCart(Long itemId, CartItemUpdateRequest request) {
         CartItem cartItem = cartItemRepository.findById(itemId)
-                .orElseThrow(() -> new RuntimeException("Cart item not found"));
+                .orElseThrow(() -> new AppException(ErrorCode.CART_ITEM_NOT_EXISTED));
         cartItem.setQuantity(request.getQuantity());
         cartItemRepository.save(cartItem);
         return cartItemMapper.toCartItemResponse(cartItem);

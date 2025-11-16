@@ -1,5 +1,6 @@
 package app.store.controller;
 
+import app.store.constant.ResponseMessage;
 import app.store.dto.request.OrderCreationRequest;
 import app.store.dto.request.OrderUpdateByAdminRequest;
 import app.store.dto.request.OrderUpdateByUserRequest;
@@ -27,6 +28,7 @@ public class OrderController {
     ApiResponse<List<OrderResponse>> getAllOrders() {
         return ApiResponse.<List<OrderResponse>>builder()
                 .result(orderServiceImpl.getAllOrders())
+                .message(ResponseMessage.GET_ALL_ORDERS_SUCCESS)
                 .build();
     }
 
@@ -34,6 +36,7 @@ public class OrderController {
     ApiResponse<OrderResponse> getOrder(@PathVariable String orderId) {
         return ApiResponse.<OrderResponse>builder()
                 .result(orderServiceImpl.getOrderById(orderId))
+                .message(ResponseMessage.GET_ORDER_SUCCESS)
                 .build();
     }
 
@@ -41,6 +44,7 @@ public class OrderController {
     ApiResponse<List<OrderResponse>> getMyOrder() {
         return ApiResponse.<List<OrderResponse>>builder()
                 .result(orderServiceImpl.getMyOrder())
+                .message(ResponseMessage.GET_MY_ORDER_SUCCESS)
                 .build();
     }
 
@@ -48,6 +52,7 @@ public class OrderController {
     ApiResponse<OrderResponse> createOrderFromCart(@RequestBody OrderCreationRequest request) {
         return ApiResponse.<OrderResponse>builder()
                 .result(orderServiceImpl.createOrderFromCart(request))
+                .message(ResponseMessage.CREATE_ORDER_SUCCESS)
                 .build();
     }
 
@@ -55,6 +60,7 @@ public class OrderController {
     ApiResponse<OrderResponse> updateOrderByUser(@PathVariable String orderId, @RequestBody OrderUpdateByUserRequest request) {
         return ApiResponse.<OrderResponse>builder()
                 .result(orderServiceImpl.updateOrderByUser(orderId, request))
+                .message(ResponseMessage.UPDATE_ORDER_BY_USER_SUCCESS)
                 .build();
     }
 
@@ -62,6 +68,7 @@ public class OrderController {
     ApiResponse<OrderResponse> updateOrderByAdmin(@PathVariable String orderId, @RequestBody OrderUpdateByAdminRequest request) {
         return ApiResponse.<OrderResponse>builder()
                 .result(orderServiceImpl.updateOrderByAdmin(orderId, request))
+                .message(ResponseMessage.UPDATE_ORDER_BY_ADMIN_SUCCESS)
                 .build();
     }
 
@@ -69,6 +76,7 @@ public class OrderController {
     ApiResponse<OrderResponse> cancelOrder(@PathVariable String orderId) {
         return ApiResponse.<OrderResponse>builder()
                 .result(orderServiceImpl.cancelOrder(orderId))
+                .message(ResponseMessage.CANCEL_ORDER_SUCCESS)
                 .build();
     }
 
@@ -76,6 +84,7 @@ public class OrderController {
     ApiResponse<Void> deleteOrder(@PathVariable String orderId) {
         orderServiceImpl.deleteOrder(orderId);
         return ApiResponse.<Void>builder()
+                .message(ResponseMessage.DELETE_ORDER_SUCCESS)
                 .build();
     }
 }

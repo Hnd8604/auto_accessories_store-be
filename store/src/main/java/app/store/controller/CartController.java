@@ -1,5 +1,6 @@
 package app.store.controller;
 
+import app.store.constant.ResponseMessage;
 import app.store.dto.request.CartItemRequest;
 import app.store.dto.request.CartItemUpdateRequest;
 import app.store.dto.response.CartResponse;
@@ -28,6 +29,7 @@ public class CartController {
     ApiResponse<CartResponse> getCartById(@PathVariable Long cartId) throws ParseException, JOSEException {
         return ApiResponse.<CartResponse>builder()
                 .result(cartServiceImpl.getCartById(cartId))
+                .message(ResponseMessage.GET_CART_SUCCESS)
                 .build();
     }
 
@@ -35,25 +37,22 @@ public class CartController {
     ApiResponse<CartItemResponse> addItemToCart(@RequestBody CartItemRequest cartItemRequest) {
         return ApiResponse.<CartItemResponse>builder()
                 .result(cartServiceImpl.addItemToCart(cartItemRequest))
+                .message(ResponseMessage.ADD_ITEM_SUCCESS)
                 .build();
     }
 
     @DeleteMapping("/{cartId}/items/{itemId}")
     ApiResponse<Void> removeItemFromCart(@PathVariable  Long cartId, @PathVariable Long itemId) {
         cartServiceImpl.removeItemFromCart(cartId, itemId);
-        return ApiResponse.<Void>builder().build();
+        return ApiResponse.<Void>builder().
+                message(ResponseMessage.REMOVE_ITEM_SUCCESS).build();
+
     }
     @PutMapping("/items/{itemId}")
     ApiResponse<CartItemResponse> updateItemInCart(@PathVariable Long itemId, @RequestBody CartItemUpdateRequest request) {
         return ApiResponse.<CartItemResponse>builder()
                 .result(cartServiceImpl.updateItemInCart(itemId, request))
+                .message(ResponseMessage.UPDATE_ITEM_SUCCESS)
                 .build();
     }
-//
-//    @GetMapping("/{cartId}/items")
-//    ApiResponse<List<CartItemResponse>> getAllItemsInCart(@PathVariable Long cartId) {
-//    return ApiResponse.<List<CartItemResponse>>builder()
-//                .result(cartItemServiceImpl.getAllItemsInCart(cartId))
-//                .build();
-//    }
 }
