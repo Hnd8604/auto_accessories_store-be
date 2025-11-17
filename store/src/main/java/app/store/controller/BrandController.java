@@ -9,8 +9,14 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -22,9 +28,13 @@ public class BrandController {
     BrandServiceImpl BrandServiceImpl;
 
     @GetMapping
-    ApiResponse<List<BrandResponse>> getAllBrands() {
-        return ApiResponse.<List<BrandResponse>>builder()
-                .result(BrandServiceImpl.getAllBrands())
+    ApiResponse<Page<BrandResponse>> getAllBrands(@RequestParam(defaultValue = "0") int page,
+                                                  @RequestParam(defaultValue = "2") int size,
+                                                  @RequestParam(defaultValue = "name,asc") String sort
+    ) {
+        Pageable pageable = PageRequest.of(page, size, buildSort(sort));
+        return ApiResponse.<Page<BrandResponse>>builder()
+                .result(BrandServiceImpl.getAllBrands(pageable))
                 .message(ResponseMessage.GET_ALL_BRANDS_SUCCESS)
                 .build();
     }
@@ -57,4 +67,21 @@ public class BrandController {
                 .message(ResponseMessage.DELETE_BRAND_SUCCESS)
                 .build();
         }
+
+    private Sort buildSort(String sortParam) {
+        // sortParam dạng: "name,asc"
+        // tách field và direction
+        String[] parts = sortParam.split(",");
+
+        String sortField = parts[0].trim();                       // name
+        String direction = (parts.length > 1)                     // asc
+                ? parts[1].trim().toUpperCase()
+                : "ASC";
+
+        Sort.Direction sortDirection = Sort.Direction.fromString(direction);
+
+        // Nếu bạn muốn ép nếu sortField == name thì dùng name
+        // Còn nếu không thì giữ như này
+        return Sort.by(sortDirection, sortField);
+    }
 }

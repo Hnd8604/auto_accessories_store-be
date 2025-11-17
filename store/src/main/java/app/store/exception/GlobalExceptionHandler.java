@@ -62,7 +62,7 @@ public class GlobalExceptionHandler {
         // Use the exception's message to provide specific details
         apiResponse.setMessage(errorCode.getMessage().replace("{message}", exception.getMessage()));
 
-        return ResponseEntity.badRequest().body(apiResponse);
+        return ResponseEntity.status(ErrorCode.INVALID_ARGUMENT.getStatusCode()).body(apiResponse);
     }
 
     @ExceptionHandler(value = MethodArgumentNotValidException.class)

@@ -12,6 +12,8 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,9 +26,9 @@ public class BrandServiceImpl implements BrandService {
     BrandRepository brandRepository;
     BrandMapper brandMapper;
     @Override
-    public List<BrandResponse> getAllBrands() {
-        return brandRepository.findAll().stream()
-                .map(brandMapper::toBrandResponse).toList();
+    public Page<BrandResponse> getAllBrands(Pageable pageable) {
+        return brandRepository.findAll(pageable)
+                .map(brandMapper::toBrandResponse);
     }
 
     @Override

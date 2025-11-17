@@ -16,6 +16,8 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -33,9 +35,9 @@ public class ProductImageServiceImpl implements ProductImageService {
     private final ProductMapper productMapper;
 
     @Override
-    public List<ProductImageResponse> getAllProductImages() {
-        return productImageRepository.findAll().stream()
-                .map(productImageMapper::toProductImageResponse).toList();
+    public Page<ProductImageResponse> getAllProductImages(Pageable pageable) {
+        return productImageRepository.findAll(pageable)
+                .map(productImageMapper::toProductImageResponse);
     }
 
     @Override

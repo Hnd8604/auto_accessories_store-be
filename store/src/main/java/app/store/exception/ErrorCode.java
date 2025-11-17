@@ -36,7 +36,6 @@ public enum ErrorCode {
     ORDER_NOT_EXISTED(1005, "Order not existed", HttpStatus.NOT_FOUND),
     // cart
     CART_NOT_EXISTED(1005, "Cart not existed", HttpStatus.NOT_FOUND),
-
     // cart item
     CART_ITEM_NOT_EXISTED(1005, "Cart item not existed", HttpStatus.NOT_FOUND),
 

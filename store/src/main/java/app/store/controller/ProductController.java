@@ -13,9 +13,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import static com.yourproject.utils.SortUtils.buildSort;
 
 @RestController
 @RequestMapping("/products")
@@ -27,7 +31,6 @@ public class ProductController {
 
     @PostMapping
     ApiResponse<ProductResponse> createProduct(@RequestBody ProductRequest request) {
-
         return ApiResponse.<ProductResponse>builder()
                 .result(productServiceImpl.createProduct(request))
                 .message(ResponseMessage.CREATE_PRODUCT_SUCCESS)
@@ -44,27 +47,17 @@ public class ProductController {
 
     @DeleteMapping("/{productId}")
     ApiResponse<Void> deleteProduct(@PathVariable Long productId) {
-
-     productServiceImpl.deleteProduct(productId);
+        productServiceImpl.deleteProduct(productId);
         return ApiResponse.<Void>builder().message(ResponseMessage.DELETE_PRODUCT_SUCCESS).build();
     }
 
     @GetMapping
     ApiResponse<Page<ProductResponse>> getAllProducts(
-            @RequestParam(value = "page", defaultValue = "0") int page,
-            @RequestParam(value = "size", defaultValue = "2") int size,
-            @RequestParam(value = "sort", defaultValue = "name,asc") String sort
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "2") int size,
+            @RequestParam(defaultValue = "name,asc") String sort
     ) {
-        Sort pageSort;
-        String[] sortPart = sort.split(",");
-        String direction = sortPart.length > 1 ? sortPart[1] : "asc";
-        String sortField = sortPart[0].trim();
-        Sort.Direction sortDirection = Sort.Direction.fromString(direction.toUpperCase());
-        String actualSortField = "name".equalsIgnoreCase(sortField) ? "name" : sortField;
-
-        pageSort = Sort.by(sortDirection, actualSortField);
-
-        Pageable pageable = PageRequest.of(page, size, pageSort);
+        Pageable pageable = PageRequest.of(page, size, buildSort(sort));
         return ApiResponse.<Page<ProductResponse>>builder()
                 .result(productServiceImpl.getAllProducts(pageable))
                 .message(ResponseMessage.GET_ALL_PRODUCTS_SUCCESS)
@@ -72,19 +65,28 @@ public class ProductController {
     }
 
     @GetMapping("/categories/{categoryId}")
-    ApiResponse<List<ProductResponse>> getAllProductsByCategoryId(@PathVariable Long categoryId) {
-
-        return ApiResponse.<List<ProductResponse>>builder()
-                .result(productServiceImpl.getProductsByCategoryId(categoryId))
+    ApiResponse<Page<ProductResponse>> getAllProductsByCategoryId(@PathVariable Long categoryId,
+                                                                  @RequestParam(defaultValue = "0") int page,
+                                                                  @RequestParam(defaultValue = "2") int size,
+                                                                  @RequestParam(defaultValue = "name,asc") String sort
+    ) {
+        Pageable pageable = PageRequest.of(page, size, buildSort(sort));
+        return ApiResponse.<Page<ProductResponse>>builder()
+                .result(productServiceImpl.getProductsByCategoryId(categoryId, pageable))
                 .message(ResponseMessage.GET_ALL_PRODUCTS_BY_CATEGORY_SUCCESS)
                 .build();
     }
 
-    @GetMapping("/brandes/{brandId}")
-    ApiResponse<List<ProductResponse>> getAllProductsByBrandId(@PathVariable Long brandId) {
+    @GetMapping("/brands/{brandId}")
+    ApiResponse<Page<ProductResponse>> getAllProductsByBrandId(@PathVariable Long brandId,
+                                                               @RequestParam(defaultValue = "0") int page,
+                                                               @RequestParam(defaultValue = "2") int size,
+                                                               @RequestParam(defaultValue = "name,asc") String sort
+    ) {
+        Pageable pageable = PageRequest.of(page, size, buildSort(sort));
 
-        return ApiResponse.<List<ProductResponse>>builder()
-                .result(productServiceImpl.getProductsByBrandId(brandId))
+        return ApiResponse.<Page<ProductResponse>>builder()
+                .result(productServiceImpl.getProductsByBrandId(brandId, pageable))
                 .message(ResponseMessage.GET_ALL_PRODUCTS_BY_BRAND_SUCCESS)
                 .build();
     }
@@ -97,3 +99,4 @@ public class ProductController {
                 .build();
     }
 }
+

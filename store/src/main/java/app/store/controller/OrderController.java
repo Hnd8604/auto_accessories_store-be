@@ -13,9 +13,18 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import static com.yourproject.utils.SortUtils.buildSort;
+
 @RestController
 @RequestMapping("/orders")
 @RequiredArgsConstructor
@@ -25,9 +34,13 @@ public class OrderController {
     OrderServiceImpl orderServiceImpl;
 
     @GetMapping
-    ApiResponse<List<OrderResponse>> getAllOrders() {
-        return ApiResponse.<List<OrderResponse>>builder()
-                .result(orderServiceImpl.getAllOrders())
+    ApiResponse<Page<OrderResponse>> getAllOrders( @RequestParam(value = "page", defaultValue = "0") int page,
+                                                   @RequestParam(value = "size", defaultValue = "2") int size,
+                                                   @RequestParam(value = "sort", defaultValue = "createdAt,DESC") String sort
+    ) {
+        Pageable pageable = PageRequest.of(page, size, buildSort(sort));
+        return ApiResponse.<Page<OrderResponse>>builder()
+                .result(orderServiceImpl.getAllOrders(pageable))
                 .message(ResponseMessage.GET_ALL_ORDERS_SUCCESS)
                 .build();
     }
@@ -87,4 +100,5 @@ public class OrderController {
                 .message(ResponseMessage.DELETE_ORDER_SUCCESS)
                 .build();
     }
+
 }

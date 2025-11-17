@@ -9,6 +9,11 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,6 +21,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Map;
+
+import static com.yourproject.utils.SortUtils.buildSort;
 
 @RestController
 @RequestMapping("/product-images")
@@ -25,10 +32,16 @@ import java.util.Map;
 public class ProductImageController {
     ProductImageServiceImpl productImageServiceImpl;
 
+
     @GetMapping
-    public ApiResponse<List<ProductImageResponse>> getAllProductImages() {
-        return ApiResponse.<List<ProductImageResponse>>builder()
-                .result(productImageServiceImpl.getAllProductImages())
+    public ApiResponse<Page<ProductImageResponse>> getAllProductImages(
+                                                                        @RequestParam(value = "page", defaultValue = "0") int page,
+                                                                       @RequestParam(value = "size", defaultValue = "2") int size,
+                                                                       @RequestParam(value = "sort", defaultValue = "product.id,DESC") String sort
+    ) {
+        Pageable pageable = PageRequest.of(page, size, buildSort(sort));
+                return ApiResponse.<Page<ProductImageResponse>>builder()
+                .result(productImageServiceImpl.getAllProductImages(pageable))
                 .build();
     }
     @GetMapping("/{imageId}")

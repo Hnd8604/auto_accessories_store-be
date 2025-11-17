@@ -10,10 +10,17 @@ import jakarta.validation.Valid;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import static com.yourproject.utils.SortUtils.buildSort;
 
 @RestController
 @RequestMapping("/users")
@@ -48,9 +55,14 @@ public class UserController {
     }
 
     @GetMapping
-    ApiResponse<List<UserResponse>> getAllUsers(){
-        return ApiResponse.<List<UserResponse>>builder()
-                .result(userServiceImpl.getAllUsers())
+    ApiResponse<Page<UserResponse>> getAllUsers(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "2") int size,
+            @RequestParam(defaultValue = "username,asc") String sort
+    ) {
+        Pageable pageable = PageRequest.of(page, size, buildSort(sort));
+        return ApiResponse.<Page<UserResponse>>builder()
+                .result(userServiceImpl.getAllUsers(pageable))
                 .message(ResponseMessage.GET_ALL_USERS_SUCCESS)
                 .build();
     }

@@ -2,11 +2,13 @@ package app.store.service.interfaces;
 
 import app.store.dto.request.BrandRequest;
 import app.store.dto.response.BrandResponse;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
 public interface BrandService {
-    List<BrandResponse> getAllBrands();
+    Page<BrandResponse> getAllBrands(Pageable pageable);
     BrandResponse getBrandById(Long brandId);
     BrandResponse createBrand(BrandRequest brandRequest);
     BrandResponse updateBrand(Long brandId, BrandRequest brandRequest);

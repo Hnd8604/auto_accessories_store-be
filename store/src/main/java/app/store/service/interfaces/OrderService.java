@@ -4,11 +4,13 @@ import app.store.dto.request.OrderCreationRequest;
 import app.store.dto.request.OrderUpdateByAdminRequest;
 import app.store.dto.request.OrderUpdateByUserRequest;
 import app.store.dto.response.OrderResponse;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
 public interface OrderService {
-    List<OrderResponse> getAllOrders(); // admin
+    Page<OrderResponse> getAllOrders(Pageable pageable); // admin
     OrderResponse getOrderById(String orderId); // admin, user
     List<OrderResponse> getMyOrder(); // user
     OrderResponse createOrderFromCart(OrderCreationRequest orderRequest);

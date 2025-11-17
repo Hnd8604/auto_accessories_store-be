@@ -80,16 +80,14 @@ public class ProductServiceImpl implements ProductService {
         return productMapper.toProductResponse(product);
     }
     @Override
-    public List<ProductResponse> getProductsByCategoryId(Long categoryId) {
-        return productRepository.findProductsByCategoryId(categoryId).stream()
-                .map(productMapper::toProductResponse)
-                .toList();
+    public Page<ProductResponse> getProductsByCategoryId(Long categoryId, Pageable pageable) {
+        return productRepository.findProductsByCategoryId(categoryId, pageable)
+                .map(productMapper::toProductResponse);
     }
     @Override
-    public List<ProductResponse> getProductsByBrandId(Long brandId) {
-        return productRepository.findProductsByBrandId(brandId).stream()
-                .map(productMapper::toProductResponse)
-                .toList();
+    public Page<ProductResponse> getProductsByBrandId(Long brandId, Pageable pageable) {
+        return productRepository.findProductsByBrandId(brandId, pageable)
+                .map(productMapper::toProductResponse);
     }
 
     @Override
