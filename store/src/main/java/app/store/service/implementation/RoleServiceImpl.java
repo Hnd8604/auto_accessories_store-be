@@ -41,7 +41,7 @@ public class RoleServiceImpl implements RoleService {
 
     @Transactional
     @Override
-    public RoleResponse updateRole(Long roleId, RoleRequest request) {
+    public RoleResponse updateRole(String roleId, RoleRequest request) {
         var role = roleRepository.findById(roleId)
                 .orElseThrow(() -> new AppException(ErrorCode.ROLE_NOT_EXISTED));
 
@@ -53,7 +53,7 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
-    public RoleResponse getRole(Long roleId) {
+    public RoleResponse getRole(String roleId) {
         var role = roleRepository.findById(roleId)
                 .orElseThrow(() -> new AppException(ErrorCode.ROLE_NOT_EXISTED));
         return roleMapper.toRoleResponse(role);
@@ -67,7 +67,7 @@ public class RoleServiceImpl implements RoleService {
                 .toList();
     }
     @Override
-    public void deleteRole(Long roleId) {
+    public void deleteRole(String roleId) {
         roleRepository.deleteById(roleId);
     }
 }

@@ -10,8 +10,8 @@ import java.util.Optional;
 import java.util.Set;
 
 @Repository
-public interface RoleRepository extends JpaRepository<Role, Long> {
-    Optional<Role> findByName(String name);
-    List<Role> findByNameIn(Set<String> names);
+public interface RoleRepository extends JpaRepository<Role, String> {
+//    Optional<Role> findByName(String name);
+//    List<Role> findByNameIn(Set<String> names);
 
 }

@@ -4,6 +4,7 @@ import app.store.dto.request.user.UserCreationRequest;
 import app.store.dto.request.user.UserUpdateRequest;
 import app.store.dto.response.user.UserResponse;
 import app.store.entity.Cart;
+import app.store.entity.Role;
 import app.store.entity.User;
 import app.store.exception.AppException;
 import app.store.exception.ErrorCode;
@@ -23,7 +24,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -45,10 +48,11 @@ public class UserServiceImpl implements UserService {
             throw new AppException(ErrorCode.USER_EXISTED);
         }
         user.setPassword(passwordEncoder.encode(request.getPassword()));
-
-        var role = roleRepository.findByName("USER")
-                .orElseThrow(()-> new RuntimeException());
-        user.setRole(role);
+        Set<Role> roles = new HashSet<>();
+        var roleDefault = roleRepository.findById("USER")
+                .orElseThrow(()-> new AppException(ErrorCode.ROLE_NOT_EXISTED));
+        roles.add(roleDefault) ;
+        user.setRoles(roles);
 
         // create cart when creating user
         Cart cart = new Cart();
@@ -78,17 +82,16 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(()-> new AppException(ErrorCode.USER_NOT_EXISTED));
 
         userMapper.updateUser(user, request);
-        
+
         // Only update password if provided
         if (request.getPassword() != null && !request.getPassword().isEmpty()) {
             user.setPassword(passwordEncoder.encode(request.getPassword()));
         }
-        
-        // Only update role if provided
-        if (request.getRoleId() != null && !request.getRoleId().isEmpty()) {
-            var role = roleRepository.findById(Long.valueOf(request.getRoleId()))
-                    .orElseThrow(() -> new AppException(ErrorCode.ROLE_NOT_EXISTED));
-            user.setRole(role);
+
+        // Only update roles if provided
+        if (request.getRoles() != null && !request.getRoles().isEmpty()) {
+            var roles = roleRepository.findAllById(request.getRoles());
+            user.setRoles(new HashSet<>(roles));
         }
         return userMapper.toUserResponse(userRepository.save(user));
     }

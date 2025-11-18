@@ -6,6 +6,7 @@ import app.store.entity.Role;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
+import org.mapstruct.Named;
 
 @Mapper(componentModel = "spring")
 public interface RoleMapper {
@@ -13,9 +14,10 @@ public interface RoleMapper {
     Role toRole(RoleRequest request);
     RoleResponse toRoleResponse(Role role);
 
+    @Named("toRoleResponseWithoutPermissions")
+    @Mapping(target = "permissions", ignore = true)
+    RoleResponse toRoleResponseWithoutPermissions(Role role);
+
     @Mapping(target = "permissions", ignore = true) // Ignore roles during update
-    @Mapping(target = "id", ignore = true) // Ignore ID during update
-    @Mapping(target="createdAt", ignore = true)
-    @Mapping(target="updatedAt", ignore = true)
     void updateRole(@MappingTarget Role role, RoleRequest request);
 }

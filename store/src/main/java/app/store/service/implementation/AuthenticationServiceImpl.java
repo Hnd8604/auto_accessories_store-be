@@ -38,6 +38,7 @@ import java.text.ParseException;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.StringJoiner;
 import java.util.UUID;
 
@@ -221,14 +222,28 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
 
 
+//    private String buildScope(User user) {
+//        StringJoiner stringJoiner = new StringJoiner(" ");
+//        if (user.getRoles() != null) {
+//            HashSet<Role> roles = user.getRoles();
+//            stringJoiner.add("ROLE_" + role.getName());
+////            if(!CollectionUtils.isEmpty(role.getPermissions())) // xu ly khi role khong co permission
+////                role.getPermissions()
+////                        .forEach(permission -> stringJoiner.add(permission.getName()));
+//        }
+//        return stringJoiner.toString();
+//    }
+
     private String buildScope(User user) {
         StringJoiner stringJoiner = new StringJoiner(" ");
-        if (user.getRole() != null) {
-            Role role = user.getRole();
-            stringJoiner.add("ROLE_" + role.getName());
-            if(!CollectionUtils.isEmpty(role.getPermissions()))
-                role.getPermissions()
-                        .forEach(permission -> stringJoiner.add(permission.getName()));
+        if (user.getRoles() != null) {
+            user.getRoles().forEach(role -> {
+                stringJoiner.add("ROLE_" + role.getName());
+//                if (!CollectionUtils.isEmpty(role.getPermissions())) {
+//                    role.getPermissions()
+//                            .forEach(permission -> stringJoiner.add(permission.getName()));
+//                }
+            });
         }
         return stringJoiner.toString();
     }

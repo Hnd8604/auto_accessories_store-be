@@ -3,6 +3,8 @@ package app.store.dto.request.user;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.util.List;
+
 @Getter
 @Setter
 @Builder
@@ -16,5 +18,5 @@ public class UserUpdateRequest {
     String firstName;
     String lastName;
     String phoneNumber;
-    String roleId;
+    List<String> roles;
 }

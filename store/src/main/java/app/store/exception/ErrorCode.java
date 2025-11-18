@@ -21,8 +21,6 @@ public enum ErrorCode {
     UNAUTHORIZED(1007, "You do not have permission", HttpStatus.FORBIDDEN),
 
     INVALID_DATE_OF_BIRTH(1008, "Your age must be at least {min}", HttpStatus.BAD_REQUEST),
-    ROLE_NOT_EXISTED(1005, "Role not existed", HttpStatus.NOT_FOUND),
-    PERMISSION_NOT_EXISTED(1005, "Permission not existed", HttpStatus.NOT_FOUND),
 
     // user
 
@@ -40,7 +38,12 @@ public enum ErrorCode {
     CART_ITEM_NOT_EXISTED(1005, "Cart item not existed", HttpStatus.NOT_FOUND),
 
     // product image
-    PRODUCT_IMAGE_NOT_EXISTED(1005, "Product image not existed", HttpStatus.NOT_FOUND)
+    PRODUCT_IMAGE_NOT_EXISTED(1005, "Product image not existed", HttpStatus.NOT_FOUND),
+    // role
+    ROLE_NOT_EXISTED(1005, "Role not existed", HttpStatus.NOT_FOUND),
+
+    // permission
+    PERMISSION_NOT_EXISTED(1005, "Permission not existed", HttpStatus.NOT_FOUND)
     ;
 
     private ErrorCode(int code, String message, HttpStatusCode statusCode) {

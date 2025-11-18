@@ -14,6 +14,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.util.HashSet;
+
 @Configuration
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
@@ -27,7 +29,7 @@ public class ApplicationInitConfig {
     ApplicationRunner applicationRunner(UserRepository userRepository) {
         return args -> {
             // Create roles if they don't exist
-            Role roleAdmin = roleRepository.findByName("ADMIN").orElse(null);
+            Role roleAdmin = roleRepository.findById("ADMIN").orElse(null);
             if (roleAdmin == null) {
                 roleAdmin = new Role();
                 roleAdmin.setName("ADMIN");
@@ -36,7 +38,7 @@ public class ApplicationInitConfig {
                 log.info("Created ADMIN role");
             }
 
-            Role roleUser = roleRepository.findByName("USER").orElse(null);
+            Role roleUser = roleRepository.findById("USER").orElse(null);
             if (roleUser == null) {
                 roleUser = new Role();
                 roleUser.setName("USER");
@@ -46,11 +48,14 @@ public class ApplicationInitConfig {
             }
 
             // Create admin user if it doesn't exist
+            HashSet<Role> roles = new HashSet<>();
+            roles.add(roleAdmin);
+            roles.add(roleUser);
             if (userRepository.findByUsername("admin").isEmpty()) {
                 User user = User.builder()
                         .username("admin")
                         .password(passwordEncoder.encode("admin"))
-                        .role(roleAdmin) // Assign ADMIN role to admin user
+                        .roles(roles) // Assign ADMIN role to admin user
                         .build();
                 userRepository.save(user);
                 log.warn("admin user has been created with password: admin, please change it after login");

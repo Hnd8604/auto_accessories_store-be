@@ -35,7 +35,7 @@ public class PermissionServiceImpl implements PermissionService {
 
     }
     @Override
-    public PermissionResponse updatePermission(Long permissionId, PermissionRequest request) {
+    public PermissionResponse updatePermission(String permissionId, PermissionRequest request) {
         Permission permission = permissionRepository.findById(permissionId)
                 .orElseThrow(() -> new AppException(ErrorCode.PERMISSION_NOT_EXISTED));
 
@@ -43,7 +43,7 @@ public class PermissionServiceImpl implements PermissionService {
         return permissionMapper.toPermissionResponse(permissionRepository.save(permission));
     }
     @Override
-    public void deletePermission(Long permissionId) {
+    public void deletePermission(String permissionId) {
         permissionRepository.deleteById(permissionId);
     }
 

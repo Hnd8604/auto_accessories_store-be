@@ -29,7 +29,7 @@ public class PermissionController {
 
 
     @PutMapping("/{permissionId}")
-    ApiResponse<PermissionResponse> updatePermission(@PathVariable Long permissionId,
+    ApiResponse<PermissionResponse> updatePermission(@PathVariable String permissionId,
                                                       @RequestBody PermissionRequest request) {
         return ApiResponse.<PermissionResponse>builder()
                 .result(permissionServiceImpl.updatePermission(permissionId, request))
@@ -43,7 +43,7 @@ public class PermissionController {
     }
 
     @DeleteMapping("/{permissionId}")
-    ApiResponse<Void> deletePermission(@PathVariable Long  permissionId) {
+    ApiResponse<Void> deletePermission(@PathVariable String permissionId) {
         permissionServiceImpl.deletePermission(permissionId);
         return ApiResponse.<Void>builder().build();
     }

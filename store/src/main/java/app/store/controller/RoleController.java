@@ -33,21 +33,21 @@ public class RoleController {
                 .build();
     }
     @GetMapping("/{roleId}")
-    public ApiResponse<RoleResponse> getRole(@PathVariable Long roleId) {
+    public ApiResponse<RoleResponse> getRole(@PathVariable String roleId) {
         return ApiResponse.<RoleResponse>builder()
                 .result(roleServiceImpl.getRole(roleId))
                 .build();
     }
 
     @PutMapping("/{roleId}")
-    public ApiResponse<RoleResponse> updateRole(@PathVariable Long roleId, @RequestBody RoleRequest request) {
+    public ApiResponse<RoleResponse> updateRole(@PathVariable String roleId, @RequestBody RoleRequest request) {
         return ApiResponse.<RoleResponse>builder()
                 .result(roleServiceImpl.updateRole(roleId, request))
                 .build();
     }
 
     @DeleteMapping("/{roleId}")
-    public ApiResponse<Void> deleteRole(@PathVariable Long roleId) {
+    public ApiResponse<Void> deleteRole(@PathVariable String roleId) {
         roleServiceImpl.deleteRole(roleId);
         return ApiResponse.<Void>builder().build();
     }
