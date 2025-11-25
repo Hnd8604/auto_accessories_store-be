@@ -23,6 +23,7 @@ import com.nimbusds.jose.crypto.MACVerifier;
 import com.nimbusds.jwt.JWTClaimsSet;
 
 import com.nimbusds.jwt.SignedJWT;
+import jakarta.servlet.http.HttpSession;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -51,6 +52,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     UserRepository userRepository;
     InvalidatedRepository invalidatedRepository;
     UserMapper userMapper;
+    CartSyncService cartSyncService;
 
     @NonFinal // Don't inject this field to constructor
     @Value("${jwt.signerKey}")
@@ -81,7 +83,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
 
     @Override
-    public AuthenticationResponse authenticate(AuthenticationRequest request) {
+    public AuthenticationResponse authenticate(AuthenticationRequest request, HttpSession session) {
         var user = userRepository.findByUsername(request.getUsername())
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
 
@@ -95,6 +97,10 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
         var accessToken = generateAccessToken(user);
         var refreshToken = generateRefreshToken(user);
+
+
+        // Sync cart from session to user cart
+        cartSyncService.syncSessionCart(user, session);
 
         return AuthenticationResponse.builder()
                 .user(userMapper.toUserResponse(user))

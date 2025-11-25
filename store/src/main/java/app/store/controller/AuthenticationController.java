@@ -9,8 +9,12 @@ import app.store.dto.response.auth.ApiResponse;
 import app.store.dto.response.auth.AuthenticationResponse;
 import app.store.dto.response.auth.IntrospectResponse;
 import app.store.dto.response.auth.RefreshResponse;
+import app.store.entity.User;
+import app.store.repository.UserRepository;
 import app.store.service.implementation.AuthenticationServiceImpl;
+import app.store.service.implementation.CartSyncService;
 import com.nimbusds.jose.JOSEException;
+import jakarta.servlet.http.HttpSession;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -28,8 +32,9 @@ import java.text.ParseException;
 public class AuthenticationController {
     AuthenticationServiceImpl authenticationServiceImpl;
     @PostMapping("/token")
-    ApiResponse<AuthenticationResponse> authenticate(@RequestBody AuthenticationRequest request) {
-        var result = authenticationServiceImpl.authenticate(request);
+    ApiResponse<AuthenticationResponse> authenticate(@RequestBody AuthenticationRequest request, HttpSession session) {
+        var result = authenticationServiceImpl.authenticate(request, session);
+
         return ApiResponse.<AuthenticationResponse>builder()
                 .result(result)
                 .message(ResponseMessage.AUTHENTICATE_SUCCESS)
