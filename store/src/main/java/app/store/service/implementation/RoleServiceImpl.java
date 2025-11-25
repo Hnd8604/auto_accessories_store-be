@@ -107,6 +107,7 @@ public class RoleServiceImpl implements RoleService {
         rolePermissionRepository.syncRolePermissionsFromDb(roleId);
         return roleMapper.toRoleResponse(roleRepository.save(role));
     }
+
     @Override
     @PreAuthorize("hasAuthority('ROLE_DELETE')")
     public void deleteRole(String roleId) {
@@ -114,5 +115,4 @@ public class RoleServiceImpl implements RoleService {
         // Xóa role permissions khỏi Redis
         rolePermissionRepository.deleteRoleFromRedis(roleId);
     }
-
 }

@@ -18,8 +18,7 @@ import lombok.experimental.FieldDefaults;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static com.yourproject.utils.SortUtils.buildSort;
+import static app.store.utils.SortUtils.buildSort;
 
 @RestController
 @RequestMapping("/categories")

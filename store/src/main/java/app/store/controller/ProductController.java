@@ -2,6 +2,7 @@ package app.store.controller;
 
 import app.store.constant.ResponseMessage;
 import app.store.dto.request.ProductRequest;
+import app.store.dto.request.ProductSearchRequest;
 import app.store.dto.response.auth.ApiResponse;
 import app.store.dto.response.ProductResponse;
 import app.store.service.implementation.ProductServiceImpl;
@@ -19,8 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.yourproject.utils.SortUtils.buildSort;
-
+import static app.store.utils.SortUtils.buildSort;
 @RestController
 @RequestMapping("/products")
 @RequiredArgsConstructor
@@ -28,7 +28,19 @@ import static com.yourproject.utils.SortUtils.buildSort;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class ProductController {
     ProductServiceImpl productServiceImpl;
+    @PostMapping("/search")
+    public ApiResponse<Page<ProductResponse>> searchProducts(
+            @RequestBody ProductSearchRequest req,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "name,ASC") String sort
+    ) {
+        Pageable pageable = PageRequest.of(page, size, buildSort(sort));
 
+        return ApiResponse.<Page<ProductResponse>>builder()
+                .result(productServiceImpl.search(req, pageable))
+                .build();
+    }
     @PostMapping
     ApiResponse<ProductResponse> createProduct(@RequestBody ProductRequest request) {
         return ApiResponse.<ProductResponse>builder()

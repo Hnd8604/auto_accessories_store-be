@@ -1,6 +1,7 @@
 package app.store.service.implementation;
 
 import app.store.dto.request.ProductRequest;
+import app.store.dto.request.ProductSearchRequest;
 import app.store.dto.response.ProductResponse;
 import app.store.entity.Brand;
 import app.store.entity.Category;
@@ -12,11 +13,13 @@ import app.store.repository.BrandRepository;
 import app.store.repository.CategoryRepository;
 import app.store.repository.ProductRepository;
 import app.store.service.interfaces.ProductService;
+import app.store.specification.ProductSpecification;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -101,6 +104,12 @@ public class ProductServiceImpl implements ProductService {
     @PreAuthorize("hasAuthority('PRODUCT_GET_ALL')")
     public Page<ProductResponse> getAllProducts(Pageable pageable) {
         return productRepository.findAll(pageable)
+                .map(productMapper::toProductResponse);
+    }
+    @Override
+    public Page<ProductResponse> search(ProductSearchRequest req, Pageable pageable) {
+        Specification<Product> spec = ProductSpecification.toSpecification(req);
+        return productRepository.findAll(spec, pageable)
                 .map(productMapper::toProductResponse);
     }
 }

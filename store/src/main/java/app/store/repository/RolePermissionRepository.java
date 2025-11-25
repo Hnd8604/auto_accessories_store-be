@@ -77,7 +77,6 @@ public class RolePermissionRepository {
 
     public void deleteRoleFromRedis(String roleName) {
         if (roleName == null || roleName.isBlank()) return;
-
         String redisKey = "role:" + roleName + ":perms";
         redis.delete(redisKey);
     }

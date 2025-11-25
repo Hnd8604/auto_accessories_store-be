@@ -1,4 +1,4 @@
-package com.yourproject.utils;
+package app.store.utils;
 
 import org.springframework.data.domain.Sort;
 

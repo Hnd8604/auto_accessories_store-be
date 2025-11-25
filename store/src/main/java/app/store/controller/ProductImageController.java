@@ -22,7 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 import java.util.Map;
 
-import static com.yourproject.utils.SortUtils.buildSort;
+import static app.store.utils.SortUtils.buildSort;
 
 @RestController
 @RequestMapping("/product-images")
@@ -31,7 +31,6 @@ import static com.yourproject.utils.SortUtils.buildSort;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class ProductImageController {
     ProductImageServiceImpl productImageServiceImpl;
-
 
     @GetMapping
     public ApiResponse<Page<ProductImageResponse>> getAllProductImages(
