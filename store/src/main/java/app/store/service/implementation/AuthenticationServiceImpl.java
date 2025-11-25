@@ -29,6 +29,7 @@ import lombok.experimental.FieldDefaults;
 import lombok.experimental.NonFinal;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -221,15 +222,15 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         }
     }
 
-
+//
 //    private String buildScope(User user) {
 //        StringJoiner stringJoiner = new StringJoiner(" ");
 //        if (user.getRoles() != null) {
 //            HashSet<Role> roles = user.getRoles();
-//            stringJoiner.add("ROLE_" + role.getName());
-////            if(!CollectionUtils.isEmpty(role.getPermissions())) // xu ly khi role khong co permission
-////                role.getPermissions()
-////                        .forEach(permission -> stringJoiner.add(permission.getName()));
+//            stringJoiner.add("ROLE_" + roles.getName());
+//            if(!CollectionUtils.isEmpty(roles.getPermissions()))
+//                roles.getPermissions()
+//                        .forEach(permission -> stringJoiner.add(permission.getName()));
 //        }
 //        return stringJoiner.toString();
 //    }

@@ -14,6 +14,7 @@ import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -27,24 +28,28 @@ public class CategoryServiceImpl implements CategoryService {
     CategoryRepository categoryRepository;
 
     @Override
+    @PreAuthorize("hasAuthority('CATEGORY_CREATE')")
     public CategoryResponse createCategory(CategoryRequest request) {
         Category category = categoryMapper.toCategory(request);
         return categoryMapper.toCategoryResponse(categoryRepository.save(category));
     }
 
     @Override
+    @PreAuthorize("hasAuthority('CATEGORY_GET_BY_ID')")
     public CategoryResponse getCategoryById(Long categoryId) {
         return categoryRepository.findById(categoryId)
                 .map(categoryMapper::toCategoryResponse)
                 .orElseThrow(() -> new AppException(ErrorCode.CATEGORY_NOT_EXISTED));
     }
     @Override
+    @PreAuthorize("hasAuthority('CATEGORY_GET_ALL')")
     public Page<CategoryResponse> getAllCategories(Pageable pageable) {
         return categoryRepository.findAll(pageable)
                 .map(categoryMapper::toCategoryResponse);
     }
 
     @Override
+    @PreAuthorize("hasAuthority('CATEGORY_UPDATE')")
     public CategoryResponse updateCategory(Long categoryId, CategoryRequest request) {
         Category category = categoryRepository.findById(categoryId)
                 .orElseThrow(() -> new AppException(ErrorCode.CATEGORY_NOT_EXISTED));
@@ -53,6 +58,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
+    @PreAuthorize("hasAuthority('CATEGORY_DELETE')")
     public void deleteCategory(Long categoryId) {
         Category category = categoryRepository.findById(categoryId)
                 .orElseThrow(() -> new AppException(ErrorCode.CATEGORY_NOT_EXISTED));

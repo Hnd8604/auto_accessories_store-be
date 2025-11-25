@@ -14,6 +14,7 @@ import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -26,11 +27,12 @@ public class BrandServiceImpl implements BrandService {
     BrandRepository brandRepository;
     BrandMapper brandMapper;
     @Override
+    @PreAuthorize("hasAuthority('BRAND_GET_ALL')")
     public Page<BrandResponse> getAllBrands(Pageable pageable) {
         return brandRepository.findAll(pageable)
                 .map(brandMapper::toBrandResponse);
     }
-
+    @PreAuthorize("hasAuthority('BRAND_GET_BY_ID')")
     @Override
     public BrandResponse getBrandById(Long brandId) {
         Brand brand = brandRepository.findById(brandId)
@@ -40,12 +42,14 @@ public class BrandServiceImpl implements BrandService {
     }
 
     @Override
+    @PreAuthorize("hasAuthority('BRAND_CREATE')")
     public BrandResponse createBrand(BrandRequest brandRequest) {
         Brand brand = brandMapper.toBrand(brandRequest);
         return brandMapper.toBrandResponse(brandRepository.save(brand));
     }
 
     @Override
+    @PreAuthorize("hasAuthority('BRAND_UPDATE')")
     public BrandResponse updateBrand(Long brandId, BrandRequest brandRequest) {
         Brand brand = brandRepository.findById(brandId)
                 .orElseThrow(() -> new AppException(ErrorCode.BRAND_NOT_EXISTED));
@@ -54,6 +58,7 @@ public class BrandServiceImpl implements BrandService {
     }
 
     @Override
+    @PreAuthorize("hasAuthority('BRAND_DELETE')")
     public void deleteBrand(Long brandId) {
         Brand brand = brandRepository.findById(brandId)
                 .orElseThrow(() -> new AppException(ErrorCode.BRAND_NOT_EXISTED));

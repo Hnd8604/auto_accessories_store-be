@@ -13,7 +13,7 @@ public interface UserService {
     UserResponse getMyInfo();
     UserResponse updateUser(String userId, UserUpdateRequest request);
     void deleteUser(String userId);
-    UserResponse getUser(String userId);
+    UserResponse getUserById(String userId);
     Page<UserResponse> getAllUsers(Pageable pageable);
 
 

@@ -24,6 +24,7 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
@@ -38,6 +39,7 @@ public class CartServiceImpl implements CartService {
     CartItemRepository cartItemRepository;
     CartItemMapper cartItemMapper;
     @Override
+    @PreAuthorize("hasAuthority('CART_GET_BY_ID')")
     public CartResponse getCartById(Long cartId) throws ParseException, JOSEException {
         Cart cart = cartRepository.findById(cartId)
                 .orElseThrow(() -> new AppException(ErrorCode.CART_NOT_EXISTED));
@@ -46,6 +48,7 @@ public class CartServiceImpl implements CartService {
 
 
 @Override
+@PreAuthorize("hasAuthority('CART_ADD_ITEM')")
 public CartItemResponse addItemToCart(CartItemRequest request) {
     Cart cart = cartRepository.findById(request.getCartId())
             .orElseThrow(() -> new AppException(ErrorCode.CART_NOT_EXISTED));
@@ -79,6 +82,7 @@ public CartItemResponse addItemToCart(CartItemRequest request) {
     return cartItemMapper.toCartItemResponse(cartItem);
 }
     @Override
+    @PreAuthorize("hasAuthority('CART_REMOVE_ITEM')")
     public void removeItemFromCart(Long cartId, Long itemId) {
         CartItem item = cartItemRepository.findById(itemId)
                 .orElseThrow(() -> new AppException(ErrorCode.CART_ITEM_NOT_EXISTED));
@@ -90,6 +94,7 @@ public CartItemResponse addItemToCart(CartItemRequest request) {
     }
 
     @Override
+    @PreAuthorize("hasAuthority('CART_UPDATE_ITEM')")
     public CartItemResponse updateItemInCart(Long itemId, CartItemUpdateRequest request) {
         CartItem cartItem = cartItemRepository.findById(itemId)
                 .orElseThrow(() -> new AppException(ErrorCode.CART_ITEM_NOT_EXISTED));

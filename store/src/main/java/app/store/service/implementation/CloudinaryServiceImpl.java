@@ -7,6 +7,7 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -21,6 +22,7 @@ public class CloudinaryServiceImpl implements CloudinaryService {
     Cloudinary cloudinary;
 
     @Override
+    @PreAuthorize("hasAuthority('IMAGE_UPLOAD')")
     public String uploadImage(MultipartFile file) {
         try {
             Map uploadResult = cloudinary.uploader().upload(file.getBytes(),
@@ -33,6 +35,7 @@ public class CloudinaryServiceImpl implements CloudinaryService {
     }
 
     @Override
+    @PreAuthorize("hasAuthority('IMAGE_DELETE')")
     public void deleteImage(String imageUrl) {
         try {
             String publicId = extractPublicIdFromUrl(imageUrl);

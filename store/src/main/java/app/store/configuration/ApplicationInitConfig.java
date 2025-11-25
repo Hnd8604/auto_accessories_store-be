@@ -2,6 +2,8 @@ package app.store.configuration;
 
 import app.store.entity.Role;
 import app.store.entity.User;
+import app.store.exception.AppException;
+import app.store.exception.ErrorCode;
 import app.store.repository.RoleRepository;
 import app.store.repository.UserRepository;
 import lombok.AccessLevel;
@@ -11,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -20,6 +23,7 @@ import java.util.HashSet;
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @Slf4j
+@Order(2) // de chay sau RoleInitConfig
 public class ApplicationInitConfig {
 
     RoleRepository roleRepository;
@@ -29,23 +33,11 @@ public class ApplicationInitConfig {
     ApplicationRunner applicationRunner(UserRepository userRepository) {
         return args -> {
             // Create roles if they don't exist
-            Role roleAdmin = roleRepository.findById("ADMIN").orElse(null);
-            if (roleAdmin == null) {
-                roleAdmin = new Role();
-                roleAdmin.setName("ADMIN");
-                roleAdmin.setDescription("Admin role");
-                roleAdmin = roleRepository.save(roleAdmin);
-                log.info("Created ADMIN role");
-            }
+            Role roleAdmin = roleRepository.findById("ADMIN")
+                    .orElseThrow(() -> new AppException(ErrorCode.ROLE_NOT_EXISTED));
 
-            Role roleUser = roleRepository.findById("USER").orElse(null);
-            if (roleUser == null) {
-                roleUser = new Role();
-                roleUser.setName("USER");
-                roleUser.setDescription("User role");
-                roleUser = roleRepository.save(roleUser);
-                log.info("Created USER role");
-            }
+            Role roleUser = roleRepository.findById("USER")
+                    .orElseThrow(() -> new AppException(ErrorCode.ROLE_NOT_EXISTED));
 
             // Create admin user if it doesn't exist
             HashSet<Role> roles = new HashSet<>();

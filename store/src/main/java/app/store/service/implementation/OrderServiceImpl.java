@@ -20,6 +20,7 @@ import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
@@ -39,12 +40,14 @@ public class OrderServiceImpl implements OrderService {
     CartItemRepository cartItemRepository;
 
     @Override
+    @PreAuthorize("hasAuthority('ORDER_GET_ALL')")
     public Page<OrderResponse> getAllOrders(Pageable pageable) {
         return orderRepository.findAll(pageable)
                 .map(orderMapper::toOrderResponse);
     }
 
     @Override
+    @PreAuthorize("hasAuthority('ORDER_GET_BY_ID')")
     public OrderResponse getOrderById(String orderId) {
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(() -> new AppException(ErrorCode.ORDER_NOT_EXISTED));
@@ -52,6 +55,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    @PreAuthorize("hasAuthority('ORDER_GET_MY_ORDER')")
     public List<OrderResponse> getMyOrder() {
         var context = SecurityContextHolder.getContext();
         String name = context.getAuthentication().getName();
@@ -61,6 +65,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    @PreAuthorize("hasAuthority('ORDER_CREATE')")
     public OrderResponse createOrderFromCart(OrderCreationRequest orderRequest) {
         Order order = orderMapper.createOrder(orderRequest);
         User user = userRepository.findById(orderRequest.getUserId())
@@ -117,6 +122,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    @PreAuthorize("hasAuthority('ORDER_UPDATE_BY_ADMIN')")
     public OrderResponse updateOrderByAdmin(String orderId, OrderUpdateByAdminRequest request) {
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(() -> new AppException(ErrorCode.ORDER_NOT_EXISTED));
@@ -126,6 +132,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    @PreAuthorize("hasAuthority('ORDER_UPDATE_BY_USER')")
     public OrderResponse updateOrderByUser(String orderId, OrderUpdateByUserRequest request) {
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(() -> new AppException(ErrorCode.ORDER_NOT_EXISTED));
@@ -136,6 +143,7 @@ public class OrderServiceImpl implements OrderService {
         return orderMapper.toOrderResponse(orderRepository.save(order));
     }
     @Override
+    @PreAuthorize("hasAuthority('ORDER_CANCEL')")
     public OrderResponse cancelOrder(String orderId) {
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(() -> new AppException(ErrorCode.ORDER_NOT_EXISTED));
@@ -155,6 +163,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    @PreAuthorize("hasAuthority('ORDER_DELETE')")
     public void deleteOrder(String orderId) {
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(() -> new AppException(ErrorCode.ORDER_NOT_EXISTED));

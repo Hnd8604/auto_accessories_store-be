@@ -18,6 +18,7 @@ import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -35,12 +36,14 @@ public class ProductImageServiceImpl implements ProductImageService {
     private final ProductMapper productMapper;
 
     @Override
+    @PreAuthorize("hasAuthority('PRODUCT_IMAGE)_GET_ALL')")
     public Page<ProductImageResponse> getAllProductImages(Pageable pageable) {
         return productImageRepository.findAll(pageable)
                 .map(productImageMapper::toProductImageResponse);
     }
 
     @Override
+    @PreAuthorize("hasAuthority('PRODUCT_IMAGE_GET_BY_ID')")
     public ProductImageResponse getProductImageById(Long imageId) {
         ProductImage productImage = productImageRepository.findById(imageId).
                 orElseThrow(() -> new AppException(ErrorCode.PRODUCT_IMAGE_NOT_EXISTED));  ;
@@ -48,6 +51,7 @@ public class ProductImageServiceImpl implements ProductImageService {
     }
 
     @Override
+    @PreAuthorize("hasAuthority('PRODUCT_IMAGE_GET_BY_PRODUCT_ID')")
     public List<ProductImageResponse> getProductImagesByProductId(Long productId) {
         return productImageRepository.getProductImageByProductId(productId).stream()
                 .map(productImageMapper::toProductImageResponse).toList();
@@ -55,6 +59,7 @@ public class ProductImageServiceImpl implements ProductImageService {
 
 
     @Override
+    @PreAuthorize("hasAuthority('PRODUCT_IMAGE_CREATE')")
     public ProductImageResponse createProductImage(MultipartFile file, ProductImageRequest request) {
 
         // Tạo ProductImage entity
@@ -72,6 +77,7 @@ public class ProductImageServiceImpl implements ProductImageService {
     }
 
     @Override
+    @PreAuthorize("hasAuthority('PRODUCT_IMAGE_UPDATE')")
     public ProductImageResponse updateProductImage(Long imageId, ProductImageUpdateRequest request) {
         // Tìm ProductImage cũ
         ProductImage productImage = productImageRepository.findById(imageId)
@@ -89,6 +95,7 @@ public class ProductImageServiceImpl implements ProductImageService {
 
     @Override
     @Transactional
+    @PreAuthorize("hasAuthority('PRODUCT_IMAGE_DELETE')")
     public void deleteProductImage(Long imageId) {
         ProductImage productImage = productImageRepository.findById(imageId)
                 .orElseThrow(() -> new AppException(ErrorCode.PRODUCT_IMAGE_NOT_EXISTED));
@@ -102,6 +109,7 @@ public class ProductImageServiceImpl implements ProductImageService {
 
     @Override
     @Transactional
+    @PreAuthorize("hasAuthority('PRODUCT_IMAGE_SET_PRIMARY')")
     public void setPrimaryImage(Long imageId, Long productId) {
         // Bước 1: Kiểm tra sự tồn tại của Product
         if (!productRepository.existsById(productId)) {

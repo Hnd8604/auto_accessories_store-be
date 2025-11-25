@@ -92,9 +92,9 @@ public class ProductController {
     }
 
     @GetMapping("/{productId}")
-    ApiResponse<ProductResponse> getProduct(@PathVariable Long productId) {
+    ApiResponse<ProductResponse> getProductById(@PathVariable Long productId) {
         return ApiResponse.<ProductResponse>builder()
-                .result(productServiceImpl.getProduct(productId))
+                .result(productServiceImpl.getProductById(productId))
                 .message(ResponseMessage.GET_PRODUCT_SUCCESS)
                 .build();
     }

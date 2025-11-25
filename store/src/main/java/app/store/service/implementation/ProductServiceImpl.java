@@ -17,6 +17,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.data.domain.Pageable;
@@ -33,6 +34,7 @@ public class ProductServiceImpl implements ProductService {
     CategoryRepository categoryRepository;
     BrandRepository brandRepository;
     @Override
+    @PreAuthorize("hasAuthority('PRODUCT_CREATE')")
     public ProductResponse createProduct(ProductRequest request) {
         Product product = productMapper.toProduct(request);
         Category category = categoryRepository.findById(request.getCategoryId())
@@ -47,6 +49,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Transactional
     @Override
+    @PreAuthorize("hasAuthority('PRODUCT_UPDATE')")
     public ProductResponse updateProduct(Long productId, ProductRequest request) {
         Product product = productRepository.findById(productId).
                 orElseThrow(() -> new AppException(ErrorCode.PRODUCT_NOT_EXISTED));
@@ -64,6 +67,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Transactional
     @Override
+    @PreAuthorize("hasAuthority('PRODUCT_DELETE')")
     public void deleteProduct(Long productId) {
         Product product = productRepository.findById(productId).
                 orElseThrow(() -> new AppException(ErrorCode.PRODUCT_NOT_EXISTED));
@@ -73,24 +77,28 @@ public class ProductServiceImpl implements ProductService {
     }
     @Transactional
     @Override
-    public ProductResponse getProduct(Long productId) {
+    @PreAuthorize("hasAuthority('PRODUCT_GET_BY_ID')")
+    public ProductResponse getProductById(Long productId) {
         Product product = productRepository.findById(productId).
                 orElseThrow(() -> new AppException(ErrorCode.PRODUCT_NOT_EXISTED));
 
         return productMapper.toProductResponse(product);
     }
     @Override
+    @PreAuthorize("hasAuthority('PRODUCT_GET_BY_CATEGORY_ID')")
     public Page<ProductResponse> getProductsByCategoryId(Long categoryId, Pageable pageable) {
         return productRepository.findProductsByCategoryId(categoryId, pageable)
                 .map(productMapper::toProductResponse);
     }
     @Override
+    @PreAuthorize("hasAuthority('PRODUCT_GET_BY_BRAND_ID')")
     public Page<ProductResponse> getProductsByBrandId(Long brandId, Pageable pageable) {
         return productRepository.findProductsByBrandId(brandId, pageable)
                 .map(productMapper::toProductResponse);
     }
 
     @Override
+    @PreAuthorize("hasAuthority('PRODUCT_GET_ALL')")
     public Page<ProductResponse> getAllProducts(Pageable pageable) {
         return productRepository.findAll(pageable)
                 .map(productMapper::toProductResponse);

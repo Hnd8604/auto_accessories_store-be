@@ -19,6 +19,7 @@ import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -41,6 +42,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
+    @PreAuthorize("hasAuthority('USER_CREATE')")
     public UserResponse createUser(UserCreationRequest request) {
         User user = userMapper.toUser(request);
 
@@ -62,6 +64,7 @@ public class UserServiceImpl implements UserService {
         return userMapper.toUserResponse(userRepository.save(user));
     }
     @Override
+    @PreAuthorize("hasAuthority('USER_GET_MY_INFO')")
     public UserResponse getMyInfo(){
         var context = SecurityContextHolder.getContext();
         String name = context.getAuthentication().getName();
@@ -77,6 +80,7 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
+    @PreAuthorize("hasAuthority('USER_UPDATE')")
     public UserResponse updateUser(String userId, UserUpdateRequest request) {
         User user = userRepository.findById(userId)
                 .orElseThrow(()-> new AppException(ErrorCode.USER_NOT_EXISTED));
@@ -98,18 +102,17 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
+    @PreAuthorize("hasAuthority('USER_DELETE')")
     public void deleteUser(String userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(()-> new AppException(ErrorCode.USER_NOT_EXISTED));
-
-
         userRepository.delete(user);
-
     }
 
 
     @Override
-    public UserResponse getUser(String userId) {
+    @PreAuthorize("hasAuthority('USER_GET_BY_ID')")
+    public UserResponse getUserById(String userId) {
         log.info("getUser: {}", userId);
         User user = userRepository.findById(userId)
                 .orElseThrow(()-> new AppException(ErrorCode.USER_NOT_EXISTED));
@@ -119,6 +122,7 @@ public class UserServiceImpl implements UserService {
     }
   //  @PreAuthorize("hasRole('READ_USER')")
     @Override
+    @PreAuthorize("hasAuthority('USER_GET_ALL')")
     public Page<UserResponse> getAllUsers(Pageable pageable) {
         log.info("getAllUsers");
         return userRepository.findAll(pageable)

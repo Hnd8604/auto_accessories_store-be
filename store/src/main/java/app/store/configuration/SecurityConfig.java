@@ -1,9 +1,10 @@
+// Java
 package app.store.configuration;
 
+import app.store.configuration.RolePermissionAuthoritiesConverter; // NOTE: added import for custom converter
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -11,54 +12,56 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
-import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
 import org.springframework.security.web.SecurityFilterChain;
-
 
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
 public class SecurityConfig {
 
-    private final String[] PUBLIC_ENDPOINTS = {"/users",
-            "/auth/token", "/auth/introspect", "/auth/logout", "/auth/refresh",  "/swagger-ui/**",
-            "/swagger-ui.html",
-            "/v3/api-docs/**",
+    // NOTE: made static final
+    private static final String[] PUBLIC_ENDPOINTS = {
+            "/users",
+            "/auth/token", "/auth/introspect", "/auth/logout", "/auth/refresh",
+            "/swagger-ui/**", "/swagger-ui.html", "/v3/api-docs/**"
     };
 
     @Autowired
     private CustomJwtDecoder customJwtDecoder;
 
-    @Bean
-    public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
-        httpSecurity.authorizeHttpRequests(request ->
-                request.requestMatchers(PUBLIC_ENDPOINTS).permitAll()
-                        .anyRequest().authenticated());
+    @Autowired
+    private RolePermissionAuthoritiesConverter authoritiesConverter; // NOTE: inject custom Redis-backed converter
 
-        httpSecurity.oauth2ResourceServer(oauth2 ->
-                oauth2.jwt(jwtConfigurer ->
-                                jwtConfigurer.decoder(customJwtDecoder)
-                                        .jwtAuthenticationConverter(jwtAuthenticationConverter()))
-                        .authenticationEntryPoint(new JwtAuthenticationEntryPoint()) // when authentication fails, this entry point will be used
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        http.authorizeHttpRequests(req -> req
+                .requestMatchers(PUBLIC_ENDPOINTS).permitAll()
+                .anyRequest().authenticated()
         );
-        httpSecurity.csrf(AbstractHttpConfigurer::disable);
 
-        return httpSecurity.build();
+        http.oauth2ResourceServer(oauth2 -> oauth2
+                .jwt(jwt -> jwt
+                        .decoder(customJwtDecoder)
+                        // NOTE: use bean-configured JwtAuthenticationConverter pulling roles + permissions
+                        .jwtAuthenticationConverter(jwtAuthenticationConverter())
+                )
+                .authenticationEntryPoint(new JwtAuthenticationEntryPoint())
+        );
+
+        http.csrf(AbstractHttpConfigurer::disable);
+        return http.build();
     }
 
     @Bean
-    JwtAuthenticationConverter jwtAuthenticationConverter(){
-        JwtGrantedAuthoritiesConverter jwtGrantedAuthoritiesConverter = new JwtGrantedAuthoritiesConverter();
-        jwtGrantedAuthoritiesConverter.setAuthorityPrefix("");
-
-        JwtAuthenticationConverter jwtAuthenticationConverter = new JwtAuthenticationConverter();
-        jwtAuthenticationConverter.setJwtGrantedAuthoritiesConverter(jwtGrantedAuthoritiesConverter);
-
-        return jwtAuthenticationConverter;
+    JwtAuthenticationConverter jwtAuthenticationConverter() {
+        // NOTE: custom converter already adds ROLE_ prefix and permissions from Redis
+        JwtAuthenticationConverter converter = new JwtAuthenticationConverter();
+        converter.setJwtGrantedAuthoritiesConverter(authoritiesConverter);
+        return converter;
     }
 
     @Bean
-    PasswordEncoder passwordEncoder(){
+    PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder(10);
     }
 }

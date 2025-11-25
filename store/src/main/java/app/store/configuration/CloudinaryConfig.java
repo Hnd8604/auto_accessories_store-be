@@ -1,4 +1,4 @@
-package app.store.config;
+package app.store.configuration;
 
 import com.cloudinary.Cloudinary;
 import lombok.AccessLevel;

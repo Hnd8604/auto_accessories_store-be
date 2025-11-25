@@ -11,6 +11,7 @@ import lombok.experimental.FieldDefaults;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/roles")
@@ -33,9 +34,9 @@ public class RoleController {
                 .build();
     }
     @GetMapping("/{roleId}")
-    public ApiResponse<RoleResponse> getRole(@PathVariable String roleId) {
+    public ApiResponse<RoleResponse> getRoleById(@PathVariable String roleId) {
         return ApiResponse.<RoleResponse>builder()
-                .result(roleServiceImpl.getRole(roleId))
+                .result(roleServiceImpl.getRoleById(roleId))
                 .build();
     }
 
@@ -46,6 +47,29 @@ public class RoleController {
                 .build();
     }
 
+    // Thêm permission cho role
+    @PostMapping("/{roleId}/permissions")
+    public ApiResponse<RoleResponse> addPermissionsToRole(
+            @PathVariable String roleId,
+            @RequestBody Set<String> permissions) {
+
+        roleServiceImpl.addPermissionsToRole(roleId, permissions);
+        return ApiResponse.<RoleResponse>builder()
+                .result(roleServiceImpl.addPermissionsToRole(roleId, permissions))
+                .build();
+    }
+
+    // Xóa permission khỏi role
+    @DeleteMapping("/{roleId}/permissions")
+    public ApiResponse<RoleResponse> removePermissionsFromRole(
+            @PathVariable String roleId,
+            @RequestBody Set<String> permissions) {
+
+        roleServiceImpl.removePermissionsFromRole(roleId, permissions);
+        return ApiResponse.<RoleResponse>builder()
+                .result(roleServiceImpl.removePermissionsFromRole(roleId, permissions))
+                .build();
+    }
     @DeleteMapping("/{roleId}")
     public ApiResponse<Void> deleteRole(@PathVariable String roleId) {
         roleServiceImpl.deleteRole(roleId);
