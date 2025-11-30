@@ -1,0 +1,144 @@
+package app.store.service.impl;
+
+import app.store.dto.request.PostCategoryRequest;
+import app.store.dto.response.PostCategoryResponse;
+import app.store.entity.PostCategory;
+import app.store.mapper.PostCategoryMapper;
+import app.store.repository.PostCategoryRepository;
+import app.store.service.PostCategoryService;
+import app.store.utils.SlugUtil;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.stream.Collectors;
+
+@Service
+@RequiredArgsConstructor
+@Slf4j
+@Transactional
+public class PostCategoryServiceImpl implements PostCategoryService {
+    
+    private final PostCategoryRepository postCategoryRepository;
+    private final SlugUtil slugUtil;
+    private final PostCategoryMapper postCategoryMapper;
+    @Override
+    public PostCategoryResponse createCategory(PostCategoryRequest request) {
+
+        // Kiểm tra tên danh mục đã tồn tại chưa
+        if (postCategoryRepository.existsByName(request.getName())) {
+            throw new RuntimeException("Tên danh mục đã tồn tại");
+        }
+        PostCategory postCategory = postCategoryMapper.toPostCategory(request);
+
+        // Tạo slug từ tên danh mục
+        String baseSlug = slugUtil.toSlug(request.getName());
+        String uniqueSlug = slugUtil.createUniqueSlug(baseSlug, postCategoryRepository::existsBySlug);
+
+        postCategory.setSlug(uniqueSlug);
+        PostCategory savedCategory = postCategoryRepository.save(postCategory);
+
+        return postCategoryMapper.toPostCategoryResponse(savedCategory);
+    }
+    
+    @Override
+    public PostCategoryResponse updateCategory(Long id, PostCategoryRequest request) {
+
+        PostCategory category = postCategoryRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Không tìm thấy danh mục với ID: " + id));
+        
+        // Kiểm tra tên danh mục mới có trùng với danh mục khác không
+        if (!category.getName().equals(request.getName()) && 
+            postCategoryRepository.existsByName(request.getName())) {
+            throw new RuntimeException("Tên danh mục đã tồn tại");
+        }
+        
+        // Cập nhật slug nếu tên thay đổi
+        if (!category.getName().equals(request.getName())) {
+            String baseSlug = slugUtil.toSlug(request.getName());
+            String uniqueSlug = slugUtil.createUniqueSlug(baseSlug, slug -> 
+                !slug.equals(category.getSlug()) && postCategoryRepository.existsBySlug(slug));
+            category.setSlug(uniqueSlug);
+        }
+        
+        category.setName(request.getName());
+        category.setDescription(request.getDescription());
+        
+        PostCategory savedCategory = postCategoryRepository.save(category);
+
+        return postCategoryMapper.toPostCategoryResponse(savedCategory);
+    }
+    
+    @Override
+    public void deleteCategory(Long id) {
+        PostCategory category = postCategoryRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Không tìm thấy danh mục với ID: " + id));
+        
+        // Kiểm tra xem danh mục có bài viết nào không
+        if (category.getPosts() != null && !category.getPosts().isEmpty()) {
+            throw new RuntimeException("Không thể xóa danh mục đã có bài viết. Vui lòng xóa hoặc chuyển các bài viết trước.");
+        }
+        
+        postCategoryRepository.delete(category);
+    }
+    
+    @Override
+    @Transactional(readOnly = true)
+    public PostCategoryResponse getCategoryById(Long id) {
+        PostCategory category = postCategoryRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Không tìm thấy danh mục với ID: " + id));
+        
+        return mapToResponse(category);
+    }
+    
+    @Override
+    @Transactional(readOnly = true)
+    public PostCategoryResponse getCategoryBySlug(String slug) {
+        PostCategory category = postCategoryRepository.findBySlug(slug)
+                .orElseThrow(() -> new RuntimeException("Không tìm thấy danh mục với slug: " + slug));
+        
+        return mapToResponse(category);
+    }
+    
+    @Override
+    @Transactional(readOnly = true)
+    public List<PostCategoryResponse> getAllCategories() {
+        return postCategoryRepository.findAll(Sort.by(Sort.Direction.ASC, "name"))
+                .stream()
+                .map(this::mapToResponse)
+                .collect(Collectors.toList());
+    }
+    
+    @Override
+    @Transactional(readOnly = true)
+    public Page<PostCategoryResponse> searchCategories(String keyword, int page, int size) {
+        PageRequest pageRequest = PageRequest.of(page, size, Sort.by(Sort.Direction.ASC, "name"));
+        
+        Page<PostCategory> categoryPage;
+        if (keyword == null || keyword.trim().isEmpty()) {
+            categoryPage = postCategoryRepository.findAll(pageRequest);
+        } else {
+            categoryPage = postCategoryRepository.findByKeyword(keyword.trim(), pageRequest);
+        }
+        
+        return categoryPage.map(this::mapToResponse);
+    }
+    
+    private PostCategoryResponse mapToResponse(PostCategory category) {
+        PostCategoryResponse response = new PostCategoryResponse();
+        response.setId(category.getId());
+        response.setName(category.getName());
+        response.setSlug(category.getSlug());
+        response.setDescription(category.getDescription());
+        response.setCreatedAt(category.getCreatedAt());
+        response.setUpdatedAt(category.getUpdatedAt());
+        response.setPostCount(category.getPosts() != null ? (long) category.getPosts().size() : 0L);
+        
+        return response;
+    }
+}
