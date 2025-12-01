@@ -1,4 +1,4 @@
-package app.store.service;
+package app.store.service.interfaces;
 
 import app.store.dto.request.PostRequest;
 import app.store.dto.response.PostResponse;

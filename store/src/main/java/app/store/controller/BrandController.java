@@ -16,7 +16,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
-
+import static app.store.utils.SortUtils.buildSort;
 @RestController
 @RequestMapping("/brands")
 @RequiredArgsConstructor
@@ -87,20 +87,4 @@ public class BrandController {
                 .build();
         }
 
-    private Sort buildSort(String sortParam) {
-        // sortParam dạng: "name,asc"
-        // tách field và direction
-        String[] parts = sortParam.split(",");
-
-        String sortField = parts[0].trim();                       // name
-        String direction = (parts.length > 1)                     // asc
-                ? parts[1].trim().toUpperCase()
-                : "ASC";
-
-        Sort.Direction sortDirection = Sort.Direction.fromString(direction);
-
-        // Nếu bạn muốn ép nếu sortField == name thì dùng name
-        // Còn nếu không thì giữ như này
-        return Sort.by(sortDirection, sortField);
-    }
 }

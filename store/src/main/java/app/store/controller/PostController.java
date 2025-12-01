@@ -4,11 +4,13 @@ import app.store.constant.ResponseMessage;
 import app.store.dto.request.PostRequest;
 import app.store.dto.response.auth.ApiResponse;
 import app.store.dto.response.PostResponse;
-import app.store.service.PostService;
+import app.store.service.interfaces.PostService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import org.springframework.data.domain.Page;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
@@ -17,14 +19,14 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+@RequestMapping("/posts")
 @Tag(name = "Post Management", description = "APIs for managing blog posts including CRUD operations, publishing, and public access")
 public class PostController {
     
-    private final PostService postService;
-    
-    // ==================== ADMIN APIs ====================
-    
-    @PostMapping("/api/admin/posts")
+    PostService postService;
+
+    @PostMapping
     @Operation(
         summary = "Create a new post",
         description = "Creates a new blog post. Only accessible by admin users. Automatically generates SEO-friendly slug from title and associates with authenticated user as author."
@@ -32,55 +34,55 @@ public class PostController {
     public ApiResponse<PostResponse> createPost(
             @Valid @RequestBody PostRequest request,
             Authentication authentication) {
-        String authorId = authentication.getName(); // Lấy ID từ JWT token
-        PostResponse response = postService.createPost(request, authorId);
+        String authorName = authentication.getName(); // Lấy ID từ JWT token
+        PostResponse response = postService.createPost(request, authorName);
         return ApiResponse.<PostResponse>builder()
                 .message(ResponseMessage.CREATE_POST_SUCCESS)
                 .result(response)
                 .build();
     }
     
-    @PutMapping("/api/admin/posts/{id}")
+    @PutMapping("/{postId}")
     @Operation(
         summary = "Update post",
         description = "Updates an existing blog post by ID. Only accessible by admin users. Slug will be regenerated if title is changed."
     )
     public ApiResponse<PostResponse> updatePost(
-            @PathVariable Long id,
+            @PathVariable Long postId,
             @Valid @RequestBody PostRequest request) {
-        PostResponse response = postService.updatePost(id, request);
+        PostResponse response = postService.updatePost(postId, request);
         return ApiResponse.<PostResponse>builder()
                 .message(ResponseMessage.UPDATE_POST_SUCCESS)
                 .result(response)
                 .build();
     }
     
-    @DeleteMapping("/api/admin/posts/{id}")
+    @DeleteMapping("/{postId}")
     @Operation(
         summary = "Delete post",
         description = "Permanently deletes a blog post by ID. Only accessible by admin users."
     )
-    public ApiResponse<Void> deletePost(@PathVariable Long id) {
-        postService.deletePost(id);
+    public ApiResponse<Void> deletePost(@PathVariable Long postId) {
+        postService.deletePost(postId);
         return ApiResponse.<Void>builder()
                 .message(ResponseMessage.DELETE_POST_SUCCESS)
                 .build();
     }
     
-    @GetMapping("/api/admin/posts/{id}")
+    @GetMapping("/id/{postId}")
     @Operation(
         summary = "Get post by ID",
         description = "Retrieves detailed information of a post by ID including draft posts. Only accessible by admin users."
     )
-    public ApiResponse<PostResponse> getPostById(@PathVariable Long id) {
-        PostResponse response = postService.getPostById(id);
+    public ApiResponse<PostResponse> getPostById(@PathVariable Long postId) {
+        PostResponse response = postService.getPostById(postId);
         return ApiResponse.<PostResponse>builder()
                 .message(ResponseMessage.GET_POST_SUCCESS)
                 .result(response)
                 .build();
     }
     
-    @GetMapping("/api/admin/posts")
+    @GetMapping
     @Operation(
         summary = "Get all posts",
         description = "Retrieves all posts with pagination including drafts. Only accessible by admin users. Sorted by creation date descending."
@@ -95,21 +97,19 @@ public class PostController {
                 .build();
     }
     
-    @PatchMapping("/api/admin/posts/{id}/toggle-publish")
+    @PatchMapping("/{postId}/toggle-publish")
     @Operation(
         summary = "Toggle publish status",
         description = "Toggles the publish status of a post (publish/unpublish). Only accessible by admin users."
     )
-    public ApiResponse<Void> togglePublishStatus(@PathVariable Long id) {
-        postService.togglePublishStatus(id);
+    public ApiResponse<Void> togglePublishStatus(@PathVariable Long postId) {
+        postService.togglePublishStatus(postId);
         return ApiResponse.<Void>builder()
                 .message(ResponseMessage.TOGGLE_POST_PUBLISH_SUCCESS)
                 .build();
     }
-    
-    // ==================== PUBLIC APIs ====================
-    
-    @GetMapping("/api/posts")
+
+    @GetMapping("/published")
     @Operation(
         summary = "Get published posts",
         description = "Retrieves all published posts with pagination. Accessible by authenticated users. Only returns posts with published status."
@@ -124,7 +124,7 @@ public class PostController {
                 .build();
     }
     
-    @GetMapping("/api/posts/search")
+    @GetMapping("/search")
     @Operation(
         summary = "Search published posts",
         description = "Searches published posts by keyword with pagination. Accessible by authenticated users. Searches in title and short description fields only."
@@ -140,7 +140,7 @@ public class PostController {
                 .build();
     }
     
-    @GetMapping("/api/posts/{slug}")
+    @GetMapping("/slug/{slug}")
     @Operation(
         summary = "Get post by slug",
         description = "Retrieves post details by slug and automatically increments view count. Accessible by authenticated users. Slug is SEO-friendly URL identifier."
@@ -153,7 +153,7 @@ public class PostController {
                 .build();
     }
     
-    @GetMapping("/api/posts/category/{categoryId}")
+    @GetMapping("/category/{categoryId}")
     @Operation(
         summary = "Get posts by category",
         description = "Retrieves published posts filtered by category with pagination. Accessible by authenticated users."
@@ -169,7 +169,7 @@ public class PostController {
                 .build();
     }
     
-    @GetMapping("/api/posts/{id}/related")
+    @GetMapping("/{postId}/related")
     @Operation(
         summary = "Get related posts",
         description = "Retrieves related posts from the same category. Accessible by authenticated users. Returns posts sorted by creation date."
@@ -184,7 +184,7 @@ public class PostController {
                 .build();
     }
     
-    @GetMapping("/api/posts/most-viewed")
+    @GetMapping("/most-viewed")
     @Operation(
         summary = "Get most viewed posts",
         description = "Retrieves the most viewed published posts. Accessible by authenticated users. Sorted by view count descending."

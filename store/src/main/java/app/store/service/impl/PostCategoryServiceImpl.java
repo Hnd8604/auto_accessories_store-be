@@ -7,7 +7,9 @@ import app.store.mapper.PostCategoryMapper;
 import app.store.repository.PostCategoryRepository;
 import app.store.service.interfaces.PostCategoryService;
 import app.store.utils.SlugUtil;
+import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -23,11 +25,12 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Slf4j
 @Transactional
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class PostCategoryServiceImpl implements PostCategoryService {
     
-    private final PostCategoryRepository postCategoryRepository;
-    private final SlugUtil slugUtil;
-    private final PostCategoryMapper postCategoryMapper;
+    PostCategoryRepository postCategoryRepository;
+    SlugUtil slugUtil;
+    PostCategoryMapper postCategoryMapper;
     
     @Override
     @PreAuthorize("hasAuthority('POST_CATEGORY_CREATE')")
@@ -44,9 +47,8 @@ public class PostCategoryServiceImpl implements PostCategoryService {
         String uniqueSlug = slugUtil.createUniqueSlug(baseSlug, postCategoryRepository::existsBySlug);
 
         postCategory.setSlug(uniqueSlug);
-        PostCategory savedCategory = postCategoryRepository.save(postCategory);
 
-        return postCategoryMapper.toPostCategoryResponse(savedCategory);
+        return postCategoryMapper.toPostCategoryResponse(postCategoryRepository.save(postCategory));
     }
     
     @Override
@@ -72,10 +74,9 @@ public class PostCategoryServiceImpl implements PostCategoryService {
         
         category.setName(request.getName());
         category.setDescription(request.getDescription());
-        
-        PostCategory savedCategory = postCategoryRepository.save(category);
 
-        return postCategoryMapper.toPostCategoryResponse(savedCategory);
+
+        return postCategoryMapper.toPostCategoryResponse(postCategoryRepository.save(category));
     }
     
     @Override
@@ -99,26 +100,24 @@ public class PostCategoryServiceImpl implements PostCategoryService {
         PostCategory category = postCategoryRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Không tìm thấy danh mục với ID: " + id));
         
-        return mapToResponse(category);
+        return postCategoryMapper.toPostCategoryResponse(category);
     }
     
     @Override
     @Transactional(readOnly = true)
-    @PreAuthorize("hasAuthority('POST_CATEGORY_GET_BY_SLUG')")
     public PostCategoryResponse getCategoryBySlug(String slug) {
         PostCategory category = postCategoryRepository.findBySlug(slug)
                 .orElseThrow(() -> new RuntimeException("Không tìm thấy danh mục với slug: " + slug));
-        
-        return mapToResponse(category);
+
+        return postCategoryMapper.toPostCategoryResponse(category);
     }
-    
+
     @Override
     @Transactional(readOnly = true)
-    @PreAuthorize("hasAuthority('POST_CATEGORY_GET_ALL')")
     public List<PostCategoryResponse> getAllCategories() {
         return postCategoryRepository.findAll(Sort.by(Sort.Direction.ASC, "name"))
                 .stream()
-                .map(this::mapToResponse)
+                .map(postCategoryMapper::toPostCategoryResponse)
                 .collect(Collectors.toList());
     }
     
@@ -135,19 +134,7 @@ public class PostCategoryServiceImpl implements PostCategoryService {
             categoryPage = postCategoryRepository.findByKeyword(keyword.trim(), pageRequest);
         }
         
-        return categoryPage.map(this::mapToResponse);
+        return categoryPage.map(postCategoryMapper::toPostCategoryResponse);
     }
-    
-    private PostCategoryResponse mapToResponse(PostCategory category) {
-        PostCategoryResponse response = new PostCategoryResponse();
-        response.setId(category.getId());
-        response.setName(category.getName());
-        response.setSlug(category.getSlug());
-        response.setDescription(category.getDescription());
-        response.setCreatedAt(category.getCreatedAt());
-        response.setUpdatedAt(category.getUpdatedAt());
-        response.setPostCount(category.getPosts() != null ? (long) category.getPosts().size() : 0L);
-        
-        return response;
-    }
+
 }

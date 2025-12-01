@@ -49,7 +49,7 @@ public class PermissionServiceImpl implements PermissionService {
         return permissionMapper.toPermissionResponse(permissionRepository.save(permission));
     }
     @Override
-//    @PreAuthorize("hasAuthority('PERMISSION_DELETE')")
+    @PreAuthorize("hasAuthority('PERMISSION_DELETE')")
     public void deletePermission(String permissionId) {
         permissionRepository.deleteById(permissionId);
 //        rolePermissionRepository.syncAllRolesFromDb(); không cần thiết vì chỉ có thể xóa khi permission không thuộc role nào;
