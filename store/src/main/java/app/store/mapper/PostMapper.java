@@ -17,14 +17,14 @@ public interface PostMapper {
     @Mapping(target = "author", ignore = true)
 //    @Mapping(target = "createdAt", ignore = true)
 //    @Mapping(target = "updatedAt", ignore = true)
-    Post toEntity(PostRequest request);
+    Post toPost(PostRequest request);
 
     @Mapping(target = "categoryId", source = "category.id")
     @Mapping(target = "categoryName", source = "category.name")
     @Mapping(target = "categorySlug", source = "category.slug")
     @Mapping(target = "authorId", source = "author.id")
-    @Mapping(target = "authorName", expression = "java(getAuthorFullName(entity))")
-    PostResponse toResponse(Post entity);
+    @Mapping(target = "authorName", expression = "java(getAuthorFullName(post))")
+    PostResponse toPostResponse(Post post);
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "slug", ignore = true)

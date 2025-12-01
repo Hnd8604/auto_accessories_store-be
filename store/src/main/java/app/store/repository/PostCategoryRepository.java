@@ -21,6 +21,9 @@ public interface PostCategoryRepository extends JpaRepository<PostCategory, Long
     Page<PostCategory> findByKeyword(@Param("keyword") String keyword, Pageable pageable);
     
     boolean existsBySlug(String slug);
-    
+
+//    @Query("SELECT COUNT(p) FROM Post p WHERE p.category.id = :categoryId")
+//    long countPostByCategory(@Param("categoryId") Long categoryId);
+
     boolean existsByName(String name);
 }

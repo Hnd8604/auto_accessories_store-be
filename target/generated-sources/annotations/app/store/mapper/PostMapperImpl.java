@@ -10,14 +10,14 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2025-11-29T22:56:43+0700",
+    date = "2025-12-01T18:10:40+0700",
     comments = "version: 1.5.5.Final, compiler: javac, environment: Java 21.0.6 (Oracle Corporation)"
 )
 @Component
 public class PostMapperImpl implements PostMapper {
 
     @Override
-    public Post toEntity(PostRequest request) {
+    public Post toPost(PostRequest request) {
         if ( request == null ) {
             return null;
         }
@@ -34,29 +34,29 @@ public class PostMapperImpl implements PostMapper {
     }
 
     @Override
-    public PostResponse toResponse(Post entity) {
-        if ( entity == null ) {
+    public PostResponse toPostResponse(Post post) {
+        if ( post == null ) {
             return null;
         }
 
         PostResponse postResponse = new PostResponse();
 
-        postResponse.setCategoryId( entityCategoryId( entity ) );
-        postResponse.setCategoryName( entityCategoryName( entity ) );
-        postResponse.setCategorySlug( entityCategorySlug( entity ) );
-        postResponse.setAuthorId( entityAuthorId( entity ) );
-        postResponse.setId( entity.getId() );
-        postResponse.setTitle( entity.getTitle() );
-        postResponse.setSlug( entity.getSlug() );
-        postResponse.setShortDescription( entity.getShortDescription() );
-        postResponse.setThumbnailUrl( entity.getThumbnailUrl() );
-        postResponse.setContent( entity.getContent() );
-        postResponse.setPublished( entity.getPublished() );
-        postResponse.setViewCount( entity.getViewCount() );
-        postResponse.setCreatedAt( entity.getCreatedAt() );
-        postResponse.setUpdatedAt( entity.getUpdatedAt() );
+        postResponse.setCategoryId( postCategoryId( post ) );
+        postResponse.setCategoryName( postCategoryName( post ) );
+        postResponse.setCategorySlug( postCategorySlug( post ) );
+        postResponse.setAuthorId( postAuthorId( post ) );
+        postResponse.setId( post.getId() );
+        postResponse.setTitle( post.getTitle() );
+        postResponse.setSlug( post.getSlug() );
+        postResponse.setShortDescription( post.getShortDescription() );
+        postResponse.setThumbnailUrl( post.getThumbnailUrl() );
+        postResponse.setContent( post.getContent() );
+        postResponse.setPublished( post.getPublished() );
+        postResponse.setViewCount( post.getViewCount() );
+        postResponse.setCreatedAt( post.getCreatedAt() );
+        postResponse.setUpdatedAt( post.getUpdatedAt() );
 
-        postResponse.setAuthorName( getAuthorFullName(entity) );
+        postResponse.setAuthorName( getAuthorFullName(post) );
 
         return postResponse;
     }
@@ -74,7 +74,7 @@ public class PostMapperImpl implements PostMapper {
         entity.setPublished( request.getPublished() );
     }
 
-    private Long entityCategoryId(Post post) {
+    private Long postCategoryId(Post post) {
         if ( post == null ) {
             return null;
         }
@@ -89,7 +89,7 @@ public class PostMapperImpl implements PostMapper {
         return id;
     }
 
-    private String entityCategoryName(Post post) {
+    private String postCategoryName(Post post) {
         if ( post == null ) {
             return null;
         }
@@ -104,7 +104,7 @@ public class PostMapperImpl implements PostMapper {
         return name;
     }
 
-    private String entityCategorySlug(Post post) {
+    private String postCategorySlug(Post post) {
         if ( post == null ) {
             return null;
         }
@@ -119,7 +119,7 @@ public class PostMapperImpl implements PostMapper {
         return slug;
     }
 
-    private String entityAuthorId(Post post) {
+    private String postAuthorId(Post post) {
         if ( post == null ) {
             return null;
         }

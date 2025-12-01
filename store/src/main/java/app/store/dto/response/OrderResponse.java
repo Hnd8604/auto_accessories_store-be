@@ -25,5 +25,4 @@ public class OrderResponse {
     OrderStatus status;
     PaymentStatus paymentStatus;
     List<OrderDetailResponse> orderDetails;
-
 }
