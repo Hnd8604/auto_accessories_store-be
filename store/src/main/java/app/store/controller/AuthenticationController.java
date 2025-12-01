@@ -11,6 +11,8 @@ import app.store.dto.response.auth.IntrospectResponse;
 import app.store.dto.response.auth.RefreshResponse;
 import app.store.service.impl.AuthenticationServiceImpl;
 import com.nimbusds.jose.JOSEException;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpSession;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -26,9 +28,15 @@ import java.text.ParseException;
 @RequestMapping("/auth")
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+@Tag(name = "Authentication", description = "APIs for user authentication including login, token refresh, and logout")
 public class AuthenticationController {
     AuthenticationServiceImpl authenticationServiceImpl;
+    
     @PostMapping("/token")
+    @Operation(
+        summary = "Authenticate user",
+        description = "Authenticates user with username and password. Returns JWT access token and refresh token."
+    )
     ApiResponse<AuthenticationResponse> authenticate(@RequestBody AuthenticationRequest request, HttpSession session) {
         var result = authenticationServiceImpl.authenticate(request, session);
 
@@ -40,6 +48,10 @@ public class AuthenticationController {
     }
 
     @PostMapping("/refresh")
+    @Operation(
+        summary = "Refresh token",
+        description = "Refreshes the access token using a valid refresh token. Returns new access token."
+    )
     ApiResponse<RefreshResponse> refresh(@RequestBody RefreshRequest request) throws ParseException, JOSEException {
         var result = authenticationServiceImpl.refreshToken(request);
         return ApiResponse.<RefreshResponse>builder()
@@ -50,6 +62,10 @@ public class AuthenticationController {
     }
 
     @PostMapping("/introspect")
+    @Operation(
+        summary = "Introspect token",
+        description = "Validates a JWT token and returns its status. Used to check if a token is valid and not expired."
+    )
     ApiResponse<IntrospectResponse> introspect(@RequestBody IntrospectRequest request)
             throws ParseException, JOSEException {
 
@@ -63,6 +79,10 @@ public class AuthenticationController {
 
 
     @PostMapping("/logout")
+    @Operation(
+        summary = "Logout user",
+        description = "Logs out user by invalidating the JWT token. Adds token to blacklist to prevent reuse."
+    )
     ApiResponse<Void> logout(@RequestBody LogoutRequest request)
             throws ParseException, JOSEException {
 

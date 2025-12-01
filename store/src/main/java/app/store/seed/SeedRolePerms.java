@@ -102,6 +102,29 @@ public class SeedRolePerms implements CommandLineRunner {
         Permission imageUpload = getOrCreatePermission("IMAGE_UPLOAD", "Upload image");
         Permission imageDelete = getOrCreatePermission("IMAGE_DELETE", "Delete image");
 
+        // === POST CATEGORY PERMISSIONS ===
+        Permission postCategoryCreate = getOrCreatePermission("POST_CATEGORY_CREATE", "Create post category");
+        Permission postCategoryUpdate = getOrCreatePermission("POST_CATEGORY_UPDATE", "Update post category");
+        Permission postCategoryDelete = getOrCreatePermission("POST_CATEGORY_DELETE", "Delete post category");
+        Permission postCategoryGetById = getOrCreatePermission("POST_CATEGORY_GET_BY_ID", "Get post category by ID");
+        Permission postCategoryGetAll = getOrCreatePermission("POST_CATEGORY_GET_ALL", "Get all post categories");
+        Permission postCategoryGetBySlug = getOrCreatePermission("POST_CATEGORY_GET_BY_SLUG", "Get post category by slug");
+        Permission postCategorySearch = getOrCreatePermission("POST_CATEGORY_SEARCH", "Search post categories");
+
+        // === POST PERMISSIONS ===
+        Permission postCreate = getOrCreatePermission("POST_CREATE", "Create post");
+        Permission postUpdate = getOrCreatePermission("POST_UPDATE", "Update post");
+        Permission postDelete = getOrCreatePermission("POST_DELETE", "Delete post");
+        Permission postGetById = getOrCreatePermission("POST_GET_BY_ID", "Get post by ID");
+        Permission postGetAll = getOrCreatePermission("POST_GET_ALL", "Get all posts");
+        Permission postTogglePublish = getOrCreatePermission("POST_TOGGLE_PUBLISH", "Toggle post publish status");
+        Permission postGetPublished = getOrCreatePermission("POST_GET_PUBLISHED", "Get published posts");
+        Permission postSearch = getOrCreatePermission("POST_SEARCH", "Search published posts");
+        Permission postGetBySlug = getOrCreatePermission("POST_GET_BY_SLUG", "Get post by slug");
+        Permission postGetByCategory = getOrCreatePermission("POST_GET_BY_CATEGORY", "Get posts by category");
+        Permission postGetRelated = getOrCreatePermission("POST_GET_RELATED", "Get related posts");
+        Permission postGetMostViewed = getOrCreatePermission("POST_GET_MOST_VIEWED", "Get most viewed posts");
+
         // === ROLES ===
         // ADMIN - Has all permissions
         getOrCreateRole("ADMIN", "Administrator",
@@ -124,7 +147,11 @@ public class SeedRolePerms implements CommandLineRunner {
                 // Product image permissions
                 productImageCreate, productImageUpdate, productImageDelete, productImageGetById, productImageGetByProductId, productImageGetAll, productImageSetPrimary,
                 // Image upload permissions
-                imageUpload, imageDelete
+                imageUpload, imageDelete,
+                // Post category permissions
+                postCategoryCreate, postCategoryUpdate, postCategoryDelete, postCategoryGetById, postCategoryGetAll, postCategoryGetBySlug, postCategorySearch,
+                // Post permissions
+                postCreate, postUpdate, postDelete, postGetById, postGetAll, postTogglePublish, postGetPublished, postSearch, postGetBySlug, postGetByCategory, postGetRelated, postGetMostViewed
         );
 
         // USER - Basic permissions for customers
@@ -140,7 +167,11 @@ public class SeedRolePerms implements CommandLineRunner {
                 // Manage cart
                 cartGetById, cartAddItem, cartRemoveItem, cartUpdateItem,
                 // View product images
-                productImageGetById, productImageGetByProductId, productImageGetAll
+                productImageGetById, productImageGetByProductId, productImageGetAll,
+                // View post categories
+                postCategoryGetAll, postCategoryGetBySlug,
+                // View posts
+                postGetPublished, postSearch, postGetBySlug, postGetByCategory, postGetRelated, postGetMostViewed
         );
 
         // Đồng bộ Redis

@@ -67,4 +67,31 @@ public final class ResponseMessage {
     public static final String UPDATE_PERMISSION_SUCCESS = "Permission updated successfully";
     public static final String DELETE_PERMISSION_SUCCESS = "Permission deleted successfully";
 
+    // Role Messages
+    public static final String CREATE_ROLE_SUCCESS = "Role created successfully";
+    public static final String GET_ALL_ROLES_SUCCESS = "Get all roles successful";
+    public static final String GET_ROLE_SUCCESS = "Get role successful";
+    public static final String UPDATE_ROLE_SUCCESS = "Role updated successfully";
+    public static final String DELETE_ROLE_SUCCESS = "Role deleted successfully";
+
+    // Post Category Messages
+    public static final String CREATE_POST_CATEGORY_SUCCESS = "Post category created successfully";
+    public static final String GET_ALL_POST_CATEGORIES_SUCCESS = "Get all post categories successful";
+    public static final String GET_POST_CATEGORY_SUCCESS = "Get post category successful";
+    public static final String UPDATE_POST_CATEGORY_SUCCESS = "Post category updated successfully";
+    public static final String DELETE_POST_CATEGORY_SUCCESS = "Post category deleted successfully";
+    public static final String SEARCH_POST_CATEGORIES_SUCCESS = "Search post categories successful";
+
+    // Post Messages
+    public static final String CREATE_POST_SUCCESS = "Post created successfully";
+    public static final String GET_ALL_POSTS_SUCCESS = "Get all posts successful";
+    public static final String GET_POST_SUCCESS = "Get post successful";
+    public static final String UPDATE_POST_SUCCESS = "Post updated successfully";
+    public static final String DELETE_POST_SUCCESS = "Post deleted successfully";
+    public static final String TOGGLE_POST_PUBLISH_SUCCESS = "Post publish status toggled successfully";
+    public static final String SEARCH_POSTS_SUCCESS = "Search posts successful";
+    public static final String GET_POSTS_BY_CATEGORY_SUCCESS = "Get posts by category successful";
+    public static final String GET_RELATED_POSTS_SUCCESS = "Get related posts successful";
+    public static final String GET_MOST_VIEWED_POSTS_SUCCESS = "Get most viewed posts successful";
+
 }

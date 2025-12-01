@@ -5,6 +5,8 @@ import app.store.dto.request.ProductImageUpdateRequest;
 import app.store.dto.response.ProductImageResponse;
 import app.store.dto.response.auth.ApiResponse;
 import app.store.service.impl.ProductImageServiceImpl;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -25,10 +27,15 @@ import static app.store.utils.SortUtils.buildSort;
 @RequiredArgsConstructor
 @Slf4j
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+@Tag(name = "Product Image Management", description = "APIs for managing product images including upload, update, and setting primary image")
 public class ProductImageController {
     ProductImageServiceImpl productImageServiceImpl;
 
     @GetMapping
+    @Operation(
+        summary = "Get all product images",
+        description = "Retrieves all product images with pagination and sorting. Accessible by authenticated users."
+    )
     public ApiResponse<Page<ProductImageResponse>> getAllProductImages(
                                                                         @RequestParam(value = "page", defaultValue = "0") int page,
                                                                        @RequestParam(value = "size", defaultValue = "2") int size,
@@ -40,12 +47,20 @@ public class ProductImageController {
                 .build();
     }
     @GetMapping("/{imageId}")
+    @Operation(
+        summary = "Get product image by ID",
+        description = "Retrieves detailed information of a product image by ID. Accessible by authenticated users."
+    )
     public ApiResponse<ProductImageResponse> getProductImageById(@PathVariable Long imageId) {
         return ApiResponse.<ProductImageResponse>builder()
                 .result(productImageServiceImpl.getProductImageById(imageId))
                 .build();
     }
     @GetMapping("/products/{productId}")
+    @Operation(
+        summary = "Get product images by product ID",
+        description = "Retrieves all images associated with a specific product. Accessible by authenticated users."
+    )
     public ApiResponse<List<ProductImageResponse>> getProductImagesByProductId(@PathVariable Long productId) {
         return ApiResponse.<List<ProductImageResponse>>builder()
                 .result(productImageServiceImpl.getProductImagesByProductId(productId))
@@ -53,6 +68,10 @@ public class ProductImageController {
     }
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @Operation(
+        summary = "Upload product image",
+        description = "Uploads a new product image. Supports setting the image as primary. Only accessible by admin users."
+    )
     public ApiResponse<ProductImageResponse> createProductImage(
             @RequestParam("file") MultipartFile file,
             @RequestParam("productId") Long productId,
@@ -67,6 +86,10 @@ public class ProductImageController {
     }
 
     @PutMapping("/{imageId}")
+    @Operation(
+        summary = "Update product image",
+        description = "Updates product image information. Only accessible by admin users."
+    )
     public ApiResponse<ProductImageResponse> updateProductImage(@PathVariable Long imageId, @RequestBody ProductImageUpdateRequest request) {
         return ApiResponse.<ProductImageResponse>builder()
                 .result(productImageServiceImpl.updateProductImage(imageId, request))
@@ -74,6 +97,10 @@ public class ProductImageController {
     }
 
     @DeleteMapping("/{imageId}")
+    @Operation(
+        summary = "Delete product image",
+        description = "Permanently deletes a product image by ID. Only accessible by admin users."
+    )
     public ApiResponse<Void> deleteProductImage(@PathVariable Long imageId) {
         productImageServiceImpl.deleteProductImage(imageId);
         return ApiResponse.<Void>builder()
@@ -81,6 +108,10 @@ public class ProductImageController {
                 .build();
     }
     @PostMapping("/products/{productId}/images/{imageId}/set-primary")
+    @Operation(
+        summary = "Set primary image",
+        description = "Sets a product image as the primary/main image for display. Only accessible by admin users."
+    )
     public ApiResponse<Void> setPrimaryImage(
             @PathVariable Long productId,
             @PathVariable Long imageId) { // Đổi tên biến cho rõ

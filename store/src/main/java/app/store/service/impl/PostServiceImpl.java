@@ -15,6 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,6 +34,7 @@ public class PostServiceImpl implements PostService {
     private final SlugUtil slugUtil;
     
     @Override
+    @PreAuthorize("hasAuthority('POST_CREATE')")
     public PostResponse createPost(PostRequest request, String authorId) {
         // Tìm tác giả
         User author = userRepository.findById(authorId)
@@ -66,6 +68,7 @@ public class PostServiceImpl implements PostService {
     }
     
     @Override
+    @PreAuthorize("hasAuthority('POST_UPDATE')")
     public PostResponse updatePost(Long id, PostRequest request) {
         Post post = postRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Không tìm thấy bài viết với ID: " + id));
@@ -97,6 +100,7 @@ public class PostServiceImpl implements PostService {
     }
     
     @Override
+    @PreAuthorize("hasAuthority('POST_DELETE')")
     public void deletePost(Long id) {
         log.info("Deleting post with ID: {}", id);
         
@@ -109,6 +113,7 @@ public class PostServiceImpl implements PostService {
     
     @Override
     @Transactional(readOnly = true)
+    @PreAuthorize("hasAuthority('POST_GET_BY_ID')")
     public PostResponse getPostById(Long id) {
         Post post = postRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Không tìm thấy bài viết với ID: " + id));
@@ -118,6 +123,7 @@ public class PostServiceImpl implements PostService {
     
     @Override
     @Transactional(readOnly = true)
+    @PreAuthorize("hasAuthority('POST_GET_BY_SLUG')")
     public PostResponse getPostBySlug(String slug) {
         Post post = postRepository.findBySlug(slug)
                 .orElseThrow(() -> new RuntimeException("Không tìm thấy bài viết với slug: " + slug));
@@ -127,6 +133,7 @@ public class PostServiceImpl implements PostService {
     
     @Override
     @Transactional
+    @PreAuthorize("hasAuthority('POST_GET_BY_SLUG')")
     public PostResponse getPostBySlugAndIncrementView(String slug) {
         Post post = postRepository.findBySlug(slug)
                 .orElseThrow(() -> new RuntimeException("Không tìm thấy bài viết với slug: " + slug));
@@ -142,6 +149,7 @@ public class PostServiceImpl implements PostService {
     
     @Override
     @Transactional(readOnly = true)
+    @PreAuthorize("hasAuthority('POST_GET_ALL')")
     public Page<PostResponse> getAllPosts(int page, int size) {
         PageRequest pageRequest = PageRequest.of(page, size, 
             Sort.by(Sort.Direction.DESC, "createdAt"));
@@ -151,6 +159,7 @@ public class PostServiceImpl implements PostService {
     
     @Override
     @Transactional(readOnly = true)
+    @PreAuthorize("hasAuthority('POST_GET_PUBLISHED')")
     public Page<PostResponse> getPublishedPosts(int page, int size) {
         PageRequest pageRequest = PageRequest.of(page, size);
         
@@ -159,6 +168,7 @@ public class PostServiceImpl implements PostService {
     
     @Override
     @Transactional(readOnly = true)
+    @PreAuthorize("hasAuthority('POST_SEARCH')")
     public Page<PostResponse> searchPublishedPosts(String keyword, int page, int size) {
         PageRequest pageRequest = PageRequest.of(page, size, 
             Sort.by(Sort.Direction.DESC, "createdAt"));
@@ -173,6 +183,7 @@ public class PostServiceImpl implements PostService {
     
     @Override
     @Transactional(readOnly = true)
+    @PreAuthorize("hasAuthority('POST_GET_BY_CATEGORY')")
     public Page<PostResponse> getPostsByCategory(Long categoryId, int page, int size) {
         PostCategory category = postCategoryRepository.findById(categoryId)
                 .orElseThrow(() -> new RuntimeException("Không tìm thấy danh mục với ID: " + categoryId));
@@ -185,6 +196,7 @@ public class PostServiceImpl implements PostService {
     
     @Override
     @Transactional(readOnly = true)
+    @PreAuthorize("hasAuthority('POST_GET_RELATED')")
     public List<PostResponse> getRelatedPosts(Long postId, int limit) {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new RuntimeException("Không tìm thấy bài viết với ID: " + postId));
@@ -203,6 +215,7 @@ public class PostServiceImpl implements PostService {
     
     @Override
     @Transactional(readOnly = true)
+    @PreAuthorize("hasAuthority('POST_GET_MOST_VIEWED')")
     public List<PostResponse> getMostViewedPosts(int limit) {
         PageRequest pageRequest = PageRequest.of(0, limit);
         
@@ -213,6 +226,7 @@ public class PostServiceImpl implements PostService {
     }
     
     @Override
+    @PreAuthorize("hasAuthority('POST_TOGGLE_PUBLISH')")
     public void togglePublishStatus(Long id) {
         log.info("Toggling publish status for post with ID: {}", id);
         

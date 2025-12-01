@@ -7,6 +7,8 @@ import app.store.dto.request.OrderUpdateByUserRequest;
 import app.store.dto.response.OrderResponse;
 import app.store.dto.response.auth.ApiResponse;
 import app.store.service.impl.OrderServiceImpl;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -25,10 +27,15 @@ import static app.store.utils.SortUtils.buildSort;
 @RequiredArgsConstructor
 @Slf4j
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+@Tag(name = "Order Management", description = "APIs for managing orders including creation, updates, and order tracking")
 public class OrderController {
     OrderServiceImpl orderServiceImpl;
 
     @GetMapping
+    @Operation(
+        summary = "Get all orders",
+        description = "Retrieves all orders with pagination and sorting. Only accessible by admin users."
+    )
     ApiResponse<Page<OrderResponse>> getAllOrders( @RequestParam(value = "page", defaultValue = "0") int page,
                                                    @RequestParam(value = "size", defaultValue = "2") int size,
                                                    @RequestParam(value = "sort", defaultValue = "createdAt,DESC") String sort
@@ -41,6 +48,10 @@ public class OrderController {
     }
 
     @GetMapping("/{orderId}")
+    @Operation(
+        summary = "Get order by ID",
+        description = "Retrieves detailed information of an order by ID. Only accessible by admin users."
+    )
     ApiResponse<OrderResponse> getOrder(@PathVariable String orderId) {
         return ApiResponse.<OrderResponse>builder()
                 .result(orderServiceImpl.getOrderById(orderId))
@@ -49,6 +60,10 @@ public class OrderController {
     }
 
     @GetMapping("/my-order")
+    @Operation(
+        summary = "Get my orders",
+        description = "Retrieves all orders of the authenticated user. Accessible by any authenticated user."
+    )
     ApiResponse<List<OrderResponse>> getMyOrder() {
         return ApiResponse.<List<OrderResponse>>builder()
                 .result(orderServiceImpl.getMyOrder())
@@ -57,6 +72,10 @@ public class OrderController {
     }
 
     @PostMapping
+    @Operation(
+        summary = "Create order from cart",
+        description = "Creates a new order from the user's shopping cart. Accessible by authenticated users."
+    )
     ApiResponse<OrderResponse> createOrderFromCart(@RequestBody OrderCreationRequest request) {
         return ApiResponse.<OrderResponse>builder()
                 .result(orderServiceImpl.createOrderFromCart(request))
@@ -65,6 +84,10 @@ public class OrderController {
     }
 
     @PutMapping("/{orderId}/update-by-user")
+    @Operation(
+        summary = "Update order by user",
+        description = "Updates order information by the user. Users can update delivery address and contact information."
+    )
     ApiResponse<OrderResponse> updateOrderByUser(@PathVariable String orderId, @RequestBody OrderUpdateByUserRequest request) {
         return ApiResponse.<OrderResponse>builder()
                 .result(orderServiceImpl.updateOrderByUser(orderId, request))
@@ -73,6 +96,10 @@ public class OrderController {
     }
 
     @PutMapping("/{orderId}/update-by-admin")
+    @Operation(
+        summary = "Update order by admin",
+        description = "Updates order information by admin. Admin can update order status, payment status, and shipping information."
+    )
     ApiResponse<OrderResponse> updateOrderByAdmin(@PathVariable String orderId, @RequestBody OrderUpdateByAdminRequest request) {
         return ApiResponse.<OrderResponse>builder()
                 .result(orderServiceImpl.updateOrderByAdmin(orderId, request))
@@ -81,6 +108,10 @@ public class OrderController {
     }
 
     @PutMapping("{orderId}/cancel")
+    @Operation(
+        summary = "Cancel order",
+        description = "Cancels an order. Accessible by the order owner or admin users."
+    )
     ApiResponse<OrderResponse> cancelOrder(@PathVariable String orderId) {
         return ApiResponse.<OrderResponse>builder()
                 .result(orderServiceImpl.cancelOrder(orderId))
@@ -89,6 +120,10 @@ public class OrderController {
     }
 
     @DeleteMapping("/{orderId}")
+    @Operation(
+        summary = "Delete order",
+        description = "Permanently deletes an order by ID. Only accessible by admin users."
+    )
     ApiResponse<Void> deleteOrder(@PathVariable String orderId) {
         orderServiceImpl.deleteOrder(orderId);
         return ApiResponse.<Void>builder()

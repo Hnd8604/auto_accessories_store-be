@@ -6,6 +6,8 @@ import app.store.dto.request.user.UserUpdateRequest;
 import app.store.dto.response.auth.ApiResponse;
 import app.store.dto.response.user.UserResponse;
 import app.store.service.impl.UserServiceImpl;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -22,10 +24,15 @@ import static app.store.utils.SortUtils.buildSort;
 @RequiredArgsConstructor
 @Slf4j
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+@Tag(name = "User Management", description = "APIs for managing users including CRUD operations and profile management")
 public class UserController {
     UserServiceImpl userServiceImpl;
 
     @PostMapping
+    @Operation(
+        summary = "Create a new user",
+        description = "Creates a new user account. Only accessible by admin users. Requires validation for username, email, and password."
+    )
     ApiResponse<UserResponse> createUser(@RequestBody @Valid UserCreationRequest request) {
         return ApiResponse.<UserResponse>builder()
                 .result(userServiceImpl.createUser(request))
@@ -34,6 +41,10 @@ public class UserController {
     }
 
     @PutMapping("/{userId}")
+    @Operation(
+        summary = "Update user",
+        description = "Updates an existing user by ID. Only accessible by admin users."
+    )
     ApiResponse<UserResponse> updateUser(@PathVariable String userId, @RequestBody UserUpdateRequest request) {
         return ApiResponse.<UserResponse>builder()
                 .result(userServiceImpl.updateUser(userId, request))
@@ -42,6 +53,10 @@ public class UserController {
     }
 
     @DeleteMapping("/{userId}")
+    @Operation(
+        summary = "Delete user",
+        description = "Permanently deletes a user by ID. Only accessible by admin users."
+    )
     ApiResponse<Void> deleteUser(@PathVariable String userId) {
         userServiceImpl.deleteUser(userId);
       return ApiResponse.<Void>builder()
@@ -50,6 +65,10 @@ public class UserController {
     }
 
     @GetMapping
+    @Operation(
+        summary = "Get all users",
+        description = "Retrieves all users with pagination and sorting. Only accessible by admin users."
+    )
     ApiResponse<Page<UserResponse>> getAllUsers(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "2") int size,
@@ -64,6 +83,10 @@ public class UserController {
 
 
     @GetMapping("/{userId}")
+    @Operation(
+        summary = "Get user by ID",
+        description = "Retrieves detailed information of a user by ID. Only accessible by admin users."
+    )
     ApiResponse<UserResponse> getUserById(@PathVariable String userId) {
         return ApiResponse.<UserResponse>builder()
                 .result(userServiceImpl.getUserById(userId))
@@ -72,6 +95,10 @@ public class UserController {
     }
 
     @GetMapping("/my-info")
+    @Operation(
+        summary = "Get my profile",
+        description = "Retrieves the authenticated user's profile information. Accessible by any authenticated user."
+    )
     ApiResponse<UserResponse> getMyInfo() {
         return ApiResponse.<UserResponse>builder()
                 .result(userServiceImpl.getMyInfo())

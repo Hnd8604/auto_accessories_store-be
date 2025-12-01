@@ -5,13 +5,14 @@ import app.store.dto.response.PostCategoryResponse;
 import app.store.entity.PostCategory;
 import app.store.mapper.PostCategoryMapper;
 import app.store.repository.PostCategoryRepository;
-import app.store.service.PostCategoryService;
+import app.store.service.interfaces.PostCategoryService;
 import app.store.utils.SlugUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,7 +28,9 @@ public class PostCategoryServiceImpl implements PostCategoryService {
     private final PostCategoryRepository postCategoryRepository;
     private final SlugUtil slugUtil;
     private final PostCategoryMapper postCategoryMapper;
+    
     @Override
+    @PreAuthorize("hasAuthority('POST_CATEGORY_CREATE')")
     public PostCategoryResponse createCategory(PostCategoryRequest request) {
 
         // Kiểm tra tên danh mục đã tồn tại chưa
@@ -47,6 +50,7 @@ public class PostCategoryServiceImpl implements PostCategoryService {
     }
     
     @Override
+    @PreAuthorize("hasAuthority('POST_CATEGORY_UPDATE')")
     public PostCategoryResponse updateCategory(Long id, PostCategoryRequest request) {
 
         PostCategory category = postCategoryRepository.findById(id)
@@ -75,6 +79,7 @@ public class PostCategoryServiceImpl implements PostCategoryService {
     }
     
     @Override
+    @PreAuthorize("hasAuthority('POST_CATEGORY_DELETE')")
     public void deleteCategory(Long id) {
         PostCategory category = postCategoryRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Không tìm thấy danh mục với ID: " + id));
@@ -89,6 +94,7 @@ public class PostCategoryServiceImpl implements PostCategoryService {
     
     @Override
     @Transactional(readOnly = true)
+    @PreAuthorize("hasAuthority('POST_CATEGORY_GET_BY_ID')")
     public PostCategoryResponse getCategoryById(Long id) {
         PostCategory category = postCategoryRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Không tìm thấy danh mục với ID: " + id));
@@ -98,6 +104,7 @@ public class PostCategoryServiceImpl implements PostCategoryService {
     
     @Override
     @Transactional(readOnly = true)
+    @PreAuthorize("hasAuthority('POST_CATEGORY_GET_BY_SLUG')")
     public PostCategoryResponse getCategoryBySlug(String slug) {
         PostCategory category = postCategoryRepository.findBySlug(slug)
                 .orElseThrow(() -> new RuntimeException("Không tìm thấy danh mục với slug: " + slug));
@@ -107,6 +114,7 @@ public class PostCategoryServiceImpl implements PostCategoryService {
     
     @Override
     @Transactional(readOnly = true)
+    @PreAuthorize("hasAuthority('POST_CATEGORY_GET_ALL')")
     public List<PostCategoryResponse> getAllCategories() {
         return postCategoryRepository.findAll(Sort.by(Sort.Direction.ASC, "name"))
                 .stream()
@@ -116,6 +124,7 @@ public class PostCategoryServiceImpl implements PostCategoryService {
     
     @Override
     @Transactional(readOnly = true)
+    @PreAuthorize("hasAuthority('POST_CATEGORY_SEARCH')")
     public Page<PostCategoryResponse> searchCategories(String keyword, int page, int size) {
         PageRequest pageRequest = PageRequest.of(page, size, Sort.by(Sort.Direction.ASC, "name"));
         
