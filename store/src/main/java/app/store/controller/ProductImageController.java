@@ -4,7 +4,7 @@ import app.store.dto.request.ProductImageRequest;
 import app.store.dto.request.ProductImageUpdateRequest;
 import app.store.dto.response.ProductImageResponse;
 import app.store.dto.response.auth.ApiResponse;
-import app.store.service.implementation.ProductImageServiceImpl;
+import app.store.service.impl.ProductImageServiceImpl;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -12,15 +12,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
-import java.util.Map;
 
 import static app.store.utils.SortUtils.buildSort;
 

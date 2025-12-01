@@ -5,7 +5,7 @@ import app.store.dto.request.ProductRequest;
 import app.store.dto.request.ProductSearchRequest;
 import app.store.dto.response.auth.ApiResponse;
 import app.store.dto.response.ProductResponse;
-import app.store.service.implementation.ProductServiceImpl;
+import app.store.service.impl.ProductServiceImpl;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -13,12 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import static app.store.utils.SortUtils.buildSort;
 @RestController

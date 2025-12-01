@@ -1,4 +1,4 @@
-package app.store.service.implementation;
+package app.store.service.impl;
 
 import app.store.dto.request.ProductRequest;
 import app.store.dto.request.ProductSearchRequest;
@@ -24,8 +24,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.data.domain.Pageable;
-
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor

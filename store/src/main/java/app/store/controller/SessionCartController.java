@@ -1,11 +1,9 @@
 package app.store.controller;
 
-import app.store.entity.Product;
 import app.store.exception.AppException;
 import app.store.exception.ErrorCode;
 import app.store.repository.ProductRepository;
-import app.store.service.implementation.SessionCartService;
-import app.store.service.interfaces.CartService;
+import app.store.service.impl.SessionCartService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;

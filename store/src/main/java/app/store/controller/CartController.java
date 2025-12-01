@@ -6,7 +6,7 @@ import app.store.dto.request.CartItemUpdateRequest;
 import app.store.dto.response.CartResponse;
 import app.store.dto.response.auth.ApiResponse;
 import app.store.dto.response.CartItemResponse;
-import app.store.service.implementation.CartServiceImpl;
+import app.store.service.impl.CartServiceImpl;
 
 import com.nimbusds.jose.JOSEException;
 import lombok.AccessLevel;

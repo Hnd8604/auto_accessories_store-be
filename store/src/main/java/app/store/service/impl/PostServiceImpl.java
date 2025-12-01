@@ -5,15 +5,12 @@ import app.store.dto.response.PostResponse;
 import app.store.entity.Post;
 import app.store.entity.PostCategory;
 import app.store.entity.User;
-import app.store.mapper.PostMapper;
 import app.store.repository.PostCategoryRepository;
 import app.store.repository.PostRepository;
 import app.store.repository.UserRepository;
 import app.store.service.PostService;
 import app.store.utils.SlugUtil;
-import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
-import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -28,18 +25,18 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Slf4j
 @Transactional
-@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class PostServiceImpl implements PostService {
-    PostRepository postRepository;
-    PostCategoryRepository postCategoryRepository;
-    UserRepository userRepository;
-    SlugUtil slugUtil;
-    PostMapper postMapper;
+    
+    private final PostRepository postRepository;
+    private final PostCategoryRepository postCategoryRepository;
+    private final UserRepository userRepository;
+    private final SlugUtil slugUtil;
+    
     @Override
-    public PostResponse createPost(PostRequest request, String authorName) {
+    public PostResponse createPost(PostRequest request, String authorId) {
         // Tìm tác giả
-        User author = userRepository.findByUsername(authorName)
-                .orElseThrow(() -> new RuntimeException("Không tìm thấy tác giả với Name: " + authorName));
+        User author = userRepository.findById(authorId)
+                .orElseThrow(() -> new RuntimeException("Không tìm thấy tác giả với ID: " + authorId));
         
         // Tìm danh mục nếu có
         PostCategory category = null;
@@ -52,14 +49,20 @@ public class PostServiceImpl implements PostService {
         String baseSlug = slugUtil.toSlug(request.getTitle());
         String uniqueSlug = slugUtil.createUniqueSlug(baseSlug, postRepository::existsBySlug);
         
-        Post post = postMapper.toPost(request);
-        post.setAuthor(author);
-        post.setCategory(category);
-        post.setSlug(uniqueSlug);
-        post.setViewCount(0L);
+        Post post = Post.builder()
+                .title(request.getTitle())
+                .slug(uniqueSlug)
+                .shortDescription(request.getShortDescription())
+                .thumbnailUrl(request.getThumbnailUrl())
+                .content(request.getContent())
+                .published(request.getPublished())
+                .viewCount(0L)
+                .category(category)
+                .author(author)
+                .build();
         
-
-        return postMapper.toPostResponse(postRepository.save(post));
+        Post savedPost = postRepository.save(post);
+        return mapToResponse(savedPost);
     }
     
     @Override
@@ -88,8 +91,9 @@ public class PostServiceImpl implements PostService {
         post.setContent(request.getContent());
         post.setPublished(request.getPublished());
         post.setCategory(category);
-
-        return postMapper.toPostResponse(postRepository.save(post));
+        
+        Post savedPost = postRepository.save(post);
+        return mapToResponse(savedPost);
     }
     
     @Override
@@ -108,8 +112,8 @@ public class PostServiceImpl implements PostService {
     public PostResponse getPostById(Long id) {
         Post post = postRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Không tìm thấy bài viết với ID: " + id));
-
-        return postMapper.toPostResponse(post);
+        
+        return mapToResponse(post);
     }
     
     @Override
@@ -117,8 +121,8 @@ public class PostServiceImpl implements PostService {
     public PostResponse getPostBySlug(String slug) {
         Post post = postRepository.findBySlug(slug)
                 .orElseThrow(() -> new RuntimeException("Không tìm thấy bài viết với slug: " + slug));
-
-        return postMapper.toPostResponse(post);
+        
+        return mapToResponse(post);
     }
     
     @Override
@@ -132,8 +136,8 @@ public class PostServiceImpl implements PostService {
             postRepository.incrementViewCount(post.getId());
             post.setViewCount(post.getViewCount() + 1);
         }
-
-        return postMapper.toPostResponse(post);
+        
+        return mapToResponse(post);
     }
     
     @Override
@@ -142,7 +146,7 @@ public class PostServiceImpl implements PostService {
         PageRequest pageRequest = PageRequest.of(page, size, 
             Sort.by(Sort.Direction.DESC, "createdAt"));
         
-        return postRepository.findAll(pageRequest).map(postMapper::toPostResponse);
+        return postRepository.findAll(pageRequest).map(this::mapToResponse);
     }
     
     @Override
@@ -150,7 +154,7 @@ public class PostServiceImpl implements PostService {
     public Page<PostResponse> getPublishedPosts(int page, int size) {
         PageRequest pageRequest = PageRequest.of(page, size);
         
-        return postRepository.findPublishedPosts(pageRequest).map(postMapper::toPostResponse);
+        return postRepository.findPublishedPosts(pageRequest).map(this::mapToResponse);
     }
     
     @Override
@@ -160,11 +164,11 @@ public class PostServiceImpl implements PostService {
             Sort.by(Sort.Direction.DESC, "createdAt"));
         
         if (keyword == null || keyword.trim().isEmpty()) {
-            return postRepository.findPublishedPosts(pageRequest).map(postMapper::toPostResponse);
+            return postRepository.findPublishedPosts(pageRequest).map(this::mapToResponse);
         }
         
         return postRepository.findPublishedPostsByKeyword(keyword.trim(), pageRequest)
-                .map(postMapper::toPostResponse);
+                .map(this::mapToResponse);
     }
     
     @Override
@@ -176,7 +180,7 @@ public class PostServiceImpl implements PostService {
         PageRequest pageRequest = PageRequest.of(page, size);
         
         return postRepository.findPublishedPostsByCategory(category, pageRequest)
-                .map(postMapper::toPostResponse);
+                .map(this::mapToResponse);
     }
     
     @Override
@@ -193,7 +197,7 @@ public class PostServiceImpl implements PostService {
         
         return postRepository.findRelatedPosts(post.getCategory(), postId, pageRequest)
                 .stream()
-                .map(postMapper::toPostResponse)
+                .map(this::mapToResponse)
                 .collect(Collectors.toList());
     }
     
@@ -204,7 +208,7 @@ public class PostServiceImpl implements PostService {
         
         return postRepository.findMostViewedPosts(pageRequest)
                 .stream()
-                .map(postMapper::toPostResponse)
+                .map(this::mapToResponse)
                 .collect(Collectors.toList());
     }
     
@@ -221,32 +225,32 @@ public class PostServiceImpl implements PostService {
         log.info("Toggled publish status for post with ID: {} to: {}", id, post.getPublished());
     }
     
-//    private PostResponse mapToResponse(Post post) {
-//        PostResponse response = new PostResponse();
-//        response.setId(post.getId());
-//        response.setTitle(post.getTitle());
-//        response.setSlug(post.getSlug());
-//        response.setShortDescription(post.getShortDescription());
-//        response.setThumbnailUrl(post.getThumbnailUrl());
-//        response.setContent(post.getContent());
-//        response.setPublished(post.getPublished());
-//        response.setViewCount(post.getViewCount());
-//        response.setCreatedAt(post.getCreatedAt());
-//        response.setUpdatedAt(post.getUpdatedAt());
-//
-//        // Thông tin danh mục
-//        if (post.getCategory() != null) {
-//            response.setCategoryId(post.getCategory().getId());
-//            response.setCategoryName(post.getCategory().getName());
-//            response.setCategorySlug(post.getCategory().getSlug());
-//        }
-//
-//        // Thông tin tác giả
-//        if (post.getAuthor() != null) {
-//            response.setAuthorId(post.getAuthor().getId());
-//            response.setAuthorName(post.getAuthor().getFirstName() + " " + post.getAuthor().getLastName());
-//        }
-//
-//        return response;
-//    }
+    private PostResponse mapToResponse(Post post) {
+        PostResponse response = new PostResponse();
+        response.setId(post.getId());
+        response.setTitle(post.getTitle());
+        response.setSlug(post.getSlug());
+        response.setShortDescription(post.getShortDescription());
+        response.setThumbnailUrl(post.getThumbnailUrl());
+        response.setContent(post.getContent());
+        response.setPublished(post.getPublished());
+        response.setViewCount(post.getViewCount());
+        response.setCreatedAt(post.getCreatedAt());
+        response.setUpdatedAt(post.getUpdatedAt());
+        
+        // Thông tin danh mục
+        if (post.getCategory() != null) {
+            response.setCategoryId(post.getCategory().getId());
+            response.setCategoryName(post.getCategory().getName());
+            response.setCategorySlug(post.getCategory().getSlug());
+        }
+        
+        // Thông tin tác giả
+        if (post.getAuthor() != null) {
+            response.setAuthorId(post.getAuthor().getId());
+            response.setAuthorName(post.getAuthor().getFirstName() + " " + post.getAuthor().getLastName());
+        }
+        
+        return response;
+    }
 }

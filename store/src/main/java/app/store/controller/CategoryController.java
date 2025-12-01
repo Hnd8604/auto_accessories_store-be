@@ -4,20 +4,16 @@ import app.store.constant.ResponseMessage;
 import app.store.dto.request.CategoryRequest;
 import app.store.dto.response.CategoryResponse;
 import app.store.dto.response.auth.ApiResponse;
-import app.store.service.implementation.CategoryServiceImpl;
+import app.store.service.impl.CategoryServiceImpl;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import lombok.experimental.FieldDefaults;
 
-import java.util.ArrayList;
-import java.util.List;
 import static app.store.utils.SortUtils.buildSort;
 
 @RestController

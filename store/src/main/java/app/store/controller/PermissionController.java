@@ -4,7 +4,7 @@ package app.store.controller;
 import app.store.dto.request.PermissionRequest;
 import app.store.dto.response.auth.ApiResponse;
 import app.store.dto.response.PermissionResponse;
-import app.store.service.implementation.PermissionServiceImpl;
+import app.store.service.impl.PermissionServiceImpl;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -24,6 +24,7 @@ public class PermissionController {
     ApiResponse<PermissionResponse> createPermission(@RequestBody PermissionRequest request) {
         return ApiResponse.<PermissionResponse>builder()
                 .result(permissionServiceImpl.createPermission(request))
+                .message()
                 .build();
     }
 

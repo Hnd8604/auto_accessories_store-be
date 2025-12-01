@@ -1,4 +1,4 @@
-package app.store.service.implementation;
+package app.store.service.impl;
 
 import app.store.dto.request.OrderCreationRequest;
 
@@ -10,7 +10,6 @@ import app.store.entity.*;
 import app.store.enums.OrderStatus;
 import app.store.exception.AppException;
 import app.store.exception.ErrorCode;
-import app.store.mapper.CartMapper;
 import app.store.mapper.OrderMapper;
 import app.store.repository.*;
 import app.store.service.interfaces.OrderService;

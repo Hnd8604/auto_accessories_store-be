@@ -1,4 +1,4 @@
-package app.store.service.implementation;
+package app.store.service.impl;
 
 import app.store.dto.request.PermissionRequest;
 import app.store.dto.response.PermissionResponse;

@@ -4,7 +4,7 @@ package app.store.controller;
 import app.store.dto.request.RoleRequest;
 import app.store.dto.response.auth.ApiResponse;
 import app.store.dto.response.RoleResponse;
-import app.store.service.implementation.RoleServiceImpl;
+import app.store.service.impl.RoleServiceImpl;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;

@@ -1,4 +1,4 @@
-package app.store.service.implementation;
+package app.store.service.impl;
 
 import jakarta.servlet.http.HttpSession;
 import lombok.AccessLevel;

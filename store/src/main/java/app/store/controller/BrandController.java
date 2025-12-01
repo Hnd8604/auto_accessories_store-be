@@ -4,7 +4,7 @@ import app.store.constant.ResponseMessage;
 import app.store.dto.request.BrandRequest;
 import app.store.dto.response.BrandResponse;
 import app.store.dto.response.auth.ApiResponse;
-import app.store.service.implementation.BrandServiceImpl;
+import app.store.service.impl.BrandServiceImpl;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -13,11 +13,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @RestController
 @RequestMapping("/brands")

@@ -59,4 +59,12 @@ public final class ResponseMessage {
     public static final String UPDATE_ORDER_BY_USER_SUCCESS = "Order updated successfully by user";
     public static final String DELETE_ORDER_SUCCESS = "Order deleted successfully";
     public static final String CANCEL_ORDER_SUCCESS = "Order cancelled successfully";
+
+    // Permission Messages
+    public static final String CREATE_PERMISSION_SUCCESS = "Permission created successfully";
+    public static final String GET_ALL_PERMISSIONS_SUCCESS = "Get all permissions successful";
+    public static final String GET_PERMISSION_SUCCESS = "Get permission successful";
+    public static final String UPDATE_PERMISSION_SUCCESS = "Permission updated successfully";
+    public static final String DELETE_PERMISSION_SUCCESS = "Permission deleted successfully";
+
 }

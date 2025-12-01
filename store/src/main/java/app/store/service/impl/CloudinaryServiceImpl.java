@@ -1,4 +1,4 @@
-package app.store.service.implementation;
+package app.store.service.impl;
 
 import app.store.service.interfaces.CloudinaryService;
 import com.cloudinary.Cloudinary;

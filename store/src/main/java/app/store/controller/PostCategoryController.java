@@ -2,7 +2,7 @@ package app.store.controller;
 
 import app.store.dto.request.PostCategoryRequest;
 import app.store.dto.response.PostCategoryResponse;
-import app.store.service.PostCategoryService;
+import app.store.service.interfaces.PostCategoryService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;

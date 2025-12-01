@@ -1,15 +1,12 @@
-package app.store.service.implementation;
+package app.store.service.impl;
 
 import app.store.dto.request.CartItemRequest;
 import app.store.dto.request.CartItemUpdateRequest;
-import app.store.dto.request.CartRequest;
-import app.store.dto.response.CartCreationResponse;
 import app.store.dto.response.CartItemResponse;
 import app.store.dto.response.CartResponse;
 import app.store.entity.Cart;
 import app.store.entity.CartItem;
 import app.store.entity.Product;
-import app.store.entity.User;
 import app.store.exception.AppException;
 import app.store.exception.ErrorCode;
 import app.store.mapper.CartItemMapper;
@@ -17,7 +14,6 @@ import app.store.mapper.CartMapper;
 import app.store.repository.CartItemRepository;
 import app.store.repository.CartRepository;
 import app.store.repository.ProductRepository;
-import app.store.repository.UserRepository;
 import app.store.service.interfaces.CartService;
 import com.nimbusds.jose.JOSEException;
 import lombok.AccessLevel;

@@ -5,7 +5,7 @@ import app.store.dto.request.user.UserCreationRequest;
 import app.store.dto.request.user.UserUpdateRequest;
 import app.store.dto.response.auth.ApiResponse;
 import app.store.dto.response.user.UserResponse;
-import app.store.service.implementation.UserServiceImpl;
+import app.store.service.impl.UserServiceImpl;
 import jakarta.validation.Valid;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -13,12 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import static app.store.utils.SortUtils.buildSort;
 
