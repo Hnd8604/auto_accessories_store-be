@@ -41,7 +41,7 @@ public class RoleController {
         summary = "Get all roles",
         description = "Retrieves all roles with their associated permissions. Only accessible by admin users."
     )
-    public ApiResponse<List<RoleResponse>> getRoles() {
+    public ApiResponse<List<RoleResponse>> getAllRoles() {
         return ApiResponse.<List<RoleResponse>>builder()
                 .message(ResponseMessage.GET_ALL_ROLES_SUCCESS)
                 .result(roleServiceImpl.getAllRoles())

@@ -16,5 +16,4 @@ public class CategoryResponse {
     String id;
     String name;
     String description;
-    List<ProductResponse> products;
 }

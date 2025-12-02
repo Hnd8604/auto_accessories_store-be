@@ -7,18 +7,12 @@ import app.store.dto.response.auth.ApiResponse;
 import app.store.service.impl.CategoryServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import lombok.experimental.FieldDefaults;
-
 import java.util.List;
-
-import static app.store.utils.SortUtils.buildSort;
 
 @RestController
 @RequestMapping("/categories")

@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface PostService {
     
-    PostResponse createPost(PostRequest request, String authorId);
+    PostResponse createPost(PostRequest request);
     
     PostResponse updatePost(Long id, PostRequest request);
     

@@ -20,11 +20,15 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static org.springframework.security.core.context.SecurityContextHolder.getContext;
 
 @Service
 @RequiredArgsConstructor
@@ -41,15 +45,18 @@ public class PostServiceImpl implements PostService {
 
     @Override
     @PreAuthorize("hasAuthority('POST_CREATE')")
-    public PostResponse createPost(PostRequest request, String authorName) {
+    public PostResponse createPost(PostRequest request) {
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String authorName = authentication.getName(); // Lấy ID từ JWT token
         // Tìm tác giả
         User author = userRepository.findByUsername(authorName)
                 .orElseThrow(() -> new RuntimeException("Không tìm thấy tác giả với ID: " + authorName));
 
         // Tìm danh mục nếu có
-        PostCategory category = null;
+        PostCategory postCategory = null;
         if (request.getCategoryId() != null) {
-            category = postCategoryRepository.findById(request.getCategoryId())
+            postCategory = postCategoryRepository.findById(request.getCategoryId())
                     .orElseThrow(() -> new RuntimeException("Không tìm thấy danh mục với ID: " + request.getCategoryId()));
         }
 
@@ -60,6 +67,7 @@ public class PostServiceImpl implements PostService {
         post.setSlug(uniqueSlug);
         post.setAuthor(author);
         post.setViewCount(0L);
+        post.setCategory(postCategory);
 
         return postMapper.toPostResponse(postRepository.save(post));
     }

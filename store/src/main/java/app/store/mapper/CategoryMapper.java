@@ -12,7 +12,6 @@ public interface CategoryMapper {
     @Mapping(target = "products", ignore = true)
     Category toCategory(CategoryRequest request);
 
-    @Mapping(target = "products", source = "products")
     CategoryResponse toCategoryResponse(Category category);
 
     @Mapping(target = "id", ignore = true) // Ignore the ID field during update

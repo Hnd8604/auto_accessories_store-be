@@ -15,5 +15,4 @@ public class BrandResponse {
     Long id;
     String name;
     String description;
-    List<ProductResponse> products;
 }

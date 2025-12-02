@@ -37,10 +37,8 @@ public class PostController {
         description = "Creates a new blog post. Only accessible by admin users. Automatically generates SEO-friendly slug from title and associates with authenticated user as author."
     )
     public ApiResponse<PostResponse> createPost(
-            @Valid @RequestBody PostRequest request,
-            Authentication authentication) {
-        String authorName = authentication.getName(); // Lấy ID từ JWT token
-        PostResponse response = postService.createPost(request, authorName);
+            @Valid @RequestBody PostRequest request) {
+        PostResponse response = postService.createPost(request);
         return ApiResponse.<PostResponse>builder()
                 .message(ResponseMessage.CREATE_POST_SUCCESS)
                 .result(response)

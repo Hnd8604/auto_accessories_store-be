@@ -8,10 +8,10 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 
-@Mapper(componentModel = "spring",uses = {ProductMapper.class})
+@Mapper(componentModel = "spring")
 public interface BrandMapper {
 
-    @Mapping(target = "products", source = "products")
+
     BrandResponse toBrandResponse(Brand brand);
 
     @Mapping(target = "products", ignore = true)
