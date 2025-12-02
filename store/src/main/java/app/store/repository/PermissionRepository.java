@@ -13,11 +13,9 @@ import java.util.Set;
 
 @Repository
 public interface PermissionRepository extends JpaRepository<Permission, String> {
-
-    List<Permission> findByNameIn(Set<String> names);
+   List<Permission> findByNameIn(Set<String> names);
 
    @Query("SELECT p FROM Role r JOIN r.permissions p WHERE r = :role")
    List<Permission> getAllByRole(@Param("role") Role role);
-
 
 }

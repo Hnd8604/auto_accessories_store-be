@@ -20,5 +20,5 @@ public interface PostCategoryService {
     
     List<PostCategoryResponse> getAllCategories();
     
-    Page<PostCategoryResponse> searchCategories(String keyword, int page, int size);
+    List<PostCategoryResponse> searchCategories(String keyword);
 }

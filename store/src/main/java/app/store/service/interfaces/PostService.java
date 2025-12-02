@@ -3,6 +3,7 @@ package app.store.service.interfaces;
 import app.store.dto.request.PostRequest;
 import app.store.dto.response.PostResponse;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -20,17 +21,17 @@ public interface PostService {
     
     PostResponse getPostBySlugAndIncrementView(String slug);
     
-    Page<PostResponse> getAllPosts(int page, int size);
+    Page<PostResponse> getAllPosts(Pageable pageable);
     
-    Page<PostResponse> getPublishedPosts(int page, int size);
+    Page<PostResponse> getPublishedPosts(Pageable pageable);
     
-    Page<PostResponse> searchPublishedPosts(String keyword, int page, int size);
+    Page<PostResponse> searchPublishedPosts(String keyword, Pageable pageable);
     
-    Page<PostResponse> getPostsByCategory(Long categoryId, int page, int size);
+    Page<PostResponse> getPostsByCategory(Long categoryId, Pageable pageable);
     
-    List<PostResponse> getRelatedPosts(Long postId, int limit);
+    Page<PostResponse> getRelatedPosts(Long postId, Pageable pageable);
     
-    List<PostResponse> getMostViewedPosts(int limit);
+    Page<PostResponse> getMostViewedPosts(Pageable pageable);
     
     void togglePublishStatus(Long id);
 }

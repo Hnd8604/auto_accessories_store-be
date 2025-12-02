@@ -8,7 +8,7 @@ import org.springframework.data.domain.Pageable;
 import java.util.List;
 
 public interface BrandService {
-    Page<BrandResponse> getAllBrands(Pageable pageable);
+    List<BrandResponse> getAllBrands();
     BrandResponse getBrandById(Long brandId);
     BrandResponse createBrand(BrandRequest brandRequest);
     BrandResponse updateBrand(Long brandId, BrandRequest brandRequest);

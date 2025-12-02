@@ -16,6 +16,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import lombok.experimental.FieldDefaults;
 
+import java.util.List;
+
 import static app.store.utils.SortUtils.buildSort;
 
 @RestController
@@ -45,12 +47,10 @@ public class CategoryController {
         summary = "Get all categories",
         description = "Retrieves all product categories with pagination and sorting. Accessible by authenticated users."
     )
-    ApiResponse<Page<CategoryResponse>> getAllCategories(@RequestParam(defaultValue = "0") int page,
-                                                         @RequestParam(defaultValue = "2") int size,
-                                                         @RequestParam(defaultValue = "name,asc") String sort
-    ) {
-        Pageable pageable = PageRequest.of(page, size, buildSort(sort));return ApiResponse.<Page<CategoryResponse>>builder()
-                .result(categoryServiceImpl.getAllCategories(pageable))
+    ApiResponse<List<CategoryResponse>> getAllCategories() {
+
+        return ApiResponse.<List<CategoryResponse>>builder()
+                .result(categoryServiceImpl.getAllCategories())
                 .message(ResponseMessage.GET_ALL_CATEGORIES_SUCCESS)
                 .build();
     }

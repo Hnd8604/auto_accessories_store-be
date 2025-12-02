@@ -17,6 +17,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
@@ -41,9 +43,11 @@ public class CategoryServiceImpl implements CategoryService {
     }
     @Override
     @PreAuthorize("hasAuthority('CATEGORY_GET_ALL')")
-    public Page<CategoryResponse> getAllCategories(Pageable pageable) {
-        return categoryRepository.findAll(pageable)
-                .map(categoryMapper::toCategoryResponse);
+    public List<CategoryResponse> getAllCategories() {
+        return categoryRepository.findAll()
+                .stream()
+                .map(categoryMapper::toCategoryResponse)
+                .toList();
     }
 
     @Override

@@ -42,7 +42,6 @@ public class CartServiceImpl implements CartService {
         return cartMapper.toCartResponse(cart);
     }
 
-
 @Override
 @PreAuthorize("hasAuthority('CART_ADD_ITEM')")
 public CartItemResponse addItemToCart(CartItemRequest request) {

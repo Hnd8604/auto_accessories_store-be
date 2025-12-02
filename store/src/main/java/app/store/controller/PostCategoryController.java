@@ -83,12 +83,10 @@ public class PostCategoryController {
         summary = "Search post categories",
         description = "Searches post categories with pagination. Only accessible by admin users. Supports keyword search in name and description."
     )
-    public ApiResponse<Page<PostCategoryResponse>> searchCategories(
-            @RequestParam(defaultValue = "") String keyword,
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size) {
-        Page<PostCategoryResponse> response = postCategoryService.searchCategories(keyword, page, size);
-        return ApiResponse.<Page<PostCategoryResponse>>builder()
+    public ApiResponse<List<PostCategoryResponse>> searchCategories(
+            @RequestParam(defaultValue = "") String keyword) {
+        List<PostCategoryResponse> response = postCategoryService.searchCategories(keyword);
+        return ApiResponse.<List<PostCategoryResponse>>builder()
                 .message(ResponseMessage.SEARCH_POST_CATEGORIES_SUCCESS)
                 .result(response)
                 .build();

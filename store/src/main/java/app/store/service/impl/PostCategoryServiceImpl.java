@@ -118,23 +118,25 @@ public class PostCategoryServiceImpl implements PostCategoryService {
         return postCategoryRepository.findAll(Sort.by(Sort.Direction.ASC, "name"))
                 .stream()
                 .map(postCategoryMapper::toPostCategoryResponse)
-                .collect(Collectors.toList());
+                .toList();
     }
     
     @Override
     @Transactional(readOnly = true)
     @PreAuthorize("hasAuthority('POST_CATEGORY_SEARCH')")
-    public Page<PostCategoryResponse> searchCategories(String keyword, int page, int size) {
-        PageRequest pageRequest = PageRequest.of(page, size, Sort.by(Sort.Direction.ASC, "name"));
-        
-        Page<PostCategory> categoryPage;
+    public List<PostCategoryResponse> searchCategories(String keyword) {
+
+        List<PostCategory> postCategoryList;
         if (keyword == null || keyword.trim().isEmpty()) {
-            categoryPage = postCategoryRepository.findAll(pageRequest);
+            postCategoryList = postCategoryRepository.findAll();
         } else {
-            categoryPage = postCategoryRepository.findByKeyword(keyword.trim(), pageRequest);
+            postCategoryList = postCategoryRepository.findByKeyword(keyword.trim());
         }
         
-        return categoryPage.map(postCategoryMapper::toPostCategoryResponse);
+        return postCategoryList
+                .stream()
+                .map(postCategoryMapper::toPostCategoryResponse)
+                .toList();
     }
 
 }

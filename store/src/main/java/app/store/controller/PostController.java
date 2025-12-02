@@ -2,6 +2,7 @@ package app.store.controller;
 
 import app.store.constant.ResponseMessage;
 import app.store.dto.request.PostRequest;
+import app.store.dto.request.ProductSearchRequest;
 import app.store.dto.response.auth.ApiResponse;
 import app.store.dto.response.PostResponse;
 import app.store.service.interfaces.PostService;
@@ -12,10 +13,14 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
+import static app.store.utils.SortUtils.buildSort;
 
 @RestController
 @RequiredArgsConstructor
@@ -89,8 +94,11 @@ public class PostController {
     )
     public ApiResponse<Page<PostResponse>> getAllPosts(
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size) {
-        Page<PostResponse> response = postService.getAllPosts(page, size);
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "createdAt,DESC") String sort
+    ) {
+        Pageable pageable = PageRequest.of(page, size, buildSort(sort));
+        Page<PostResponse> response = postService.getAllPosts(pageable);
         return ApiResponse.<Page<PostResponse>>builder()
                 .message(ResponseMessage.GET_ALL_POSTS_SUCCESS)
                 .result(response)
@@ -116,8 +124,11 @@ public class PostController {
     )
     public ApiResponse<Page<PostResponse>> getPublishedPosts(
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size) {
-        Page<PostResponse> response = postService.getPublishedPosts(page, size);
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "createdAt,DESC") String sort
+    ) {
+        Pageable pageable = PageRequest.of(page, size, buildSort(sort));
+        Page<PostResponse> response = postService.getPublishedPosts(pageable);
         return ApiResponse.<Page<PostResponse>>builder()
                 .message(ResponseMessage.GET_ALL_POSTS_SUCCESS)
                 .result(response)
@@ -132,8 +143,11 @@ public class PostController {
     public ApiResponse<Page<PostResponse>> searchPosts(
             @RequestParam String keyword,
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size) {
-        Page<PostResponse> response = postService.searchPublishedPosts(keyword, page, size);
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "createdAt,DESC") String sort
+    ) {
+        Pageable pageable = PageRequest.of(page, size, buildSort(sort));
+        Page<PostResponse> response = postService.searchPublishedPosts(keyword, pageable);
         return ApiResponse.<Page<PostResponse>>builder()
                 .message(ResponseMessage.SEARCH_POSTS_SUCCESS)
                 .result(response)
@@ -161,8 +175,11 @@ public class PostController {
     public ApiResponse<Page<PostResponse>> getPostsByCategory(
             @PathVariable Long categoryId,
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size) {
-        Page<PostResponse> response = postService.getPostsByCategory(categoryId, page, size);
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "createdAt,DESC") String sort
+    ) {
+        Pageable pageable = PageRequest.of(page, size, buildSort(sort));
+        Page<PostResponse> response = postService.getPostsByCategory(categoryId,pageable);
         return ApiResponse.<Page<PostResponse>>builder()
                 .message(ResponseMessage.GET_POSTS_BY_CATEGORY_SUCCESS)
                 .result(response)
@@ -174,11 +191,15 @@ public class PostController {
         summary = "Get related posts",
         description = "Retrieves related posts from the same category. Accessible by authenticated users. Returns posts sorted by creation date."
     )
-    public ApiResponse<List<PostResponse>> getRelatedPosts(
-            @PathVariable Long id,
-            @RequestParam(defaultValue = "5") int limit) {
-        List<PostResponse> response = postService.getRelatedPosts(id, limit);
-        return ApiResponse.<List<PostResponse>>builder()
+    public ApiResponse<Page<PostResponse>> getRelatedPosts(
+            @PathVariable Long postId,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "createdAt,DESC") String sort
+    ) {
+        Pageable pageable = PageRequest.of(page, size, buildSort(sort));
+        Page<PostResponse> response = postService.getRelatedPosts(postId, pageable);
+        return ApiResponse.<Page<PostResponse>>builder()
                 .message(ResponseMessage.GET_RELATED_POSTS_SUCCESS)
                 .result(response)
                 .build();
@@ -189,10 +210,14 @@ public class PostController {
         summary = "Get most viewed posts",
         description = "Retrieves the most viewed published posts. Accessible by authenticated users. Sorted by view count descending."
     )
-    public ApiResponse<List<PostResponse>> getMostViewedPosts(
-            @RequestParam(defaultValue = "5") int limit) {
-        List<PostResponse> response = postService.getMostViewedPosts(limit);
-        return ApiResponse.<List<PostResponse>>builder()
+    public ApiResponse<Page<PostResponse>> getMostViewedPosts(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "viewCount,DESC") String sort
+    ) {
+        Pageable pageable = PageRequest.of(page, size, buildSort(sort));
+        Page<PostResponse> response = postService.getMostViewedPosts(pageable);
+        return ApiResponse.<Page<PostResponse>>builder()
                 .message(ResponseMessage.GET_MOST_VIEWED_POSTS_SUCCESS)
                 .result(response)
                 .build();

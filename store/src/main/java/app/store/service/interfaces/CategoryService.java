@@ -12,7 +12,7 @@ public interface CategoryService {
 
     CategoryResponse getCategoryById(Long categoryId);
 
-    Page<CategoryResponse> getAllCategories(Pageable pageable);
+    List<CategoryResponse> getAllCategories();
 
     CategoryResponse updateCategory(Long categoryId, CategoryRequest request);
 

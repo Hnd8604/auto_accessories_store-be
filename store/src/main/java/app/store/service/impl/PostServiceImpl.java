@@ -17,6 +17,7 @@ import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
@@ -51,6 +52,7 @@ public class PostServiceImpl implements PostService {
             category = postCategoryRepository.findById(request.getCategoryId())
                     .orElseThrow(() -> new RuntimeException("Không tìm thấy danh mục với ID: " + request.getCategoryId()));
         }
+
         Post post = postMapper.toPost(request);
         // Tạo slug từ tiêu đề
         String baseSlug = slugUtil.toSlug(request.getTitle());
@@ -144,79 +146,64 @@ public class PostServiceImpl implements PostService {
     @Override
     @Transactional(readOnly = true)
     @PreAuthorize("hasAuthority('POST_GET_ALL')")
-    public Page<PostResponse> getAllPosts(int page, int size) {
-        PageRequest pageRequest = PageRequest.of(page, size,
-                Sort.by(Sort.Direction.DESC, "createdAt"));
-
-        return postRepository.findAll(pageRequest).map(postMapper::toPostResponse);
+    public Page<PostResponse> getAllPosts(Pageable pageable) {
+        return postRepository.findAll(pageable).map(postMapper::toPostResponse);
     }
 
     @Override
     @Transactional(readOnly = true)
     @PreAuthorize("hasAuthority('POST_GET_PUBLISHED')")
-    public Page<PostResponse> getPublishedPosts(int page, int size) {
-        PageRequest pageRequest = PageRequest.of(page, size);
+    public Page<PostResponse> getPublishedPosts(Pageable pageable) {
 
-        return postRepository.findPublishedPosts(pageRequest).map(postMapper::toPostResponse);
+        return postRepository.findPublishedPosts(pageable).map(postMapper::toPostResponse);
     }
 
     @Override
     @Transactional(readOnly = true)
     @PreAuthorize("hasAuthority('POST_SEARCH')")
-    public Page<PostResponse> searchPublishedPosts(String keyword, int page, int size) {
-        PageRequest pageRequest = PageRequest.of(page, size,
-                Sort.by(Sort.Direction.DESC, "createdAt"));
+    public Page<PostResponse> searchPublishedPosts(String keyword, Pageable pageable) {
 
         if (keyword == null || keyword.trim().isEmpty()) {
-            return postRepository.findPublishedPosts(pageRequest).map(postMapper::toPostResponse);
+            return postRepository.findPublishedPosts(pageable).map(postMapper::toPostResponse);
         }
 
-        return postRepository.findPublishedPostsByKeyword(keyword.trim(), pageRequest)
+        return postRepository.findPublishedPostsByKeyword(keyword.trim(), pageable)
                 .map(postMapper::toPostResponse);
     }
 
     @Override
     @Transactional(readOnly = true)
     @PreAuthorize("hasAuthority('POST_GET_BY_CATEGORY')")
-    public Page<PostResponse> getPostsByCategory(Long categoryId, int page, int size) {
+    public Page<PostResponse> getPostsByCategory(Long categoryId, Pageable pageable) {
         PostCategory category = postCategoryRepository.findById(categoryId)
                 .orElseThrow(() -> new RuntimeException("Không tìm thấy danh mục với ID: " + categoryId));
 
-        PageRequest pageRequest = PageRequest.of(page, size);
-
-        return postRepository.findPublishedPostsByCategory(category, pageRequest)
+        return postRepository.findPublishedPostsByCategory(category, pageable)
                 .map(postMapper::toPostResponse);
     }
 
     @Override
     @Transactional(readOnly = true)
     @PreAuthorize("hasAuthority('POST_GET_RELATED')")
-    public List<PostResponse> getRelatedPosts(Long postId, int limit) {
+    public Page<PostResponse> getRelatedPosts(Long postId, Pageable pageable) {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new RuntimeException("Không tìm thấy bài viết với ID: " + postId));
 
         if (post.getCategory() == null) {
-            return List.of();
+            return Page.empty();
         }
 
-        PageRequest pageRequest = PageRequest.of(0, limit);
-
-        return postRepository.findRelatedPosts(post.getCategory(), postId, pageRequest)
-                .stream()
-                .map(postMapper::toPostResponse)
-                .collect(Collectors.toList());
+        return postRepository.findRelatedPosts(post.getCategory(), postId,pageable)
+                .map(postMapper::toPostResponse);
     }
 
     @Override
     @Transactional(readOnly = true)
     @PreAuthorize("hasAuthority('POST_GET_MOST_VIEWED')")
-    public List<PostResponse> getMostViewedPosts(int limit) {
-        PageRequest pageRequest = PageRequest.of(0, limit);
+    public Page<PostResponse> getMostViewedPosts(Pageable pageable) {
 
-        return postRepository.findMostViewedPosts(pageRequest)
-                .stream()
-                .map(postMapper::toPostResponse)
-                .collect(Collectors.toList());
+        return postRepository.findMostViewedPosts(pageable)
+                .map(postMapper::toPostResponse);
     }
 
     @Override

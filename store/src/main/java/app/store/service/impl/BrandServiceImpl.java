@@ -17,6 +17,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
@@ -26,9 +28,11 @@ public class BrandServiceImpl implements BrandService {
     BrandMapper brandMapper;
     @Override
     @PreAuthorize("hasAuthority('BRAND_GET_ALL')")
-    public Page<BrandResponse> getAllBrands(Pageable pageable) {
-        return brandRepository.findAll(pageable)
-                .map(brandMapper::toBrandResponse);
+    public List<BrandResponse> getAllBrands() {
+        return brandRepository.findAll()
+                .stream()
+                .map(brandMapper::toBrandResponse)
+                .toList();
     }
     @PreAuthorize("hasAuthority('BRAND_GET_BY_ID')")
     @Override

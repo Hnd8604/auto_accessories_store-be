@@ -16,6 +16,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
 import static app.store.utils.SortUtils.buildSort;
 @RestController
 @RequestMapping("/brands")
@@ -31,13 +34,9 @@ public class BrandController {
         summary = "Get all brands",
         description = "Retrieves all brands with pagination and sorting. Accessible by authenticated users."
     )
-    ApiResponse<Page<BrandResponse>> getAllBrands(@RequestParam(defaultValue = "0") int page,
-                                                  @RequestParam(defaultValue = "2") int size,
-                                                  @RequestParam(defaultValue = "name,asc") String sort
-    ) {
-        Pageable pageable = PageRequest.of(page, size, buildSort(sort));
-        return ApiResponse.<Page<BrandResponse>>builder()
-                .result(BrandServiceImpl.getAllBrands(pageable))
+    ApiResponse<List<BrandResponse>> getAllBrands() {
+        return ApiResponse.<List<BrandResponse>>builder()
+                .result(BrandServiceImpl.getAllBrands())
                 .message(ResponseMessage.GET_ALL_BRANDS_SUCCESS)
                 .build();
     }
