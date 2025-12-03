@@ -25,7 +25,6 @@ import java.util.HashSet;
 @Slf4j
 @Order(2) // de chay sau RoleInitConfig
 public class ApplicationInitConfig {
-
     RoleRepository roleRepository;
     PasswordEncoder passwordEncoder;
 

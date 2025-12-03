@@ -24,8 +24,7 @@ public class User extends BaseEntityUUID {
     @Column(nullable = false)
     String password;
     String email;
-    String firstName;
-    String lastName;
+    String fullName;
     String phoneNumber;
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     Cart cart;

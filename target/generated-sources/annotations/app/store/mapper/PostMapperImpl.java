@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2025-12-03T09:19:42+0700",
+    date = "2025-12-03T10:17:07+0700",
     comments = "version: 1.5.5.Final, compiler: javac, environment: Java 21.0.6 (Oracle Corporation)"
 )
 @Component
@@ -43,6 +43,7 @@ public class PostMapperImpl implements PostMapper {
 
         postResponse.setCategoryName( postCategoryName( post ) );
         postResponse.setAuthorId( postAuthorId( post ) );
+        postResponse.setAuthorName( postAuthorFullName( post ) );
         postResponse.setId( post.getId() );
         postResponse.setTitle( post.getTitle() );
         postResponse.setSlug( post.getSlug() );
@@ -53,8 +54,6 @@ public class PostMapperImpl implements PostMapper {
         postResponse.setViewCount( post.getViewCount() );
         postResponse.setCreatedAt( post.getCreatedAt() );
         postResponse.setUpdatedAt( post.getUpdatedAt() );
-
-        postResponse.setAuthorName( getAuthorFullName(post) );
 
         return postResponse;
     }
@@ -100,5 +99,20 @@ public class PostMapperImpl implements PostMapper {
             return null;
         }
         return id;
+    }
+
+    private String postAuthorFullName(Post post) {
+        if ( post == null ) {
+            return null;
+        }
+        User author = post.getAuthor();
+        if ( author == null ) {
+            return null;
+        }
+        String fullName = author.getFullName();
+        if ( fullName == null ) {
+            return null;
+        }
+        return fullName;
     }
 }

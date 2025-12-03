@@ -22,7 +22,7 @@ public interface PostMapper {
 
     @Mapping(target = "categoryName", source = "category.name")
     @Mapping(target = "authorId", source = "author.id")
-    @Mapping(target = "authorName", expression = "java(getAuthorFullName(post))")
+    @Mapping(target = "authorName", source = "author.fullName")
     PostResponse toPostResponse(Post post);
 
     @Mapping(target = "id", ignore = true)
@@ -34,12 +34,4 @@ public interface PostMapper {
     @Mapping(target = "updatedAt", ignore = true)
     void updateEntityFromRequest(PostRequest request, @MappingTarget Post entity);
 
-    default String getAuthorFullName(Post entity) {
-        if (entity.getAuthor() == null) {
-            return null;
-        }
-        return (entity.getAuthor().getFirstName() != null ? entity.getAuthor().getFirstName() : "") +
-               " " +
-               (entity.getAuthor().getLastName() != null ? entity.getAuthor().getLastName() : "");
-    }
 }
