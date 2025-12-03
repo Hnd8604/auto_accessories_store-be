@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2025-12-01T18:10:40+0700",
+    date = "2025-12-03T09:19:42+0700",
     comments = "version: 1.5.5.Final, compiler: javac, environment: Java 21.0.6 (Oracle Corporation)"
 )
 @Component
@@ -41,9 +41,7 @@ public class PostMapperImpl implements PostMapper {
 
         PostResponse postResponse = new PostResponse();
 
-        postResponse.setCategoryId( postCategoryId( post ) );
         postResponse.setCategoryName( postCategoryName( post ) );
-        postResponse.setCategorySlug( postCategorySlug( post ) );
         postResponse.setAuthorId( postAuthorId( post ) );
         postResponse.setId( post.getId() );
         postResponse.setTitle( post.getTitle() );
@@ -74,21 +72,6 @@ public class PostMapperImpl implements PostMapper {
         entity.setPublished( request.getPublished() );
     }
 
-    private Long postCategoryId(Post post) {
-        if ( post == null ) {
-            return null;
-        }
-        PostCategory category = post.getCategory();
-        if ( category == null ) {
-            return null;
-        }
-        Long id = category.getId();
-        if ( id == null ) {
-            return null;
-        }
-        return id;
-    }
-
     private String postCategoryName(Post post) {
         if ( post == null ) {
             return null;
@@ -102,21 +85,6 @@ public class PostMapperImpl implements PostMapper {
             return null;
         }
         return name;
-    }
-
-    private String postCategorySlug(Post post) {
-        if ( post == null ) {
-            return null;
-        }
-        PostCategory category = post.getCategory();
-        if ( category == null ) {
-            return null;
-        }
-        String slug = category.getSlug();
-        if ( slug == null ) {
-            return null;
-        }
-        return slug;
     }
 
     private String postAuthorId(Post post) {

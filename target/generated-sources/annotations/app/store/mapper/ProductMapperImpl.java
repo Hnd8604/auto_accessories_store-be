@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2025-12-01T18:10:40+0700",
+    date = "2025-12-03T09:04:07+0700",
     comments = "version: 1.5.5.Final, compiler: javac, environment: Java 21.0.6 (Oracle Corporation)"
 )
 @Component
@@ -47,6 +47,7 @@ public class ProductMapperImpl implements ProductMapper {
         productResponse.description( product.getDescription() );
         productResponse.unitPrice( product.getUnitPrice() );
         productResponse.stockQuantity( product.getStockQuantity() );
+        productResponse.slug( product.getSlug() );
 
         return productResponse.build();
     }

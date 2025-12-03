@@ -11,7 +11,7 @@ public interface CategoryService {
     CategoryResponse createCategory(CategoryRequest request);
 
     CategoryResponse getCategoryById(Long categoryId);
-
+    CategoryResponse getCategoryBySlug(String slug);
     List<CategoryResponse> getAllCategories();
 
     CategoryResponse updateCategory(Long categoryId, CategoryRequest request);

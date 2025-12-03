@@ -15,4 +15,6 @@ public class BrandResponse {
     Long id;
     String name;
     String description;
+    String slug;
+    Long productCount;
 }

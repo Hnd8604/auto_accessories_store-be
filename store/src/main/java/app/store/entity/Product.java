@@ -32,4 +32,6 @@ public class Product extends BaseEntityLong {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name= "brand_id")
     Brand brand;
+
+    String slug;
 }

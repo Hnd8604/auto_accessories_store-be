@@ -24,9 +24,7 @@ public class PostResponse {
     LocalDateTime updatedAt;
     
     // Category info
-    Long categoryId;
     String categoryName;
-    String categorySlug;
     
     // Author info
     String authorId;

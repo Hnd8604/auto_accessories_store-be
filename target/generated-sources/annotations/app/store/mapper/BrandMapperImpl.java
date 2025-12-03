@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2025-12-02T11:26:22+0700",
+    date = "2025-12-03T09:42:15+0700",
     comments = "version: 1.5.5.Final, compiler: javac, environment: Java 21.0.6 (Oracle Corporation)"
 )
 @Component
@@ -25,6 +25,9 @@ public class BrandMapperImpl implements BrandMapper {
         brandResponse.id( brand.getId() );
         brandResponse.name( brand.getName() );
         brandResponse.description( brand.getDescription() );
+        brandResponse.slug( brand.getSlug() );
+
+        brandResponse.productCount( brand.getProducts() != null ? (long) brand.getProducts().size() : 0L );
 
         return brandResponse.build();
     }

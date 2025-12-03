@@ -19,4 +19,6 @@ public class Category extends BaseEntityLong {
     String description;
     @OneToMany(mappedBy ="category", cascade = CascadeType.ALL)
     List<Product> products;
+    @Column(unique = true, nullable = false, length = 255)
+    String slug;
 }

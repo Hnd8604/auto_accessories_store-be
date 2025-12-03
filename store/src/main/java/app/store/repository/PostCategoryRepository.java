@@ -15,16 +15,17 @@ import java.util.Optional;
 public interface PostCategoryRepository extends JpaRepository<PostCategory, Long> {
     
     Optional<PostCategory> findBySlug(String slug);
-    
+    boolean existsBySlug(String slug);
+    boolean existsByName(String name);
     @Query("SELECT pc FROM PostCategory pc WHERE " +
            "LOWER(pc.name) LIKE LOWER(CONCAT('%', :keyword, '%')) OR " +
            "LOWER(pc.description) LIKE LOWER(CONCAT('%', :keyword, '%'))")
     List<PostCategory> findByKeyword(@Param("keyword") String keyword);
     
-    boolean existsBySlug(String slug);
+
 
 //    @Query("SELECT COUNT(p) FROM Post p WHERE p.category.id = :categoryId")
 //    long countPostByCategory(@Param("categoryId") Long categoryId);
 
-    boolean existsByName(String name);
+
 }

@@ -36,7 +36,7 @@ public class SeedRolePerms implements CommandLineRunner {
         Permission productGetByCategoryId = getOrCreatePermission("PRODUCT_GET_BY_CATEGORY_ID", "Get products by category");
         Permission productGetByBrandId = getOrCreatePermission("PRODUCT_GET_BY_BRAND_ID", "Get products by brand");
         Permission productGetAll = getOrCreatePermission("PRODUCT_GET_ALL", "Get all products");
-
+        Permission productGetBySlug = getOrCreatePermission("PRODUCT_GET_BY_SLUG", "Get product by slug");
         // === CATEGORY PERMISSIONS ===
         Permission categoryCreate = getOrCreatePermission("CATEGORY_CREATE", "Create category");
         Permission categoryUpdate = getOrCreatePermission("CATEGORY_UPDATE", "Update category");
@@ -129,7 +129,7 @@ public class SeedRolePerms implements CommandLineRunner {
         // ADMIN - Has all permissions
         getOrCreateRole("ADMIN", "Administrator",
                 // Product permissions
-                productCreate, productUpdate, productDelete, productGetById, productGetByCategoryId, productGetByBrandId, productGetAll,
+                productCreate, productUpdate, productDelete, productGetById, productGetByCategoryId, productGetByBrandId, productGetAll,productGetBySlug,
                 // Category permissions  
                 categoryCreate, categoryUpdate, categoryDelete, categoryGetById, categoryGetAll,
                 // Brand permissions
@@ -144,7 +144,7 @@ public class SeedRolePerms implements CommandLineRunner {
                 orderCreate, orderGetAll, orderGetById, orderGetMyOrder, orderUpdateByAdmin, orderUpdateByUser, orderCancel, orderDelete,
                 // Cart permissions
                 cartGetById, cartAddItem, cartRemoveItem, cartUpdateItem,
-                // Product image permissions
+                // Product image permissions,
                 productImageCreate, productImageUpdate, productImageDelete, productImageGetById, productImageGetByProductId, productImageGetAll, productImageSetPrimary,
                 // Image upload permissions
                 imageUpload, imageDelete,
@@ -157,7 +157,7 @@ public class SeedRolePerms implements CommandLineRunner {
         // USER - Basic permissions for customers
         getOrCreateRole("USER", "User", 
                 // View products
-                productGetById, productGetByCategoryId, productGetByBrandId, productGetAll,
+                productGetById, productGetByCategoryId, productGetByBrandId, productGetAll, productGetBySlug,
                 // View categories and brands
                 categoryGetAll, categoryGetById, brandGetAll, brandGetById,
                 // Manage personal information
@@ -188,8 +188,8 @@ public class SeedRolePerms implements CommandLineRunner {
                 ));
     }
 
-    private Role getOrCreateRole(String name, String description, Permission... permissions) {
-        return roleRepository.findById(name)
+    private void getOrCreateRole(String name, String description, Permission... permissions) {
+        roleRepository.findById(name)
                 .orElseGet(() -> {
                     Role role = Role.builder()
                             .name(name)

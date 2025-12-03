@@ -49,15 +49,27 @@ public class CategoryController {
                 .build();
     }
 
-    @GetMapping("/{categoryId}")
+    @GetMapping("/id/{categoryId}")
     @Operation(
         summary = "Get category by ID",
         description = "Retrieves detailed information of a category by ID. Accessible by authenticated users."
     )
-    ApiResponse<CategoryResponse> getCategory(@PathVariable Long categoryId) {
+    ApiResponse<CategoryResponse> getCategoryById(@PathVariable Long categoryId) {
        return ApiResponse.<CategoryResponse>builder()
                 .result(categoryServiceImpl.getCategoryById(categoryId))
                .message(ResponseMessage.GET_CATEGORY_SUCCESS)
+                .build();
+    }
+
+    @GetMapping("/slug/{slug}")
+    @Operation(
+            summary = "Get category by slug",
+            description = "Retrieves detailed information of a category by slug. Accessible by authenticated users."
+    )
+    ApiResponse<CategoryResponse> getCategoryBySlug(@PathVariable String slug) {
+        return ApiResponse.<CategoryResponse>builder()
+                .result(categoryServiceImpl.getCategoryBySlug(slug))
+                .message(ResponseMessage.GET_CATEGORY_SUCCESS)
                 .build();
     }
     @PutMapping("/{categoryId}")

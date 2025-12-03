@@ -132,7 +132,7 @@ public class ProductController {
                 .build();
     }
 
-    @GetMapping("/{productId}")
+    @GetMapping("/id/{productId}")
     @Operation(
         summary = "Get product by ID",
         description = "Retrieves detailed information of a product by ID. Accessible by authenticated users."
@@ -140,6 +140,18 @@ public class ProductController {
     ApiResponse<ProductResponse> getProductById(@PathVariable Long productId) {
         return ApiResponse.<ProductResponse>builder()
                 .result(productServiceImpl.getProductById(productId))
+                .message(ResponseMessage.GET_PRODUCT_SUCCESS)
+                .build();
+    }
+
+    @GetMapping("/slug/{slug}")
+    @Operation(
+            summary = "Get product by Slug",
+            description = "Retrieves detailed information of a product by Slug. Accessible by authenticated users."
+    )
+    ApiResponse<ProductResponse> getProductBySlug(@PathVariable String slug) {
+        return ApiResponse.<ProductResponse>builder()
+                .result(productServiceImpl.getProductBySlug(slug))
                 .message(ResponseMessage.GET_PRODUCT_SUCCESS)
                 .build();
     }

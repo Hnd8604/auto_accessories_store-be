@@ -8,6 +8,7 @@ import app.store.exception.ErrorCode;
 import app.store.mapper.CategoryMapper;
 import app.store.repository.CategoryRepository;
 import app.store.service.interfaces.CategoryService;
+import app.store.utils.SlugUtil;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -26,11 +27,16 @@ import java.util.List;
 public class CategoryServiceImpl implements CategoryService {
     CategoryMapper categoryMapper;
     CategoryRepository categoryRepository;
-
+    SlugUtil slugUtil;
     @Override
     @PreAuthorize("hasAuthority('CATEGORY_CREATE')")
     public CategoryResponse createCategory(CategoryRequest request) {
         Category category = categoryMapper.toCategory(request);
+        // Tạo slug từ tên danh mục
+        String baseSlug = slugUtil.toSlug(request.getName());
+        String uniqueSlug = slugUtil.createUniqueSlug(baseSlug, categoryRepository::existsBySlug);
+
+        category.setSlug(uniqueSlug);
         return categoryMapper.toCategoryResponse(categoryRepository.save(category));
     }
 
@@ -38,6 +44,13 @@ public class CategoryServiceImpl implements CategoryService {
     @PreAuthorize("hasAuthority('CATEGORY_GET_BY_ID')")
     public CategoryResponse getCategoryById(Long categoryId) {
         return categoryRepository.findById(categoryId)
+                .map(categoryMapper::toCategoryResponse)
+                .orElseThrow(() -> new AppException(ErrorCode.CATEGORY_NOT_EXISTED));
+    }
+
+    @Override
+    public CategoryResponse getCategoryBySlug(String slug) {
+        return categoryRepository.findBySlug(slug)
                 .map(categoryMapper::toCategoryResponse)
                 .orElseThrow(() -> new AppException(ErrorCode.CATEGORY_NOT_EXISTED));
     }
@@ -55,6 +68,14 @@ public class CategoryServiceImpl implements CategoryService {
     public CategoryResponse updateCategory(Long categoryId, CategoryRequest request) {
         Category category = categoryRepository.findById(categoryId)
                 .orElseThrow(() -> new AppException(ErrorCode.CATEGORY_NOT_EXISTED));
+
+        // Cập nhật slug nếu tên thay đổi
+        if (!category.getName().equals(request.getName())) {
+            String baseSlug = slugUtil.toSlug(request.getName());
+            String uniqueSlug = slugUtil.createUniqueSlug(baseSlug, slug ->
+                    !slug.equals(category.getSlug()) && categoryRepository.existsBySlug(slug));
+            category.setSlug(uniqueSlug);
+        }
         categoryMapper.updateCategory(category, request);
         return categoryMapper.toCategoryResponse(categoryRepository.save(category));
     }

@@ -40,14 +40,26 @@ public class BrandController {
                 .message(ResponseMessage.GET_ALL_BRANDS_SUCCESS)
                 .build();
     }
-    @GetMapping("/{brandId}")
+    @GetMapping("/id/{brandId}")
     @Operation(
         summary = "Get brand by ID",
         description = "Retrieves detailed information of a brand by ID. Accessible by authenticated users."
     )
-    ApiResponse<BrandResponse> getBrandById(@PathVariable String brandId) {
+    ApiResponse<BrandResponse> getBrandById(@PathVariable Long brandId) {
         return ApiResponse.<BrandResponse>builder()
-                .result(BrandServiceImpl.getBrandById(Long.parseLong(brandId)))
+                .result(BrandServiceImpl.getBrandById(brandId))
+                .message(ResponseMessage.GET_BRAND_SUCCESS)
+                .build();
+    }
+
+    @GetMapping("/slug/{slug}")
+    @Operation(
+            summary = "Get brand by slug",
+            description = "Retrieves detailed information of a brand by slug. Accessible by authenticated users."
+    )
+    ApiResponse<BrandResponse> getBrandBySlug(@PathVariable String slug) {
+        return ApiResponse.<BrandResponse>builder()
+                .result(BrandServiceImpl.getBrandBySlug(slug))
                 .message(ResponseMessage.GET_BRAND_SUCCESS)
                 .build();
     }

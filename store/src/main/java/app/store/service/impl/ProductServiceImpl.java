@@ -14,6 +14,7 @@ import app.store.repository.CategoryRepository;
 import app.store.repository.ProductRepository;
 import app.store.service.interfaces.ProductService;
 import app.store.specification.ProductSpecification;
+import app.store.utils.SlugUtil;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -34,6 +35,7 @@ public class ProductServiceImpl implements ProductService {
     ProductRepository productRepository;
     CategoryRepository categoryRepository;
     BrandRepository brandRepository;
+    SlugUtil slugUtil;
     @Override
     @PreAuthorize("hasAuthority('PRODUCT_CREATE')")
     public ProductResponse createProduct(ProductRequest request) {
@@ -42,7 +44,10 @@ public class ProductServiceImpl implements ProductService {
                 .orElseThrow(() -> new AppException(ErrorCode.CATEGORY_NOT_EXISTED));
         Brand brand = brandRepository.findById(request.getBrandId())
                 .orElseThrow(() -> new AppException(ErrorCode.BRAND_NOT_EXISTED));
+        String baseSlug = slugUtil.toSlug(request.getName());
+        String uniqueSlug = slugUtil.createUniqueSlug(baseSlug, productRepository::existsBySlug);
 
+        product.setSlug(uniqueSlug);
         product.setCategory(category);
         product.setBrand(brand);
         return productMapper.toProductResponse(productRepository.save(product));
@@ -61,8 +66,17 @@ public class ProductServiceImpl implements ProductService {
         Brand brand = brandRepository.findById(request.getBrandId())
                 .orElseThrow(() -> new AppException(ErrorCode.BRAND_NOT_EXISTED));
 
+        // Cập nhật slug nếu tiêu đề thay đổi
+        if (!product.getName().equals(request.getName())) {
+            String baseSlug = slugUtil.toSlug(request.getName());
+            String uniqueSlug = slugUtil.createUniqueSlug(baseSlug, slug ->
+                    !slug.equals(product.getSlug()) && productRepository.existsBySlug(slug));
+            product.setSlug(uniqueSlug);
+        }
+
         product.setCategory(category);
         product.setBrand(brand);
+
         return productMapper.toProductResponse(productRepository.save(product));
     }
 
@@ -85,6 +99,17 @@ public class ProductServiceImpl implements ProductService {
 
         return productMapper.toProductResponse(product);
     }
+
+    @Transactional
+    @Override
+    @PreAuthorize("hasAuthority('PRODUCT_GET_BY_SLUG')")
+    public ProductResponse getProductBySlug(String slug) {
+        Product product = productRepository.findBySlug(slug).
+                orElseThrow(() -> new AppException(ErrorCode.PRODUCT_NOT_EXISTED));
+
+        return productMapper.toProductResponse(product);
+    }
+
     @Override
     @PreAuthorize("hasAuthority('PRODUCT_GET_BY_CATEGORY_ID')")
     public Page<ProductResponse> getProductsByCategoryId(Long categoryId, Pageable pageable) {

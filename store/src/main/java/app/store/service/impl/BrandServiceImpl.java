@@ -8,6 +8,7 @@ import app.store.exception.ErrorCode;
 import app.store.mapper.BrandMapper;
 import app.store.repository.BrandRepository;
 import app.store.service.interfaces.BrandService;
+import app.store.utils.SlugUtil;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -26,6 +27,7 @@ import java.util.List;
 public class BrandServiceImpl implements BrandService {
     BrandRepository brandRepository;
     BrandMapper brandMapper;
+    SlugUtil slugUtil;
     @Override
     @PreAuthorize("hasAuthority('BRAND_GET_ALL')")
     public List<BrandResponse> getAllBrands() {
@@ -44,9 +46,23 @@ public class BrandServiceImpl implements BrandService {
     }
 
     @Override
+    public BrandResponse getBrandBySlug(String slug) {
+        Brand brand = brandRepository.findBySlug(slug)
+                .orElseThrow(() -> new AppException(ErrorCode.BRAND_NOT_EXISTED));
+        return brandMapper.toBrandResponse(brand);
+
+    }
+
+    @Override
     @PreAuthorize("hasAuthority('BRAND_CREATE')")
     public BrandResponse createBrand(BrandRequest brandRequest) {
+
         Brand brand = brandMapper.toBrand(brandRequest);
+        // Tạo slug từ tên danh mục
+        String baseSlug = slugUtil.toSlug(brandRequest.getName());
+        String uniqueSlug = slugUtil.createUniqueSlug(baseSlug, brandRepository::existsBySlug);
+
+        brand.setSlug(uniqueSlug);
         return brandMapper.toBrandResponse(brandRepository.save(brand));
     }
 
@@ -55,6 +71,14 @@ public class BrandServiceImpl implements BrandService {
     public BrandResponse updateBrand(Long brandId, BrandRequest brandRequest) {
         Brand brand = brandRepository.findById(brandId)
                 .orElseThrow(() -> new AppException(ErrorCode.BRAND_NOT_EXISTED));
+
+        // Cập nhật slug nếu tên thay đổi
+        if (!brand.getName().equals(brandRequest.getName())) {
+            String baseSlug = slugUtil.toSlug(brandRequest.getName());
+            String uniqueSlug = slugUtil.createUniqueSlug(baseSlug, slug ->
+                    !slug.equals(brand.getSlug()) && brandRepository.existsBySlug(slug));
+            brand.setSlug(uniqueSlug);
+        }
         brandMapper.updateBrand(brand, brandRequest);
         return brandMapper.toBrandResponse(brandRepository.save(brand));
     }

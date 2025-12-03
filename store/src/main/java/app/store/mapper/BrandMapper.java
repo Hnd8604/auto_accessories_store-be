@@ -12,9 +12,11 @@ import org.mapstruct.MappingTarget;
 public interface BrandMapper {
 
 
+    @Mapping(target = "productCount", expression = "java(brand.getProducts() != null ? (long) brand.getProducts().size() : 0L)")
     BrandResponse toBrandResponse(Brand brand);
 
     @Mapping(target = "products", ignore = true)
+    @Mapping(target = "slug", ignore = true)
     Brand toBrand(BrandRequest brandRequest);
 
     @Mapping(target = "id", ignore = true)

@@ -19,9 +19,8 @@ public interface PostMapper {
 //    @Mapping(target = "updatedAt", ignore = true)
     Post toPost(PostRequest request);
 
-    @Mapping(target = "categoryId", source = "category.id")
+
     @Mapping(target = "categoryName", source = "category.name")
-    @Mapping(target = "categorySlug", source = "category.slug")
     @Mapping(target = "authorId", source = "author.id")
     @Mapping(target = "authorName", expression = "java(getAuthorFullName(post))")
     PostResponse toPostResponse(Post post);

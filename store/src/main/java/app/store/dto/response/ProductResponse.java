@@ -20,4 +20,5 @@ public class ProductResponse {
     String categoryName;
     String brandName;
     Integer stockQuantity;
+    String slug;
 }
