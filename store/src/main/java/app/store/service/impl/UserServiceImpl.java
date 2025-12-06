@@ -62,7 +62,7 @@ public class UserServiceImpl implements UserService {
         return userMapper.toUserResponse(userRepository.save(user));
     }
     @Override
-    @PreAuthorize("hasAuthority('USER_GET_MY_INFO')")
+//    @PreAuthorize("hasAuthority('USER_GET_MY_INFO')")
     public UserResponse getMyInfo(){
         var context = SecurityContextHolder.getContext();
         String name = context.getAuthentication().getName();
