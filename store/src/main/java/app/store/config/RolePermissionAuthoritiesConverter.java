@@ -1,4 +1,4 @@
-package app.store.configuration;
+package app.store.config;
 
 import java.util.*;
 import java.util.stream.Collectors;

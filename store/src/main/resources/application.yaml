@@ -24,6 +24,7 @@ spring:
   data:
     redis:
       host: localhost
+#      host: host.docker.internal # dùng localhost cũng được, nhưng đây là redis trong docker nên dùng host.docker.internal cho rõ ràng
       port: 6379
       password: "StrongPass123!"
       database: 0

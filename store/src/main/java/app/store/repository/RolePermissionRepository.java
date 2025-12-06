@@ -62,7 +62,7 @@ public class RolePermissionRepository {
             redis.delete(redisKey);
 
             // Thêm permissions mới vào Redis
-            if (!permNames.isEmpty()) {
+            if (!permNames.isEmpty()) { // nếu không có permission thì không tạo role mới trên redis.
                 redis.opsForSet().add(redisKey, permNames.toArray(String[]::new));
             }
         });
