@@ -1,5 +1,6 @@
 package app.store.config;
 
+import app.store.entity.Cart;
 import app.store.entity.Role;
 import app.store.entity.User;
 import app.store.exception.AppException;
@@ -41,15 +42,27 @@ public class ApplicationInitConfig {
             HashSet<Role> roles = new HashSet<>();
             roles.add(roleAdmin);
             roles.add(roleUser);
+
             if (userRepository.findByUsername("admin").isEmpty()) {
                 User user = User.builder()
                         .username("admin")
                         .password(passwordEncoder.encode("admin"))
                         .roles(roles) // Assign ADMIN role to admin user
+                        .email("admin@gmail.com")
+                        .fullName("Administrator")
                         .build();
+
+                // Tạo cart cho admin
+                Cart cart = new Cart();
+                user.setCart(cart);
+                cart.setUser(user);
+
                 userRepository.save(user);
                 log.warn("admin user has been created with password: admin, please change it after login");
             }
+
+
+
         };
     }
 }

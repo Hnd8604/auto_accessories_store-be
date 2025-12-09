@@ -29,14 +29,13 @@ public class BrandServiceImpl implements BrandService {
     BrandMapper brandMapper;
     SlugUtil slugUtil;
     @Override
-    @PreAuthorize("hasAuthority('BRAND_GET_ALL')")
     public List<BrandResponse> getAllBrands() {
         return brandRepository.findAll()
                 .stream()
                 .map(brandMapper::toBrandResponse)
                 .toList();
     }
-    @PreAuthorize("hasAuthority('BRAND_GET_BY_ID')")
+
     @Override
     public BrandResponse getBrandById(Long brandId) {
         Brand brand = brandRepository.findById(brandId)

@@ -41,7 +41,6 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    @PreAuthorize("hasAuthority('CATEGORY_GET_BY_ID')")
     public CategoryResponse getCategoryById(Long categoryId) {
         return categoryRepository.findById(categoryId)
                 .map(categoryMapper::toCategoryResponse)
@@ -54,8 +53,8 @@ public class CategoryServiceImpl implements CategoryService {
                 .map(categoryMapper::toCategoryResponse)
                 .orElseThrow(() -> new AppException(ErrorCode.CATEGORY_NOT_EXISTED));
     }
+
     @Override
-    @PreAuthorize("hasAuthority('CATEGORY_GET_ALL')")
     public List<CategoryResponse> getAllCategories() {
         return categoryRepository.findAll()
                 .stream()

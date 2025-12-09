@@ -4,6 +4,7 @@ package app.store.config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -21,6 +22,7 @@ public class SecurityConfig {
     // NOTE: made static final
     private static final String[] PUBLIC_ENDPOINTS = {
             "/users",
+            "/session-carts/**",
             "/auth/token", "/auth/introspect", "/auth/logout", "/auth/refresh",
             "/swagger-ui/**", "/swagger-ui.html", "/v3/api-docs/**"
     };
@@ -38,7 +40,8 @@ public class SecurityConfig {
                 .cors(cors -> cors.configurationSource(corsConfig.corsConfigurationSource()))
                 .authorizeHttpRequests(req -> req
                 .requestMatchers(PUBLIC_ENDPOINTS).permitAll()
-                .anyRequest().authenticated())
+                .requestMatchers(HttpMethod.GET, "/products/**", "/categories/**", "/brands/**", "/posts/**", "/post-categories/**", "/product-images/**").permitAll()
+                        .anyRequest().authenticated())
 
                 .oauth2ResourceServer(oauth2 -> oauth2
                 .jwt(jwt -> jwt

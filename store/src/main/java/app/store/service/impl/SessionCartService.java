@@ -27,7 +27,7 @@ public class SessionCartService {
         }
         return cart;
     }
-
+    
     public Map<Long, Integer> addToCart(Long productId, int quantity) { // user đăng nhập phát là thêm sp vào giỏ
         Map<Long, Integer> cart = getSessionCart();
         cart.put(productId, cart.getOrDefault(productId, 0) + quantity); //
@@ -38,6 +38,10 @@ public class SessionCartService {
         Map<Long, Integer> cart = getSessionCart();
         cart.remove(productId);
         return cart;
+    }
+
+    public void clearCart() {
+        session.removeAttribute("CART");
     }
 }
 

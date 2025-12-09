@@ -92,7 +92,6 @@ public class ProductServiceImpl implements ProductService {
     }
     @Transactional
     @Override
-    @PreAuthorize("hasAuthority('PRODUCT_GET_BY_ID')")
     public ProductResponse getProductById(Long productId) {
         Product product = productRepository.findById(productId).
                 orElseThrow(() -> new AppException(ErrorCode.PRODUCT_NOT_EXISTED));
@@ -102,7 +101,6 @@ public class ProductServiceImpl implements ProductService {
 
     @Transactional
     @Override
-    @PreAuthorize("hasAuthority('PRODUCT_GET_BY_SLUG')")
     public ProductResponse getProductBySlug(String slug) {
         Product product = productRepository.findBySlug(slug).
                 orElseThrow(() -> new AppException(ErrorCode.PRODUCT_NOT_EXISTED));
@@ -111,20 +109,18 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    @PreAuthorize("hasAuthority('PRODUCT_GET_BY_CATEGORY_ID')")
     public Page<ProductResponse> getProductsByCategoryId(Long categoryId, Pageable pageable) {
         return productRepository.findProductsByCategoryId(categoryId, pageable)
                 .map(productMapper::toProductResponse);
     }
+
     @Override
-    @PreAuthorize("hasAuthority('PRODUCT_GET_BY_BRAND_ID')")
     public Page<ProductResponse> getProductsByBrandId(Long brandId, Pageable pageable) {
         return productRepository.findProductsByBrandId(brandId, pageable)
                 .map(productMapper::toProductResponse);
     }
 
     @Override
-    @PreAuthorize("hasAuthority('PRODUCT_GET_ALL')")
     public Page<ProductResponse> getAllProducts(Pageable pageable) {
         return productRepository.findAll(pageable)
                 .map(productMapper::toProductResponse);

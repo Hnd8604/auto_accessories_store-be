@@ -54,7 +54,7 @@ public class CartServiceImpl implements CartService {
     }
 
 @Override
-@PreAuthorize("hasAuthority('CART_ADD_ITEM')")
+//@PreAuthorize("hasAuthority('CART_ADD_ITEM')")
 public CartItemResponse addItemToCart(CartItemRequest request) {
     Cart cart = cartRepository.findById(request.getCartId())
             .orElseThrow(() -> new AppException(ErrorCode.CART_NOT_EXISTED));

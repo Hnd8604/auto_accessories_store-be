@@ -58,4 +58,13 @@ public class SessionCartController {
     public Map<Long, Integer> remove(@PathVariable Long productId) {
         return sessionCartService.removeFromCart(productId);
     }
+
+    @DeleteMapping("/clear")
+    @Operation(
+        summary = "Clear session cart",
+        description = "Removes all products from the session cart. Typically used after merging to user cart."
+    )
+    public void clear() {
+        sessionCartService.clearCart();
+    }
 }

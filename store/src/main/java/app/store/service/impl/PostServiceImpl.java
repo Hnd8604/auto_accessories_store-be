@@ -117,7 +117,6 @@ public class PostServiceImpl implements PostService {
 
     @Override
     @Transactional(readOnly = true)
-    @PreAuthorize("hasAuthority('POST_GET_BY_ID')")
     public PostResponse getPostById(Long id) {
         Post post = postRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Không tìm thấy bài viết với ID: " + id));
@@ -127,7 +126,6 @@ public class PostServiceImpl implements PostService {
 
     @Override
     @Transactional(readOnly = true)
-    @PreAuthorize("hasAuthority('POST_GET_BY_SLUG')")
     public PostResponse getPostBySlug(String slug) {
         Post post = postRepository.findBySlug(slug)
                 .orElseThrow(() -> new RuntimeException("Không tìm thấy bài viết với slug: " + slug));
@@ -137,7 +135,6 @@ public class PostServiceImpl implements PostService {
 
     @Override
     @Transactional
-    @PreAuthorize("hasAuthority('POST_GET_BY_SLUG')")
     public PostResponse getPostBySlugAndIncrementView(String slug) {
         Post post = postRepository.findBySlug(slug)
                 .orElseThrow(() -> new RuntimeException("Không tìm thấy bài viết với slug: " + slug));
@@ -153,14 +150,12 @@ public class PostServiceImpl implements PostService {
 
     @Override
     @Transactional(readOnly = true)
-    @PreAuthorize("hasAuthority('POST_GET_ALL')")
     public Page<PostResponse> getAllPosts(Pageable pageable) {
         return postRepository.findAll(pageable).map(postMapper::toPostResponse);
     }
 
     @Override
     @Transactional(readOnly = true)
-    @PreAuthorize("hasAuthority('POST_GET_PUBLISHED')")
     public Page<PostResponse> getPublishedPosts(Pageable pageable) {
 
         return postRepository.findPublishedPosts(pageable).map(postMapper::toPostResponse);
@@ -168,7 +163,6 @@ public class PostServiceImpl implements PostService {
 
     @Override
     @Transactional(readOnly = true)
-    @PreAuthorize("hasAuthority('POST_SEARCH')")
     public Page<PostResponse> searchPublishedPosts(String keyword, Pageable pageable) {
 
         if (keyword == null || keyword.trim().isEmpty()) {
@@ -181,7 +175,6 @@ public class PostServiceImpl implements PostService {
 
     @Override
     @Transactional(readOnly = true)
-    @PreAuthorize("hasAuthority('POST_GET_BY_CATEGORY')")
     public Page<PostResponse> getPostsByCategory(Long categoryId, Pageable pageable) {
         PostCategory category = postCategoryRepository.findById(categoryId)
                 .orElseThrow(() -> new RuntimeException("Không tìm thấy danh mục với ID: " + categoryId));
@@ -192,7 +185,6 @@ public class PostServiceImpl implements PostService {
 
     @Override
     @Transactional(readOnly = true)
-    @PreAuthorize("hasAuthority('POST_GET_RELATED')")
     public Page<PostResponse> getRelatedPosts(Long postId, Pageable pageable) {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new RuntimeException("Không tìm thấy bài viết với ID: " + postId));
@@ -207,9 +199,7 @@ public class PostServiceImpl implements PostService {
 
     @Override
     @Transactional(readOnly = true)
-    @PreAuthorize("hasAuthority('POST_GET_MOST_VIEWED')")
     public Page<PostResponse> getMostViewedPosts(Pageable pageable) {
-
         return postRepository.findMostViewedPosts(pageable)
                 .map(postMapper::toPostResponse);
     }

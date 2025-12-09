@@ -95,7 +95,6 @@ public class PostCategoryServiceImpl implements PostCategoryService {
     
     @Override
     @Transactional(readOnly = true)
-    @PreAuthorize("hasAuthority('POST_CATEGORY_GET_BY_ID')")
     public PostCategoryResponse getCategoryById(Long id) {
         PostCategory category = postCategoryRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Không tìm thấy danh mục với ID: " + id));
@@ -123,7 +122,7 @@ public class PostCategoryServiceImpl implements PostCategoryService {
     
     @Override
     @Transactional(readOnly = true)
-    @PreAuthorize("hasAuthority('POST_CATEGORY_SEARCH')")
+//    @PreAuthorize("hasAuthority('POST_CATEGORY_SEARCH')")
     public List<PostCategoryResponse> searchCategories(String keyword) {
 
         List<PostCategory> postCategoryList;

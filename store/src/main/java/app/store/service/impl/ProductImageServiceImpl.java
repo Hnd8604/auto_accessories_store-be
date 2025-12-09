@@ -36,14 +36,12 @@ public class ProductImageServiceImpl implements ProductImageService {
     private final ProductMapper productMapper;
 
     @Override
-    @PreAuthorize("hasAuthority('PRODUCT_IMAGE)_GET_ALL')")
     public Page<ProductImageResponse> getAllProductImages(Pageable pageable) {
         return productImageRepository.findAll(pageable)
                 .map(productImageMapper::toProductImageResponse);
     }
 
     @Override
-    @PreAuthorize("hasAuthority('PRODUCT_IMAGE_GET_BY_ID')")
     public ProductImageResponse getProductImageById(Long imageId) {
         ProductImage productImage = productImageRepository.findById(imageId).
                 orElseThrow(() -> new AppException(ErrorCode.PRODUCT_IMAGE_NOT_EXISTED));  ;
@@ -51,7 +49,6 @@ public class ProductImageServiceImpl implements ProductImageService {
     }
 
     @Override
-    @PreAuthorize("hasAuthority('PRODUCT_IMAGE_GET_BY_PRODUCT_ID')")
     public List<ProductImageResponse> getProductImagesByProductId(Long productId) {
         return productImageRepository.getProductImageByProductId(productId).stream()
                 .map(productImageMapper::toProductImageResponse).toList();

@@ -62,7 +62,6 @@ public class UserServiceImpl implements UserService {
         return userMapper.toUserResponse(userRepository.save(user));
     }
     @Override
-//    @PreAuthorize("hasAuthority('USER_GET_MY_INFO')")
     public UserResponse getMyInfo(){
         var context = SecurityContextHolder.getContext();
         String name = context.getAuthentication().getName();
@@ -115,10 +114,9 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findById(userId)
                 .orElseThrow(()-> new AppException(ErrorCode.USER_NOT_EXISTED));
 
-
         return userMapper.toUserResponse(user);
     }
-  //  @PreAuthorize("hasRole('READ_USER')")
+
     @Override
     @PreAuthorize("hasAuthority('USER_GET_ALL')")
     public Page<UserResponse> getAllUsers(Pageable pageable) {
