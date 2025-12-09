@@ -13,7 +13,7 @@ import java.text.ParseException;
 
 public interface CartService {
 
-
+    CartResponse getMyCart();
     CartResponse getCartById(Long cartId) throws ParseException, JOSEException;
     CartItemResponse addItemToCart(CartItemRequest request);
     void removeItemFromCart(Long cartId, Long itemId);

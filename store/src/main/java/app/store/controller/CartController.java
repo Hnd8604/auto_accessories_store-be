@@ -39,7 +39,17 @@ public class CartController {
                 .message(ResponseMessage.GET_CART_SUCCESS)
                 .build();
     }
-
+    @GetMapping("/my-cart")
+    @Operation(
+            summary = "Get my cart",
+            description = "Retrieves cart details including all cart items. Accessible by cart owner or admin users."
+    )
+    ApiResponse<CartResponse> getMyCart() throws ParseException, JOSEException {
+        return ApiResponse.<CartResponse>builder()
+                .result(cartServiceImpl.getMyCart())
+                .message(ResponseMessage.GET_CART_SUCCESS)
+                .build();
+    }
     @PostMapping("/items")
     @Operation(
         summary = "Add item to cart",

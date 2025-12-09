@@ -38,19 +38,18 @@ public class SecurityConfig {
                 .cors(cors -> cors.configurationSource(corsConfig.corsConfigurationSource()))
                 .authorizeHttpRequests(req -> req
                 .requestMatchers(PUBLIC_ENDPOINTS).permitAll()
-                .anyRequest().authenticated()
-        );
+                .anyRequest().authenticated())
 
-        http.oauth2ResourceServer(oauth2 -> oauth2
+                .oauth2ResourceServer(oauth2 -> oauth2
                 .jwt(jwt -> jwt
                         .decoder(customJwtDecoder)
                         // NOTE: use bean-configured JwtAuthenticationConverter pulling roles + permissions
                         .jwtAuthenticationConverter(jwtAuthenticationConverter())
                 )
                 .authenticationEntryPoint(new JwtAuthenticationEntryPoint())
-        );
+                )
+                .csrf(AbstractHttpConfigurer::disable);
 
-        http.csrf(AbstractHttpConfigurer::disable);
         return http.build();
     }
 

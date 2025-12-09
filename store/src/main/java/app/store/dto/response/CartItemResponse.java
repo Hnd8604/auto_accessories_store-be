@@ -18,6 +18,6 @@ public class CartItemResponse {
     Long productId;
 //    String productName;
     Integer quantity;
-//    BigDecimal unitPrice;
-//    BigDecimal totalPrice;
+    BigDecimal unitPrice;
+    BigDecimal totalPrice;
 }

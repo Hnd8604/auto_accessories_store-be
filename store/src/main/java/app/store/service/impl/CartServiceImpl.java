@@ -21,6 +21,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
@@ -34,6 +36,15 @@ public class CartServiceImpl implements CartService {
     ProductRepository productRepository;
     CartItemRepository cartItemRepository;
     CartItemMapper cartItemMapper;
+
+    @Override
+    public CartResponse getMyCart() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Cart cart = cartRepository.findByUser_Username(authentication.getName())
+                .orElseThrow(() -> new AppException(ErrorCode.CART_NOT_EXISTED));
+        return cartMapper.toCartResponse(cart);
+    }
+
     @Override
     @PreAuthorize("hasAuthority('CART_GET_BY_ID')")
     public CartResponse getCartById(Long cartId) throws ParseException, JOSEException {
