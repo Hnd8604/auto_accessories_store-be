@@ -9,9 +9,10 @@ import lombok.experimental.FieldDefaults;
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class ProductImageRequest {
-    Long productId;
+public class BannerRequest {
+    String title;
+    String redirectUrl;
     String altText;
-    Boolean isPrimary;
-    Integer sortOrder;
+    Integer displayOrder;
+    Boolean isActive;
 }

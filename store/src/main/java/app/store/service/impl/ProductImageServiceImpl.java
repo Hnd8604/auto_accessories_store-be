@@ -33,6 +33,24 @@ public class ProductImageServiceImpl implements ProductImageService {
     ProductImageMapper productImageMapper;
     ProductRepository productRepository;
     CloudinaryServiceImpl cloudinaryServiceImpl;
+    @Override
+    @PreAuthorize("hasAuthority('PRODUCT_IMAGE_CREATE')")
+    public ProductImageResponse createProductImage(MultipartFile file, ProductImageRequest request) {
+
+        // Tạo ProductImage entity
+        ProductImage productImage = productImageMapper.toProductImage(request);
+        Product product = productRepository.findById(request.getProductId())
+                .orElseThrow(() -> new AppException(ErrorCode.PRODUCT_IMAGE_NOT_EXISTED));
+        // Upload ảnh lên Cloudinary
+        String imageUrl = cloudinaryServiceImpl.uploadImage(file);
+
+        productImage.setProduct(product);
+        productImage.setImageUrl(imageUrl);
+
+        return productImageMapper.toProductImageResponse(
+                productImageRepository.save(productImage));
+    }
+
     private final ProductMapper productMapper;
 
     @Override
@@ -54,24 +72,6 @@ public class ProductImageServiceImpl implements ProductImageService {
                 .map(productImageMapper::toProductImageResponse).toList();
     }
 
-
-    @Override
-    @PreAuthorize("hasAuthority('PRODUCT_IMAGE_CREATE')")
-    public ProductImageResponse createProductImage(MultipartFile file, ProductImageRequest request) {
-
-        // Tạo ProductImage entity
-        ProductImage productImage = productImageMapper.toProductImage(request);
-        Product product = productRepository.findById(request.getProductId())
-                .orElseThrow(() -> new AppException(ErrorCode.PRODUCT_IMAGE_NOT_EXISTED));
-        // Upload ảnh lên Cloudinary
-        String imageUrl = cloudinaryServiceImpl.uploadImage(file);
-
-        productImage.setProduct(product);
-        productImage.setImageUrl(imageUrl);
-
-        return productImageMapper.toProductImageResponse(
-                productImageRepository.save(productImage));
-    }
 
     @Override
     @PreAuthorize("hasAuthority('PRODUCT_IMAGE_UPDATE')")

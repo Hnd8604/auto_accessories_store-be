@@ -41,6 +41,13 @@ public final class ResponseMessage {
     public static final String UPDATE_BRAND_SUCCESS = "Brand updated successfully";
     public static final String DELETE_BRAND_SUCCESS = "Brand deleted successfully";
 
+    // Banner Messages
+    public static final String CREATE_BANNER_SUCCESS = "Banner created successfully";
+    public static final String GET_ALL_BANNERS_SUCCESS = "Get all banners successful";
+    public static final String GET_BANNER_SUCCESS = "Get banner successful";
+    public static final String UPDATE_BANNER_SUCCESS = "Banner updated successfully";
+    public static final String DELETE_BANNER_SUCCESS = "Banner deleted successfully";
+
     // Product Messages
     public static final String CREATE_PRODUCT_SUCCESS = "Product created successfully";
     public static final String GET_ALL_PRODUCTS_SUCCESS = "Get all products successful";

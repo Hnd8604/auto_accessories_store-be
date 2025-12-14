@@ -42,6 +42,11 @@ public class SeedRolePerms implements CommandLineRunner {
         Permission brandUpdate = getOrCreatePermission("BRAND_UPDATE", "Update brand");
         Permission brandDelete = getOrCreatePermission("BRAND_DELETE", "Delete brand");
 
+        // === BANNER PERMISSIONS ===
+        Permission bannerCreate = getOrCreatePermission("BANNER_CREATE", "Create banner");
+        Permission bannerUpdate = getOrCreatePermission("BANNER_UPDATE", "Update banner");
+        Permission bannerDelete = getOrCreatePermission("BANNER_DELETE", "Delete banner");
+
         // === USER PERMISSIONS ===
         Permission userCreate = getOrCreatePermission("USER_CREATE", "Create user");
         Permission userUpdate = getOrCreatePermission("USER_UPDATE", "Update user");
@@ -110,6 +115,8 @@ public class SeedRolePerms implements CommandLineRunner {
                 categoryCreate, categoryUpdate, categoryDelete,
                 // Brand permissions
                 brandCreate, brandUpdate, brandDelete,
+                // Banner permissions
+                bannerCreate, bannerUpdate, bannerDelete,
                 // User permissions
                 userCreate, userUpdate, userDelete, userGetById, userGetAll,
                 // Role permissions

@@ -29,6 +29,19 @@ public class BrandServiceImpl implements BrandService {
     BrandMapper brandMapper;
     SlugUtil slugUtil;
     @Override
+    @PreAuthorize("hasAuthority('BRAND_CREATE')")
+    public BrandResponse createBrand(BrandRequest brandRequest) {
+
+        Brand brand = brandMapper.toBrand(brandRequest);
+        // Tạo slug từ tên danh mục
+        String baseSlug = slugUtil.toSlug(brandRequest.getName());
+        String uniqueSlug = slugUtil.createUniqueSlug(baseSlug, brandRepository::existsBySlug);
+
+        brand.setSlug(uniqueSlug);
+        return brandMapper.toBrandResponse(brandRepository.save(brand));
+    }
+
+    @Override
     public List<BrandResponse> getAllBrands() {
         return brandRepository.findAll()
                 .stream()
@@ -50,19 +63,6 @@ public class BrandServiceImpl implements BrandService {
                 .orElseThrow(() -> new AppException(ErrorCode.BRAND_NOT_EXISTED));
         return brandMapper.toBrandResponse(brand);
 
-    }
-
-    @Override
-    @PreAuthorize("hasAuthority('BRAND_CREATE')")
-    public BrandResponse createBrand(BrandRequest brandRequest) {
-
-        Brand brand = brandMapper.toBrand(brandRequest);
-        // Tạo slug từ tên danh mục
-        String baseSlug = slugUtil.toSlug(brandRequest.getName());
-        String uniqueSlug = slugUtil.createUniqueSlug(baseSlug, brandRepository::existsBySlug);
-
-        brand.setSlug(uniqueSlug);
-        return brandMapper.toBrandResponse(brandRepository.save(brand));
     }
 
     @Override
