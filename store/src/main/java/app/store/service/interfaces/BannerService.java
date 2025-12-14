@@ -10,6 +10,6 @@ public interface BannerService {
     public List<BannerResponse> getAllBanners();
     public BannerResponse getBannerById(Long bannerId);
     public void deleteBanner(Long bannerId);
-    public BannerResponse updateBanner(MultipartFile file, BannerRequest request, Long bannerId);
+    public BannerResponse updateBanner(BannerRequest request, Long bannerId);
     public BannerResponse createBanner(MultipartFile file, BannerRequest request);
 }

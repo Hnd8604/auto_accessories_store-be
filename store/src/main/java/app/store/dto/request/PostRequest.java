@@ -20,8 +20,6 @@ public class PostRequest {
     @Size(max = 1000, message = "Mô tả ngắn không được vượt quá 1000 ký tự")
     String shortDescription;
     
-    String thumbnailUrl;
-    
     @NotBlank(message = "Nội dung không được để trống")
     String content;
     

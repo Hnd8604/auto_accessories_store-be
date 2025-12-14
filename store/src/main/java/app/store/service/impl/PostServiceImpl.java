@@ -24,6 +24,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -41,11 +42,12 @@ public class PostServiceImpl implements PostService {
     PostCategoryRepository postCategoryRepository;
     UserRepository userRepository;
     SlugUtil slugUtil;
-    private final PostMapper postMapper;
+    PostMapper postMapper;
+    CloudinaryServiceImpl cloudinaryServiceImpl;
 
     @Override
     @PreAuthorize("hasAuthority('POST_CREATE')")
-    public PostResponse createPost(PostRequest request) {
+    public PostResponse createPost(MultipartFile file, PostRequest request) {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String authorName = authentication.getName(); // Lấy ID từ JWT token
@@ -61,6 +63,10 @@ public class PostServiceImpl implements PostService {
         }
 
         Post post = postMapper.toPost(request);
+
+        String thumbnailUrl = cloudinaryServiceImpl.uploadImage(file, "store/posts");
+        post.setThumbnailUrl(thumbnailUrl);
+
         // Tạo slug từ tiêu đề
         String baseSlug = slugUtil.toSlug(request.getTitle());
         String uniqueSlug = slugUtil.createUniqueSlug(baseSlug, postRepository::existsBySlug);
@@ -74,7 +80,7 @@ public class PostServiceImpl implements PostService {
 
     @Override
     @PreAuthorize("hasAuthority('POST_UPDATE')")
-    public PostResponse updatePost(Long id, PostRequest request) {
+    public PostResponse updatePost(MultipartFile file ,Long id, PostRequest request) {
         Post post = postRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Không tìm thấy bài viết với ID: " + id));
 
@@ -85,6 +91,7 @@ public class PostServiceImpl implements PostService {
                     .orElseThrow(() -> new RuntimeException("Không tìm thấy danh mục với ID: " + request.getCategoryId()));
         }
 
+
         // Cập nhật slug nếu tiêu đề thay đổi
         if (!post.getTitle().equals(request.getTitle())) {
             String baseSlug = slugUtil.toSlug(request.getTitle());
@@ -92,10 +99,14 @@ public class PostServiceImpl implements PostService {
                     !slug.equals(post.getSlug()) && postRepository.existsBySlug(slug));
             post.setSlug(uniqueSlug);
         }
+        // Cập nhật thumbnail nếu có file mới
+        if (file != null && !file.isEmpty()) {
+            String thumbnailUrl = cloudinaryServiceImpl.uploadImage(file, "posts");
+            post.setThumbnailUrl(thumbnailUrl);
+        }
 
         post.setTitle(request.getTitle());
         post.setShortDescription(request.getShortDescription());
-        post.setThumbnailUrl(request.getThumbnailUrl());
         post.setContent(request.getContent());
         post.setPublished(request.getPublished());
         post.setCategory(category);

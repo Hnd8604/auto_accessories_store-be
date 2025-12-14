@@ -72,10 +72,9 @@ public class BannerController {
     )
     ApiResponse<BannerResponse> updateBanner(
             @PathVariable Long bannerId,
-            @RequestPart(value = "file", required = false) MultipartFile file,
             @RequestPart("banner") BannerRequest bannerRequest) {
         return ApiResponse.<BannerResponse>builder()
-                .result(bannerService.updateBanner(file, bannerRequest, bannerId))
+                .result(bannerService.updateBanner(bannerRequest, bannerId))
                 .message(ResponseMessage.UPDATE_BANNER_SUCCESS)
                 .build();
     }

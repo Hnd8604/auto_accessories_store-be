@@ -17,6 +17,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -33,33 +34,34 @@ public class PostController {
 
     @PostMapping
     @Operation(
-        summary = "Create a new post",
-        description = "Creates a new blog post. Only accessible by admin users. Automatically generates SEO-friendly slug from title and associates with authenticated user as author."
+            summary = "Create a new post",
+            description = "Creates a new blog post. Only accessible by admin users."
     )
     public ApiResponse<PostResponse> createPost(
-            @Valid @RequestBody PostRequest request) {
-        PostResponse response = postService.createPost(request);
+            @RequestPart("file") MultipartFile file,
+            @Valid @RequestPart("post") PostRequest request) {
+        PostResponse response = postService.createPost(file, request);
         return ApiResponse.<PostResponse>builder()
                 .message(ResponseMessage.CREATE_POST_SUCCESS)
                 .result(response)
                 .build();
     }
-    
+
     @PutMapping("/{postId}")
     @Operation(
-        summary = "Update post",
-        description = "Updates an existing blog post by ID. Only accessible by admin users. Slug will be regenerated if title is changed."
+            summary = "Update post",
+            description = "Updates an existing blog post by ID."
     )
     public ApiResponse<PostResponse> updatePost(
+            @RequestPart(value = "file", required = false) MultipartFile file,
             @PathVariable Long postId,
-            @Valid @RequestBody PostRequest request) {
-        PostResponse response = postService.updatePost(postId, request);
+            @Valid @RequestPart("post") PostRequest request) {
+        PostResponse response = postService.updatePost(file, postId, request);
         return ApiResponse.<PostResponse>builder()
                 .message(ResponseMessage.UPDATE_POST_SUCCESS)
                 .result(response)
                 .build();
     }
-    
     @DeleteMapping("/{postId}")
     @Operation(
         summary = "Delete post",

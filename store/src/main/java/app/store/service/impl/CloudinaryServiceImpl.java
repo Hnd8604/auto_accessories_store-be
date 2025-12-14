@@ -23,10 +23,10 @@ public class CloudinaryServiceImpl implements CloudinaryService {
 
     @Override
     @PreAuthorize("hasAuthority('IMAGE_UPLOAD')")
-    public String uploadImage(MultipartFile file) {
+    public String uploadImage(MultipartFile file, String pathFolder) {
         try {
             Map uploadResult = cloudinary.uploader().upload(file.getBytes(),
-                    ObjectUtils.asMap("folder", "products"));
+                    ObjectUtils.asMap("folder", pathFolder));
             return uploadResult.get("secure_url").toString();
         } catch (IOException e) {
             log.error("Failed to upload image to Cloudinary", e);

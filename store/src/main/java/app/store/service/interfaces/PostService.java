@@ -4,14 +4,15 @@ import app.store.dto.request.PostRequest;
 import app.store.dto.response.PostResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
 public interface PostService {
     
-    PostResponse createPost(PostRequest request);
+    PostResponse createPost(MultipartFile file, PostRequest request);
     
-    PostResponse updatePost(Long id, PostRequest request);
+    PostResponse updatePost(MultipartFile file, Long id, PostRequest request);
     
     void deletePost(Long id);
     

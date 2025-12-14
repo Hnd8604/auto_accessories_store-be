@@ -27,18 +27,16 @@ public class BannerServiceImpl implements BannerService {
     @PreAuthorize("hasAuthority('BANNER_CREATE')")
     public BannerResponse createBanner(MultipartFile file, BannerRequest request) {
         Banner banner = bannerMapper.toBanner(request);
-        String imageUrl = cloudinaryServiceImpl.uploadImage(file);
+        String imageUrl = cloudinaryServiceImpl.uploadImage(file, "store/banners");
         banner.setImageUrl(imageUrl);
         return bannerMapper.toBannerResponse(
                 bannerRepository.save(banner));
     }
     @Override
     @PreAuthorize("hasAuthority('BANNER_UPDATE')")
-    public BannerResponse updateBanner(MultipartFile file, BannerRequest request, Long bannerId) {
+    public BannerResponse updateBanner(BannerRequest request, Long bannerId) {
         Banner banner = bannerRepository.findById(bannerId).orElseThrow(()
                 -> new RuntimeException("Banner not found"));
-        String imageUrl = cloudinaryServiceImpl.uploadImage(file);
-        banner.setImageUrl(imageUrl);
         return bannerMapper.toBannerResponse(
                 bannerRepository.save(banner));
     }

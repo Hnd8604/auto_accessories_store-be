@@ -39,7 +39,7 @@ public class ProductImageController {
     public ApiResponse<Page<ProductImageResponse>> getAllProductImages(
                                                                         @RequestParam(value = "page", defaultValue = "0") int page,
                                                                        @RequestParam(value = "size", defaultValue = "2") int size,
-                                                                       @RequestParam(value = "sort", defaultValue = "product.id,DESC") String sort
+                                                                        @RequestParam(value = "sort", defaultValue = "product.id,DESC") String sort
     ) {
         Pageable pageable = PageRequest.of(page, size, buildSort(sort));
                 return ApiResponse.<Page<ProductImageResponse>>builder()

@@ -42,7 +42,7 @@ public class ProductImageServiceImpl implements ProductImageService {
         Product product = productRepository.findById(request.getProductId())
                 .orElseThrow(() -> new AppException(ErrorCode.PRODUCT_IMAGE_NOT_EXISTED));
         // Upload ảnh lên Cloudinary
-        String imageUrl = cloudinaryServiceImpl.uploadImage(file);
+        String imageUrl = cloudinaryServiceImpl.uploadImage(file, "store/products");
 
         productImage.setProduct(product);
         productImage.setImageUrl(imageUrl);
