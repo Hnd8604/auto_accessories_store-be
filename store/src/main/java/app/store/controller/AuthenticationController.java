@@ -1,19 +1,28 @@
 package app.store.controller;
 
 import app.store.constant.ResponseMessage;
+import app.store.dto.request.ConfirmResetPasswordRequest;
+import app.store.dto.request.InitResetPasswordRequest;
+import app.store.dto.request.ResendOtpRequest;
+import app.store.dto.request.VerifyOtpRequest;
 import app.store.dto.request.auth.AuthenticationRequest;
 import app.store.dto.request.auth.IntrospectRequest;
 import app.store.dto.request.auth.LogoutRequest;
 import app.store.dto.request.auth.RefreshRequest;
+import app.store.dto.response.InitResetPasswordResponse;
+import app.store.dto.response.ResendOtpResponse;
+import app.store.dto.response.VerifyOtpResponse;
 import app.store.dto.response.auth.ApiResponse;
 import app.store.dto.response.auth.AuthenticationResponse;
 import app.store.dto.response.auth.IntrospectResponse;
 import app.store.dto.response.auth.RefreshResponse;
 import app.store.service.impl.AuthenticationServiceImpl;
+import app.store.service.impl.ResetPasswordService;
 import com.nimbusds.jose.JOSEException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -28,11 +37,12 @@ import java.text.ParseException;
 @RequestMapping("/auth")
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-@Tag(name = "Authentication", description = "APIs for user authentication including login, token refresh, and logout")
+@Tag(name = "Authentication", description = "APIs for user authentication including login, token refresh, logout and password reset")
 public class AuthenticationController {
     AuthenticationServiceImpl authenticationServiceImpl;
+    ResetPasswordService resetPasswordService;
     
-    @PostMapping("/token")
+    @PostMapping("/login")
     @Operation(
         summary = "Authenticate user",
         description = "Authenticates user with username and password. Returns JWT access token and refresh token."
@@ -91,5 +101,58 @@ public class AuthenticationController {
                 .message(ResponseMessage.LOGOUT_SUCCESS)
                 .build();
 
+    }
+    
+    // ==================== 3-Step Password Reset Flow ====================
+    
+    @PostMapping("/password/reset/init")
+    @Operation(
+            summary = "Step 1: Initiate password reset",
+            description = "Initiates the password reset flow. Verifies email exists, generates OTP, and sends it to the user's email. Returns a unique sessionId for the entire flow."
+    )
+    ApiResponse<InitResetPasswordResponse> initResetPassword(@Valid @RequestBody InitResetPasswordRequest request) {
+        var result = resetPasswordService.initResetPassword(request);
+        return ApiResponse.<InitResetPasswordResponse>builder()
+                .result(result)
+                .message(ResponseMessage.INIT_RESET_PASSWORD_SUCCESS)
+                .build();
+    }
+    
+    @PostMapping("/password/reset/verify-otp")
+    @Operation(
+            summary = "Step 2: Verify OTP",
+            description = "Verifies the OTP sent to user's email. Requires the sessionId from step 1. Max 5 attempts allowed. OTP expires in 3 minutes."
+    )
+    ApiResponse<VerifyOtpResponse> verifyOtp(@Valid @RequestBody VerifyOtpRequest request) {
+        var result = resetPasswordService.verifyOtp(request);
+        return ApiResponse.<VerifyOtpResponse>builder()
+                .result(result)
+                .message(ResponseMessage.VERIFY_OTP_SUCCESS)
+                .build();
+    }
+    
+    @PostMapping("/password/reset/confirm")
+    @Operation(
+            summary = "Step 3: Confirm password reset",
+            description = "Confirms the password reset with a new password. Requires sessionId and OTP must be verified in step 2."
+    )
+    ApiResponse<Void> confirmResetPassword(@Valid @RequestBody ConfirmResetPasswordRequest request) {
+        resetPasswordService.confirmResetPassword(request);
+        return ApiResponse.<Void>builder()
+                .message(ResponseMessage.CONFIRM_RESET_PASSWORD_SUCCESS)
+                .build();
+    }
+    
+    @PostMapping("/password/reset/resend-otp")
+    @Operation(
+            summary = "Resend OTP",
+            description = "Resends OTP to user's email. Rate limited to 1 request per minute. Requires valid sessionId from step 1."
+    )
+    ApiResponse<ResendOtpResponse> resendOtp(@Valid @RequestBody ResendOtpRequest request) {
+        var result = resetPasswordService.resendOtp(request);
+        return ApiResponse.<ResendOtpResponse>builder()
+                .result(result)
+                .message(ResponseMessage.RESEND_OTP_SUCCESS)
+                .build();
     }
 }

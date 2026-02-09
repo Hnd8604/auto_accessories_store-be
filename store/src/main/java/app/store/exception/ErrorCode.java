@@ -43,7 +43,16 @@ public enum ErrorCode {
     ROLE_NOT_EXISTED(1005, "Role not existed", HttpStatus.NOT_FOUND),
 
     // permission
-    PERMISSION_NOT_EXISTED(1005, "Permission not existed", HttpStatus.NOT_FOUND)
+    PERMISSION_NOT_EXISTED(1005, "Permission not existed", HttpStatus.NOT_FOUND),
+    
+    // Password Reset
+    EMAIL_NOT_EXISTED(2001, "Email không tồn tại trong hệ thống", HttpStatus.NOT_FOUND),
+    RESET_SESSION_NOT_FOUND(2002, "Phiên đặt lại mật khẩu không tồn tại hoặc đã hết hạn", HttpStatus.BAD_REQUEST),
+    RESET_INVALID_STEP(2003, "Bước xác thực không hợp lệ", HttpStatus.BAD_REQUEST),
+    OTP_EXPIRED(2004, "Mã OTP đã hết hạn", HttpStatus.BAD_REQUEST),
+    OTP_INVALID(2005, "Mã OTP không đúng", HttpStatus.BAD_REQUEST),
+    OTP_MAX_ATTEMPTS_EXCEEDED(2006, "Đã vượt quá số lần thử OTP cho phép", HttpStatus.TOO_MANY_REQUESTS),
+    OTP_RESEND_TOO_SOON(2007, "Vui lòng đợi trước khi gửi lại OTP", HttpStatus.TOO_MANY_REQUESTS)
     ;
 
     private ErrorCode(int code, String message, HttpStatusCode statusCode) {

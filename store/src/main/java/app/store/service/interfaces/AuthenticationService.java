@@ -20,8 +20,8 @@ public interface AuthenticationService {
     AuthenticationResponse authenticate(AuthenticationRequest request, HttpSession session);
 
     void logout(LogoutRequest request) throws ParseException, JOSEException;
-
-    void invalidateToken(String token, String type)throws ParseException, JOSEException;
+//
+//    void invalidateToken(String token, String type)throws ParseException, JOSEException;
 
     RefreshResponse refreshToken(RefreshRequest request) throws ParseException, JOSEException;
 

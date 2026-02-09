@@ -13,6 +13,11 @@ public final class ResponseMessage {
     public static final String INTROSPECT_SUCCESS = "Introspect successful";
     public static final String LOGOUT_SUCCESS = "Logout successful";
 
+    // Password Reset Flow Messages
+    public static final String INIT_RESET_PASSWORD_SUCCESS = "Mã OTP đã được gửi đến email của bạn";
+    public static final String VERIFY_OTP_SUCCESS = "Xác thực OTP thành công";
+    public static final String CONFIRM_RESET_PASSWORD_SUCCESS = "Đặt lại mật khẩu thành công";
+    public static final String RESEND_OTP_SUCCESS = "Mã OTP mới đã được gửi";
     // User Messages
     public static final String CREATE_USER_SUCCESS = "User created successfully";
     public static final String GET_ALL_USERS_SUCCESS = "Get all users successful";

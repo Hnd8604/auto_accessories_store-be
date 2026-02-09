@@ -23,8 +23,9 @@ public class SecurityConfig {
     private static final String[] PUBLIC_ENDPOINTS = {
             "/users",
             "/session-carts/**",
-            "/auth/token", "/auth/introspect", "/auth/logout", "/auth/refresh",
+            "/auth/login", "/auth/introspect", "/auth/logout", "/auth/refresh", "/auth/password/reset/**",
             "/swagger-ui/**", "/swagger-ui.html", "/v3/api-docs/**"
+
     };
 
     @Autowired
@@ -41,7 +42,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(req -> req
                 .requestMatchers(PUBLIC_ENDPOINTS).permitAll()
                 .requestMatchers(HttpMethod.GET, "/products/**", "/categories/**", "/brands/**", "/posts/**", "/post-categories/**", "/product-images/**", "/banner/**").permitAll()
-                        .requestMatchers(HttpMethod.POST,"/products/search**").permitAll()
+                        .requestMatchers(HttpMethod.POST,"/products/search**", "/auth/forgot-password", "/auth/reset-password").permitAll()
                         .anyRequest().authenticated())
 
 

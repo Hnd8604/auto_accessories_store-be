@@ -49,7 +49,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     InvalidatedRepository invalidatedRepository;
     UserMapper userMapper;
     CartSyncService cartSyncService;
-
+    PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
     @NonFinal // Don't inject this field to constructor
     @Value("${jwt.signerKey}")
     protected String SIGNER_KEY;
@@ -83,17 +83,15 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         var user = userRepository.findByUsername(request.getUsername())
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
 
-        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
+//        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
         boolean authenticated = passwordEncoder.matches(request.getPassword(), user.getPassword());
 
         if (!authenticated){
             throw new AppException(ErrorCode.UNAUTHENTICATED);
         }
 
-
         var accessToken = generateAccessToken(user);
         var refreshToken = generateRefreshToken(user);
-
 
         // Sync cart from session to user cart
         cartSyncService.syncSessionCart(user, session);
@@ -112,8 +110,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         invalidateToken(request.getRefreshToken(), "refreshToken");
     }
 
-    @Override
-    public void invalidateToken(String token, String type)throws ParseException, JOSEException{
+
+    private void invalidateToken(String token, String type)throws ParseException, JOSEException{
         try {
             SignedJWT signToken = verifyToken(token);
             String jti = signToken.getJWTClaimsSet().getJWTID();
@@ -224,30 +222,14 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         }
     }
 
-//
-//    private String buildScope(User user) {
-//        StringJoiner stringJoiner = new StringJoiner(" ");
-//        if (user.getRoles() != null) {
-//            HashSet<Role> roles = user.getRoles();
-//            stringJoiner.add("ROLE_" + roles.getName());
-//            if(!CollectionUtils.isEmpty(roles.getPermissions()))
-//                roles.getPermissions()
-//                        .forEach(permission -> stringJoiner.add(permission.getName()));
-//        }
-//        return stringJoiner.toString();
-//    }
-
     private String buildScope(User user) {
         StringJoiner stringJoiner = new StringJoiner(" ");
         if (user.getRoles() != null) {
             user.getRoles().forEach(role -> {
                 stringJoiner.add("ROLE_" + role.getName());
-//                if (!CollectionUtils.isEmpty(role.getPermissions())) {
-//                    role.getPermissions()
-//                            .forEach(permission -> stringJoiner.add(permission.getName()));
-//                }
             });
         }
         return stringJoiner.toString();
     }
 }
+
