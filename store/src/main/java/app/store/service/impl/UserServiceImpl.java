@@ -47,6 +47,9 @@ public class UserServiceImpl implements UserService {
         if( userRepository.existsByUsername(user.getUsername())) {
             throw new AppException(ErrorCode.USER_EXISTED);
         }
+        if (userRepository.existsByEmail(user.getEmail())) {
+            throw new AppException(ErrorCode.EMAIL_EXISTED);
+        }
         user.setPassword(passwordEncoder.encode(request.getPassword()));
         Set<Role> roles = new HashSet<>();
         var roleDefault = roleRepository.findById("USER")

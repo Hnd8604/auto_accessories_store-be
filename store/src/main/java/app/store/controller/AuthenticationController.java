@@ -9,6 +9,7 @@ import app.store.dto.request.auth.AuthenticationRequest;
 import app.store.dto.request.auth.IntrospectRequest;
 import app.store.dto.request.auth.LogoutRequest;
 import app.store.dto.request.auth.RefreshRequest;
+import app.store.dto.request.user.UserCreationRequest;
 import app.store.dto.response.InitResetPasswordResponse;
 import app.store.dto.response.ResendOtpResponse;
 import app.store.dto.response.VerifyOtpResponse;
@@ -16,6 +17,7 @@ import app.store.dto.response.auth.ApiResponse;
 import app.store.dto.response.auth.AuthenticationResponse;
 import app.store.dto.response.auth.IntrospectResponse;
 import app.store.dto.response.auth.RefreshResponse;
+import app.store.dto.response.user.UserResponse;
 import app.store.service.impl.AuthenticationServiceImpl;
 import app.store.service.impl.ResetPasswordService;
 import com.nimbusds.jose.JOSEException;
@@ -56,7 +58,19 @@ public class AuthenticationController {
                 .build();
 
     }
+    @PostMapping("/register")
+    @Operation(
+        summary = "Register new user",
+        description = "Registers a new user with the provided details. Returns the created user information."
+    )
+    ApiResponse<UserResponse> register(@Valid @RequestBody UserCreationRequest request){
+        var result = authenticationServiceImpl.register(request);
+        return ApiResponse.<UserResponse>builder()
+                .result(result)
+                .message(ResponseMessage.REGISTER_SUCCESS)
+                .build();
 
+    }
     @PostMapping("/refresh")
     @Operation(
         summary = "Refresh token",
@@ -110,7 +124,7 @@ public class AuthenticationController {
             summary = "Step 1: Initiate password reset",
             description = "Initiates the password reset flow. Verifies email exists, generates OTP, and sends it to the user's email. Returns a unique sessionId for the entire flow."
     )
-    ApiResponse<InitResetPasswordResponse> initResetPassword(@Valid @RequestBody InitResetPasswordRequest request) {
+    ApiResponse<InitResetPasswordResponse> initResetPassword(@RequestBody InitResetPasswordRequest request) {
         var result = resetPasswordService.initResetPassword(request);
         return ApiResponse.<InitResetPasswordResponse>builder()
                 .result(result)

@@ -1,6 +1,7 @@
 package app.store.entity;
 
 import app.store.enums.OrderStatus;
+import app.store.enums.PaymentMethod;
 import app.store.enums.PaymentStatus;
 import jakarta.persistence.*;
 import lombok.*;
@@ -37,9 +38,16 @@ public class Order extends BaseEntityUUID {
 
     String note;
 
+    @Column(unique = true, nullable = false)
+    String orderCode;  // Mã đơn hàng duy nhất, dùng trong nội dung chuyển khoản (VD: DH20240115ABC123)
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     OrderStatus status;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    PaymentMethod paymentMethod;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)

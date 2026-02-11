@@ -1,7 +1,7 @@
 package app.store.dto.request;
 
 
-import app.store.entity.OrderDetail;
+import app.store.enums.PaymentMethod;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -20,5 +20,6 @@ public class OrderCreationRequest {
     String phoneRecipient;
     String addressRecipient;
     String note;
+    PaymentMethod paymentMethod;  // COD hoặc BANK_TRANSFER
     List<OrderDetailRequest> orderDetails;
 }

@@ -37,6 +37,7 @@ public class OrderServiceImpl implements OrderService {
     CartRepository cartRepository;
     ProductRepository productRepository;
     CartItemRepository cartItemRepository;
+    PaymentService paymentService;
 
     @Override
     @PreAuthorize("hasAuthority('ORDER_GET_ALL')")
@@ -69,6 +70,16 @@ public class OrderServiceImpl implements OrderService {
         Order order = orderMapper.createOrder(orderRequest);
         User user = userRepository.findById(orderRequest.getUserId())
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
+
+        // Generate unique orderCode
+        order.setOrderCode(paymentService.generateOrderCode());
+
+        // Set paymentMethod (default COD nếu không chỉ định)
+        if (orderRequest.getPaymentMethod() != null) {
+            order.setPaymentMethod(orderRequest.getPaymentMethod());
+        } else {
+            order.setPaymentMethod(app.store.enums.PaymentMethod.COD);
+        }
 
         // lấy cartId theo UserId, lấy cartItem theo cartId
         Cart cart = cartRepository.findByUserId(user.getId())

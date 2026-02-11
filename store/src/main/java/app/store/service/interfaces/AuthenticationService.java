@@ -4,9 +4,11 @@ import app.store.dto.request.auth.AuthenticationRequest;
 import app.store.dto.request.auth.IntrospectRequest;
 import app.store.dto.request.auth.LogoutRequest;
 import app.store.dto.request.auth.RefreshRequest;
+import app.store.dto.request.user.UserCreationRequest;
 import app.store.dto.response.auth.AuthenticationResponse;
 import app.store.dto.response.auth.IntrospectResponse;
 import app.store.dto.response.auth.RefreshResponse;
+import app.store.dto.response.user.UserResponse;
 import app.store.entity.User;
 import com.nimbusds.jose.JOSEException;
 import com.nimbusds.jwt.SignedJWT;
@@ -25,7 +27,7 @@ public interface AuthenticationService {
 
     RefreshResponse refreshToken(RefreshRequest request) throws ParseException, JOSEException;
 
-
+    UserResponse register (UserCreationRequest request) throws ParseException, JOSEException;
 
 
 

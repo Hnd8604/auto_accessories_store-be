@@ -5,15 +5,20 @@ import app.store.dto.request.auth.AuthenticationRequest;
 import app.store.dto.request.auth.IntrospectRequest;
 import app.store.dto.request.auth.LogoutRequest;
 import app.store.dto.request.auth.RefreshRequest;
+import app.store.dto.request.user.UserCreationRequest;
 import app.store.dto.response.auth.AuthenticationResponse;
 import app.store.dto.response.auth.IntrospectResponse;
 import app.store.dto.response.auth.RefreshResponse;
+import app.store.dto.response.user.UserResponse;
+import app.store.entity.Cart;
 import app.store.entity.InvalidatedToken;
+import app.store.entity.Role;
 import app.store.entity.User;
 import app.store.exception.AppException;
 import app.store.exception.ErrorCode;
 import app.store.mapper.UserMapper;
 import app.store.repository.InvalidatedRepository;
+import app.store.repository.RoleRepository;
 import app.store.repository.UserRepository;
 import app.store.service.interfaces.AuthenticationService;
 import com.nimbusds.jose.*;
@@ -36,9 +41,7 @@ import org.springframework.stereotype.Service;
 import java.text.ParseException;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
-import java.util.Date;
-import java.util.StringJoiner;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -50,6 +53,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     UserMapper userMapper;
     CartSyncService cartSyncService;
     PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
+    RoleRepository roleRepository;
     @NonFinal // Don't inject this field to constructor
     @Value("${jwt.signerKey}")
     protected String SIGNER_KEY;
@@ -62,6 +66,31 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     @Value("${jwt.refresh-duration}")
     protected long REFRESH_DURATION;
 
+
+    @Override
+    public UserResponse register(UserCreationRequest request) {
+        User user = userMapper.toUser(request);
+
+        if( userRepository.existsByUsername(user.getUsername())) {
+            throw new AppException(ErrorCode.USER_EXISTED);
+        }
+        if (userRepository.existsByEmail(user.getEmail())) {
+            throw new AppException(ErrorCode.EMAIL_EXISTED);
+        }
+        user.setPassword(passwordEncoder.encode(request.getPassword()));
+        Set<Role> roles = new HashSet<>();
+        var roleDefault = roleRepository.findById("USER")
+                .orElseThrow(()-> new AppException(ErrorCode.ROLE_NOT_EXISTED));
+        roles.add(roleDefault) ;
+        user.setRoles(roles);
+
+        // create cart when creating user
+        Cart cart = new Cart();
+        user.setCart(cart);
+        cart.setUser(user);
+
+        return userMapper.toUserResponse(userRepository.save(user));
+    }
     @Override
     public IntrospectResponse introspect(IntrospectRequest request) throws JOSEException, ParseException {
         var token = request.getToken();

@@ -22,6 +22,7 @@ public interface OrderMapper {
     @Mapping(target="paymentStatus", constant = "UNPAID")
     @Mapping(target = "orderDetails", ignore = true)
     @Mapping(target = "totalPrice", ignore = true)
+    @Mapping(target = "orderCode", ignore = true)
     Order createOrder(OrderCreationRequest request);
 //
 //    @Mapping(target="user", ignore = true)

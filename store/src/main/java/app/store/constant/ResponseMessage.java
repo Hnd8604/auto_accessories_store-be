@@ -12,7 +12,7 @@ public final class ResponseMessage {
     public static final String REFRESH_SUCCESS = "Refresh successful";
     public static final String INTROSPECT_SUCCESS = "Introspect successful";
     public static final String LOGOUT_SUCCESS = "Logout successful";
-
+    public static final String REGISTER_SUCCESS = "Register successful";
     // Password Reset Flow Messages
     public static final String INIT_RESET_PASSWORD_SUCCESS = "Mã OTP đã được gửi đến email của bạn";
     public static final String VERIFY_OTP_SUCCESS = "Xác thực OTP thành công";
@@ -71,6 +71,11 @@ public final class ResponseMessage {
     public static final String UPDATE_ORDER_BY_USER_SUCCESS = "Order updated successfully by user";
     public static final String DELETE_ORDER_SUCCESS = "Order deleted successfully";
     public static final String CANCEL_ORDER_SUCCESS = "Order cancelled successfully";
+
+    // Payment Messages
+    public static final String CREATE_PAYMENT_SUCCESS = "Payment QR created successfully";
+    public static final String CHECK_PAYMENT_STATUS_SUCCESS = "Payment status retrieved successfully";
+    public static final String SEPAY_WEBHOOK_SUCCESS = "SePay webhook processed successfully";
 
     // Permission Messages
     public static final String CREATE_PERMISSION_SUCCESS = "Permission created successfully";
