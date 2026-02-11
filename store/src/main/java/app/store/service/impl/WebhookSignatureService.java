@@ -139,6 +139,7 @@ public class WebhookSignatureService {
     /**
      * So sánh 2 chuỗi trong thời gian hằng định (constant-time).
      * Ngăn timing attack – attacker không thể đoán từng ký tự dựa trên thời gian phản hồi.
+     
      */
     private boolean constantTimeEquals(String a, String b) {
         if (a == null || b == null) return false;
@@ -146,8 +147,8 @@ public class WebhookSignatureService {
 
         int result = 0;
         for (int i = 0; i < a.length(); i++) {
-            result |= a.charAt(i) ^ b.charAt(i);
+            result |= a.charAt(i) ^ b.charAt(i); // result = result | (a.charAt(i) ^ b.charAt(i)), ^ là phép toán XOR
         }
-        return result == 0;
+        return result == 0; // hai chuỗi bằng nhau trả về 0, khác trả về khác
     }
 }

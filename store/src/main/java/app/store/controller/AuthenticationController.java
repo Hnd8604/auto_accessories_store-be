@@ -1,6 +1,7 @@
 package app.store.controller;
 
 import app.store.constant.ResponseMessage;
+import app.store.dto.request.ChangePasswordRequest;
 import app.store.dto.request.ConfirmResetPasswordRequest;
 import app.store.dto.request.InitResetPasswordRequest;
 import app.store.dto.request.ResendOtpRequest;
@@ -28,10 +29,7 @@ import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.text.ParseException;
 
@@ -115,6 +113,20 @@ public class AuthenticationController {
                 .message(ResponseMessage.LOGOUT_SUCCESS)
                 .build();
 
+    }
+    
+    // ==================== Change Password ====================
+    
+    @PutMapping("/password/change")
+    @Operation(
+            summary = "Change password",
+            description = "Changes the password for the currently authenticated user. Requires current password verification."
+    )
+    ApiResponse<Void> changePassword(@Valid @RequestBody ChangePasswordRequest request) {
+        authenticationServiceImpl.changePassword(request);
+        return ApiResponse.<Void>builder()
+                .message(ResponseMessage.CHANGE_PASSWORD_SUCCESS)
+                .build();
     }
     
     // ==================== 3-Step Password Reset Flow ====================

@@ -18,6 +18,7 @@ public final class ResponseMessage {
     public static final String VERIFY_OTP_SUCCESS = "Xác thực OTP thành công";
     public static final String CONFIRM_RESET_PASSWORD_SUCCESS = "Đặt lại mật khẩu thành công";
     public static final String RESEND_OTP_SUCCESS = "Mã OTP mới đã được gửi";
+    public static final String CHANGE_PASSWORD_SUCCESS = "Đổi mật khẩu thành công";
     // User Messages
     public static final String CREATE_USER_SUCCESS = "User created successfully";
     public static final String GET_ALL_USERS_SUCCESS = "Get all users successful";

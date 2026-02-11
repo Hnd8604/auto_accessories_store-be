@@ -34,18 +34,23 @@ public class PaymentService {
     OrderRepository orderRepository;
     PaymentRepository paymentRepository;
 
+    @NonFinal     
     @Value("${sepay.bank-account-number}")
     String bankAccountNumber;
-
+    
+    @NonFinal
     @Value("${sepay.bank-name}")
     String bankName;
-
+    
+    @NonFinal
     @Value("${sepay.bank-account-name}")
     String bankAccountName;
-
+    
+    @NonFinal
     @Value("${sepay.bank-code}")
     String bankCode;
-
+    
+    @NonFinal
     @Value("${sepay.api-key}")
     String sepayApiKey;
 

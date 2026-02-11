@@ -57,7 +57,12 @@ public enum ErrorCode {
 
     // Payment / Webhook
     WEBHOOK_INVALID_SIGNATURE(3001, "Webhook signature verification failed", HttpStatus.UNAUTHORIZED),
-    WEBHOOK_TIMESTAMP_EXPIRED(3002, "Webhook timestamp expired (replay attack detected)", HttpStatus.UNAUTHORIZED)
+    WEBHOOK_TIMESTAMP_EXPIRED(3002, "Webhook timestamp expired (replay attack detected)", HttpStatus.UNAUTHORIZED),
+
+    // Change Password
+    WRONG_CURRENT_PASSWORD(4001, "Mật khẩu hiện tại không đúng", HttpStatus.BAD_REQUEST),
+    NEW_PASSWORD_SAME_AS_CURRENT(4002, "Mật khẩu mới không được trùng mật khẩu hiện tại", HttpStatus.BAD_REQUEST),
+    PASSWORD_CONFIRMATION_MISMATCH(4003, "Xác nhận mật khẩu không khớp", HttpStatus.BAD_REQUEST)
     ;
 
     private ErrorCode(int code, String message, HttpStatusCode statusCode) {
