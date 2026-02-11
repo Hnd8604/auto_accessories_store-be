@@ -53,7 +53,11 @@ public enum ErrorCode {
     OTP_EXPIRED(2004, "Mã OTP đã hết hạn", HttpStatus.BAD_REQUEST),
     OTP_INVALID(2005, "Mã OTP không đúng", HttpStatus.BAD_REQUEST),
     OTP_MAX_ATTEMPTS_EXCEEDED(2006, "Đã vượt quá số lần thử OTP cho phép", HttpStatus.TOO_MANY_REQUESTS),
-    OTP_RESEND_TOO_SOON(2007, "Vui lòng đợi trước khi gửi lại OTP", HttpStatus.TOO_MANY_REQUESTS)
+    OTP_RESEND_TOO_SOON(2007, "Vui lòng đợi trước khi gửi lại OTP", HttpStatus.TOO_MANY_REQUESTS),
+
+    // Payment / Webhook
+    WEBHOOK_INVALID_SIGNATURE(3001, "Webhook signature verification failed", HttpStatus.UNAUTHORIZED),
+    WEBHOOK_TIMESTAMP_EXPIRED(3002, "Webhook timestamp expired (replay attack detected)", HttpStatus.UNAUTHORIZED)
     ;
 
     private ErrorCode(int code, String message, HttpStatusCode statusCode) {
