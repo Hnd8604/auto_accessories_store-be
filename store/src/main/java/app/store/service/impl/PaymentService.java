@@ -13,6 +13,7 @@ import app.store.repository.PaymentRepository;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import lombok.experimental.NonFinal;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -243,5 +244,36 @@ public class PaymentService {
                 amount.toBigInteger().toString(),
                 URLEncoder.encode(content, StandardCharsets.UTF_8)
         );
+    }
+
+    // ==================== Webhook Verification ====================
+
+    /**
+     * Xác thực webhook request bằng API key.
+     * So sánh constant-time để chống timing attack.
+     */
+    public void verifyApiKey(String apiKey) {
+        if (apiKey == null || apiKey.isBlank()) {
+            log.error("❌ Missing API key in webhook request");
+            throw new AppException(ErrorCode.WEBHOOK_INVALID_SIGNATURE);
+        }
+
+        if (!constantTimeEquals(apiKey, sepayApiKey)) {
+            log.error("❌ Invalid API key in webhook request");
+            throw new AppException(ErrorCode.WEBHOOK_INVALID_SIGNATURE);
+        }
+
+        log.info("✅ Webhook API key verified successfully");
+    }
+
+    private boolean constantTimeEquals(String a, String b) {
+        if (a == null || b == null) return false;
+        if (a.length() != b.length()) return false;
+
+        int result = 0;
+        for (int i = 0; i < a.length(); i++) {
+            result |= a.charAt(i) ^ b.charAt(i);
+        }
+        return result == 0;
     }
 }

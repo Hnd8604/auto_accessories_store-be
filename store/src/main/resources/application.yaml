@@ -77,8 +77,6 @@ management:
 # Thay đổi các giá trị dưới đây theo thông tin tài khoản SePay và ngân hàng của bạn
 sepay:
   api-key: "YOUR_SEPAY_API_KEY"           # API key từ SePay dashboard (https://my.sepay.vn)
-  webhook-secret: ""                       # Webhook secret từ SePay (dùng HMAC-SHA256 verify)
-                                           # Nếu để trống → fallback dùng api-key làm secret
   bank-code: "MBBank"                      # Mã ngân hàng (MBBank, VCB, TCB, ACB, ...)
   bank-account-number: "0123456789"        # Số tài khoản ngân hàng
   bank-account-name: "NGUYEN VAN A"        # Tên chủ tài khoản
