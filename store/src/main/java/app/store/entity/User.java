@@ -21,11 +21,15 @@ public class User extends BaseEntityUUID {
     @Column(nullable = false, unique = true)
     String username;
 
-    @Column(nullable = false)
     String password;
     String email;
     String fullName;
     String phoneNumber;
+    String avatarUrl;
+
+    @Column(unique = true)
+    String googleId;
+
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     Cart cart;
 

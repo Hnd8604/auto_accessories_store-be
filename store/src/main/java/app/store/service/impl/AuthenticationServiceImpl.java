@@ -135,6 +135,21 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
 
     /**
+     * Generate JWT tokens cho user (dùng chung cho login thường và Google login).
+     */
+    public AuthenticationResponse generateAuthResponse(User user) {
+        var accessToken = generateAccessToken(user);
+        var refreshToken = generateRefreshToken(user);
+
+        return AuthenticationResponse.builder()
+                .user(userMapper.toUserResponse(user))
+                .accessToken(accessToken)
+                .refreshToken(refreshToken)
+                .authenticated(true)
+                .build();
+    }
+
+    /**
      * Đổi mật khẩu cho user đang đăng nhập.
      * Kiểm tra: mật khẩu cũ đúng, mật khẩu mới không trùng cũ, confirm khớp.
      */

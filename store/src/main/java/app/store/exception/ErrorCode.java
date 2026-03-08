@@ -61,7 +61,10 @@ public enum ErrorCode {
     // Change Password
     WRONG_CURRENT_PASSWORD(4001, "Mật khẩu hiện tại không đúng", HttpStatus.BAD_REQUEST),
     NEW_PASSWORD_SAME_AS_CURRENT(4002, "Mật khẩu mới không được trùng mật khẩu hiện tại", HttpStatus.BAD_REQUEST),
-    PASSWORD_CONFIRMATION_MISMATCH(4003, "Xác nhận mật khẩu không khớp", HttpStatus.BAD_REQUEST)
+    PASSWORD_CONFIRMATION_MISMATCH(4003, "Xác nhận mật khẩu không khớp", HttpStatus.BAD_REQUEST),
+
+    // Google OAuth2
+    GOOGLE_AUTH_FAILED(5001, "Đăng nhập bằng Google thất bại", HttpStatus.UNAUTHORIZED)
     ;
 
     private ErrorCode(int code, String message, HttpStatusCode statusCode) {

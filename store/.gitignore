@@ -31,3 +31,23 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### Security - chứa secrets (API keys, JWT key, DB password, Google OAuth, ...) ###
+src/main/resources/application.yaml
+src/main/resources/application.yml
+src/main/resources/application-*.yaml
+src/main/resources/application-*.yml
+!src/main/resources/application-example.yaml
+
+### Environment files ###
+.env
+.env.*
+!.env.example
+
+### OS files ###
+.DS_Store
+Thumbs.db
+
+### Logs ###
+*.log
+logs/

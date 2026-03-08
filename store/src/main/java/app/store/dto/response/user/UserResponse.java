@@ -20,5 +20,6 @@ public class UserResponse {
     String email;
     String fullName;
     String phoneNumber;
+    String avatarUrl;
     Set<RoleResponse> roles;
 }

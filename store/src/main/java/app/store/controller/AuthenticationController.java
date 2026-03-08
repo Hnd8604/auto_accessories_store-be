@@ -3,6 +3,7 @@ package app.store.controller;
 import app.store.constant.ResponseMessage;
 import app.store.dto.request.ChangePasswordRequest;
 import app.store.dto.request.ConfirmResetPasswordRequest;
+import app.store.dto.request.GoogleAuthRequest;
 import app.store.dto.request.InitResetPasswordRequest;
 import app.store.dto.request.ResendOtpRequest;
 import app.store.dto.request.VerifyOtpRequest;
@@ -20,6 +21,7 @@ import app.store.dto.response.auth.IntrospectResponse;
 import app.store.dto.response.auth.RefreshResponse;
 import app.store.dto.response.user.UserResponse;
 import app.store.service.impl.AuthenticationServiceImpl;
+import app.store.service.impl.GoogleAuthService;
 import app.store.service.impl.ResetPasswordService;
 import com.nimbusds.jose.JOSEException;
 import io.swagger.v3.oas.annotations.Operation;
@@ -40,6 +42,7 @@ import java.text.ParseException;
 @Tag(name = "Authentication", description = "APIs for user authentication including login, token refresh, logout and password reset")
 public class AuthenticationController {
     AuthenticationServiceImpl authenticationServiceImpl;
+    GoogleAuthService googleAuthService;
     ResetPasswordService resetPasswordService;
     
     @PostMapping("/login")
@@ -56,6 +59,20 @@ public class AuthenticationController {
                 .build();
 
     }
+    
+    @PostMapping("/google")
+    @Operation(
+        summary = "Login with Google",
+        description = "Authenticates user with Google OAuth2 authorization code. Creates new account if user doesn't exist."
+    )
+    ApiResponse<AuthenticationResponse> googleLogin(@Valid @RequestBody GoogleAuthRequest request) {
+        var result = googleAuthService.authenticateWithGoogle(request);
+        return ApiResponse.<AuthenticationResponse>builder()
+                .result(result)
+                .message(ResponseMessage.AUTHENTICATE_SUCCESS)
+                .build();
+    }
+
     @PostMapping("/register")
     @Operation(
         summary = "Register new user",

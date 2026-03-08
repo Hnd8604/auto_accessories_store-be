@@ -1,3 +1,6 @@
+## ⚠️ File mẫu - KHÔNG chứa giá trị thật
+## Copy file này thành application.yaml và điền giá trị thật vào
+
 server:
   port: 8080
   servlet:
@@ -8,8 +11,8 @@ spring:
     active: dev
   datasource:
     url: jdbc:mysql://localhost:3306/store
-    username: root
-    password: root
+    username: your_db_username
+    password: your_db_password
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     show-sql: true
@@ -24,9 +27,8 @@ spring:
   data:
     redis:
       host: localhost
-#      host: host.docker.internal # dùng localhost cũng được, nhưng đây là redis trong docker nên dùng host.docker.internal cho rõ ràng
       port: 6379
-      password: "StrongPass123!"
+      password: "your_redis_password"
       database: 0
       timeout: 5s
       lettuce:
@@ -39,8 +41,8 @@ spring:
   mail:
     host: smtp.gmail.com
     port: 587
-    username: tutruongno1@gmail.com
-    password: "mlwo tnqu fevq jkgk"
+    username: your_email@gmail.com
+    password: "your_app_password"       # Google App Password (16 ký tự)
     properties:
       mail:
         smtp:
@@ -53,19 +55,20 @@ spring:
           connectiontimeout: 5000
           timeout: 5000
           writetimeout: 5000
+
 logging:
   level:
     root: info
 
-
 jwt:
-  signerKey: "Ipw5iOxpnL0VXwmcTK7OQHjLR5g/gHjB9ispYoUp+RY+yjksxO2jYEuf+asL9LQ1"
-  access-duration: 3600      # seconds
-  refresh-duration: 2592000 # seconds
+  signerKey: "your_jwt_signer_key_base64"   # Tạo bằng: openssl rand -base64 48
+  access-duration: 3600                      # seconds (1 hour)
+  refresh-duration: 2592000                  # seconds (30 days)
+
 cloudinary:
-  cloud-name: dsgftzhzt
-  api-key: 363524259282383
-  api-secret: Fgg6RVnlQNtIe1cfAgg5sKORENw
+  cloud-name: your_cloud_name
+  api-key: your_cloudinary_api_key
+  api-secret: your_cloudinary_api_secret
 
 management:
   endpoints:
@@ -74,10 +77,16 @@ management:
         include: health,info
 
 # SePay Payment Gateway Configuration
-# Thay đổi các giá trị dưới đây theo thông tin tài khoản SePay và ngân hàng của bạn
 sepay:
-  api-key: "YOUR_SEPAY_API_KEY"           # API key từ SePay dashboard (https://my.sepay.vn)
-  bank-code: "MBBank"                      # Mã ngân hàng (MBBank, VCB, TCB, ACB, ...)
-  bank-account-number: "0123456789"        # Số tài khoản ngân hàng
-  bank-account-name: "NGUYEN VAN A"        # Tên chủ tài khoản
-  bank-name: "MB Bank"                     # Tên hiển thị ngân hàng
+  api-key: "YOUR_SEPAY_API_KEY"
+  bank-code: "MBBank"
+  bank-account-number: "0123456789"
+  bank-account-name: "NGUYEN VAN A"
+  bank-name: "MB Bank"
+
+# Google OAuth2 Configuration
+# Lấy từ Google Cloud Console → APIs & Services → Credentials → OAuth 2.0 Client IDs
+google:
+  client-id: "YOUR_GOOGLE_CLIENT_ID"
+  client-secret: "YOUR_GOOGLE_CLIENT_SECRET"
+  redirect-uri: "http://localhost:5173/auth/google/callback"
