@@ -87,7 +87,7 @@ public class GoogleAuthService {
      * Đổi authorization code lấy access token từ Google.
      */
     private String exchangeCodeForToken(String code) {
-        RestTemplate restTemplate = new RestTemplate();
+        RestTemplate restTemplate = new RestTemplate();// help backend call another api
 
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
         params.add("code", code);
@@ -106,7 +106,7 @@ public class GoogleAuthService {
                     GOOGLE_TOKEN_URL, requestEntity, String.class);
 
             ObjectMapper mapper = new ObjectMapper();
-            JsonNode jsonNode = mapper.readTree(response.getBody());
+            JsonNode jsonNode = mapper.readTree(response.getBody());// parse json to object
 
             String accessToken = jsonNode.get("access_token").asText();
             if (accessToken == null || accessToken.isBlank()) {
@@ -138,7 +138,7 @@ public class GoogleAuthService {
 
             ObjectMapper mapper = new ObjectMapper();
             JsonNode jsonNode = mapper.readTree(response.getBody());
-
+        
             GoogleUserInfo info = new GoogleUserInfo();
             info.id = jsonNode.get("id").asText();
             info.email = jsonNode.has("email") ? jsonNode.get("email").asText() : null;

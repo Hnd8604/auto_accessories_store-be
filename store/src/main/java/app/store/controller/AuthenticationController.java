@@ -129,7 +129,6 @@ public class AuthenticationController {
         return ApiResponse.<Void>builder()
                 .message(ResponseMessage.LOGOUT_SUCCESS)
                 .build();
-
     }
     
     // ==================== Change Password ====================
