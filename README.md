@@ -91,7 +91,7 @@ Before running this application, ensure you have the following installed:
 1. **Clone the repository**
 ```bash
 git clone <repository-url>
-cd store-be/store
+cd store-be
 ```
 
 2. **Create MySQL database**
@@ -222,7 +222,7 @@ http://localhost:8080/api/v1/v3/api-docs
 ### 📁 Project Structure
 
 ```
-store/
+store-be/
 ├── src/
 │   ├── main/
 │   │   ├── java/app/store/
@@ -376,7 +376,7 @@ Trước khi chạy ứng dụng, đảm bảo bạn đã cài đặt:
 1. **Clone repository**
 ```bash
 git clone <repository-url>
-cd store-be/store
+cd store-be
 ```
 
 2. **Tạo cơ sở dữ liệu MySQL**
@@ -507,7 +507,7 @@ http://localhost:8080/api/v1/v3/api-docs
 ### 📁 Cấu trúc dự án
 
 ```
-store/
+store-be/
 ├── src/
 │   ├── main/
 │   │   ├── java/app/store/
