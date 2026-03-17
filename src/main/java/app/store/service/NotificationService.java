@@ -34,7 +34,7 @@ public class NotificationService {
                                                    NotificationType type, String referenceId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
-
+    
         Notification notification = Notification.builder()
                 .user(user)
                 .title(title)

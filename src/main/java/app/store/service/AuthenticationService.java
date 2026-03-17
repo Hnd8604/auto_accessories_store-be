@@ -103,7 +103,7 @@ public class AuthenticationService {
                 .build();
     }
     public AuthenticationResponse authenticate(AuthenticationRequest request, HttpSession session) {
-        var user = userRepository.findByUsername(request.getUsername())
+        var user = userRepository.findByEmail(request.getEmail())
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
 
 //        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);

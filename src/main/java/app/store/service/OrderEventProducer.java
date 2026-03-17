@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Slf4j
 public class OrderEventProducer {
-    final KafkaTemplate<String, Object> kafkaTemplate;
+    final KafkaTemplate<String, Object> kafkaTemplate; // param 1: topic, param 2:key, param 3:content
 
     @Value("${app.kafka.topics.order-created}")
     String orderCreatedTopic;
@@ -23,8 +23,8 @@ public class OrderEventProducer {
     @Value("${app.kafka.topics.order-status-changed}")
     String orderStatusChangedTopic;
 
-    public void publishOrderCreated(OrderCreatedEvent event) {
-        kafkaTemplate.send(orderCreatedTopic, event.getOrderId(), event);
+    public void publishOrderCreated(OrderCreatedEvent event) { // key giúp đảm bảo message được gửi đến đúng partition
+        kafkaTemplate.send(orderCreatedTopic, event.getOrderId(), event); // param 1: topic, param 2:key, param 3:content
         log.info("Published order-created event. topic={}, orderId={}, orderCode={}",
                 orderCreatedTopic, event.getOrderId(), event.getOrderCode());
     }

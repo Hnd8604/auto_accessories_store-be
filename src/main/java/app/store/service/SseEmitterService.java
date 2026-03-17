@@ -18,7 +18,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public class SseEmitterService {
 
     // Mỗi user có thể có nhiều kết nối SSE (nhiều tab trình duyệt)
-    private final Map<String, CopyOnWriteArrayList<SseEmitter>> emitterMap = new ConcurrentHashMap<>();
+    private final Map<String, CopyOnWriteArrayList<SseEmitter>> emitterMap = new ConcurrentHashMap<>(); // key: userId, value: list of SseEmitter
 
     private static final long SSE_TIMEOUT = 30 * 60 * 1000L; // 30 phút
 
@@ -26,13 +26,13 @@ public class SseEmitterService {
      * Tạo SseEmitter mới cho user
      */
     public SseEmitter createEmitter(String userId) {
-        SseEmitter emitter = new SseEmitter(SSE_TIMEOUT);
+        SseEmitter emitter = new SseEmitter(SSE_TIMEOUT); // emitter: kênh gửi dữ liệu từ client->server
 
-        emitterMap.computeIfAbsent(userId, k -> new CopyOnWriteArrayList<>()).add(emitter);
+        emitterMap.computeIfAbsent(userId, k -> new CopyOnWriteArrayList<>()).add(emitter); // nếu chưa có key thì tạo mới, sau đó add emitter vào list
 
-        emitter.onCompletion(() -> removeEmitter(userId, emitter));
-        emitter.onTimeout(() -> removeEmitter(userId, emitter));
-        emitter.onError(e -> removeEmitter(userId, emitter));
+        emitter.onCompletion(() -> removeEmitter(userId, emitter)); // khi emitter bị đóng
+        emitter.onTimeout(() -> removeEmitter(userId, emitter)); // khi emitter timeout
+        emitter.onError(e -> removeEmitter(userId, emitter)); // khi emitter có lỗi
 
         log.info("SSE connection opened for userId={}", userId);
 
@@ -51,7 +51,7 @@ public class SseEmitterService {
     /**
      * Push notification đến tất cả kết nối SSE của user
      */
-    public void sendToUser(String userId, Object data) {
+    public void sendToUser(String userId, Object data) { // data là NotificationResponse
         CopyOnWriteArrayList<SseEmitter> emitters = emitterMap.get(userId);
         if (emitters == null || emitters.isEmpty()) {
             log.debug("No active SSE connections for userId={}", userId);

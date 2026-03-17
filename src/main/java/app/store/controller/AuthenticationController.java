@@ -48,7 +48,7 @@ public class AuthenticationController {
     @PostMapping("/login")
     @Operation(
         summary = "Authenticate user",
-        description = "Authenticates user with username and password. Returns JWT access token and refresh token."
+        description = "Authenticates user with email and password. Returns JWT access token and refresh token."
     )
     ApiResponse<AuthenticationResponse> authenticate(@RequestBody AuthenticationRequest request, HttpSession session) {
         var result = AuthenticationService.authenticate(request, session);

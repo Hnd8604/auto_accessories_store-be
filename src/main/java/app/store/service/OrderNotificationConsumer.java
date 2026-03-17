@@ -24,9 +24,9 @@ public class OrderNotificationConsumer {
     NotificationService notificationService;
 
     @KafkaListener(topics = "${app.kafka.topics.order-created}", groupId = "${spring.kafka.consumer.group-id}")
-    public void handleOrderCreated(String payload) {
+    public void handleOrderCreated(String payload) {// payload là json string
         try {
-            OrderCreatedEvent event = objectMapper.readValue(payload, OrderCreatedEvent.class);
+            OrderCreatedEvent event = objectMapper.readValue(payload, OrderCreatedEvent.class); // json -> object
 
             // 1. Gửi email thông báo
             mailService.sendOrderCreatedEmail(

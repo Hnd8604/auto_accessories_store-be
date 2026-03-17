@@ -39,7 +39,7 @@ public class NotificationController {
      * SSE endpoint: Frontend kết nối để nhận thông báo real-time
      * Ví dụ JS: const eventSource = new EventSource('/api/v1/notifications/stream', { headers: { Authorization: 'Bearer ...' } });
      */
-    @GetMapping(value = "/stream", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    @GetMapping(value = "/stream", produces = MediaType.TEXT_EVENT_STREAM_VALUE) // định nghĩa content type trả về fe 
     @Operation(
             summary = "Subscribe to real-time notifications",
             description = "Opens an SSE (Server-Sent Events) connection to receive real-time notifications. " +
