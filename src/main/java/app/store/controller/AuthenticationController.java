@@ -20,9 +20,9 @@ import app.store.dto.response.auth.AuthenticationResponse;
 import app.store.dto.response.auth.IntrospectResponse;
 import app.store.dto.response.auth.RefreshResponse;
 import app.store.dto.response.user.UserResponse;
-import app.store.service.impl.AuthenticationServiceImpl;
-import app.store.service.impl.GoogleAuthService;
-import app.store.service.impl.ResetPasswordService;
+import app.store.service.AuthenticationService;
+import app.store.service.GoogleAuthService;
+import app.store.service.ResetPasswordService;
 import com.nimbusds.jose.JOSEException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -41,7 +41,7 @@ import java.text.ParseException;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @Tag(name = "Authentication", description = "APIs for user authentication including login, token refresh, logout and password reset")
 public class AuthenticationController {
-    AuthenticationServiceImpl authenticationServiceImpl;
+    AuthenticationService AuthenticationService;
     GoogleAuthService googleAuthService;
     ResetPasswordService resetPasswordService;
     
@@ -51,7 +51,7 @@ public class AuthenticationController {
         description = "Authenticates user with username and password. Returns JWT access token and refresh token."
     )
     ApiResponse<AuthenticationResponse> authenticate(@RequestBody AuthenticationRequest request, HttpSession session) {
-        var result = authenticationServiceImpl.authenticate(request, session);
+        var result = AuthenticationService.authenticate(request, session);
 
         return ApiResponse.<AuthenticationResponse>builder()
                 .result(result)
@@ -79,7 +79,7 @@ public class AuthenticationController {
         description = "Registers a new user with the provided details. Returns the created user information."
     )
     ApiResponse<UserResponse> register(@Valid @RequestBody UserCreationRequest request){
-        var result = authenticationServiceImpl.register(request);
+        var result = AuthenticationService.register(request);
         return ApiResponse.<UserResponse>builder()
                 .result(result)
                 .message(ResponseMessage.REGISTER_SUCCESS)
@@ -92,7 +92,7 @@ public class AuthenticationController {
         description = "Refreshes the access token using a valid refresh token. Returns new access token."
     )
     ApiResponse<RefreshResponse> refresh(@RequestBody RefreshRequest request) throws ParseException, JOSEException {
-        var result = authenticationServiceImpl.refreshToken(request);
+        var result = AuthenticationService.refreshToken(request);
         return ApiResponse.<RefreshResponse>builder()
                 .result(result)
                 .message(ResponseMessage.AUTHENTICATE_SUCCESS)
@@ -108,7 +108,7 @@ public class AuthenticationController {
     ApiResponse<IntrospectResponse> introspect(@RequestBody IntrospectRequest request)
             throws ParseException, JOSEException {
 
-        var result = authenticationServiceImpl.introspect(request);
+        var result = AuthenticationService.introspect(request);
         return ApiResponse.<IntrospectResponse>builder()
                 .result(result)
                 .message(ResponseMessage.INTROSPECT_SUCCESS)
@@ -125,7 +125,7 @@ public class AuthenticationController {
     ApiResponse<Void> logout(@RequestBody LogoutRequest request)
             throws ParseException, JOSEException {
 
-        authenticationServiceImpl.logout(request);
+        AuthenticationService.logout(request);
         return ApiResponse.<Void>builder()
                 .message(ResponseMessage.LOGOUT_SUCCESS)
                 .build();
@@ -139,7 +139,7 @@ public class AuthenticationController {
             description = "Changes the password for the currently authenticated user. Requires current password verification."
     )
     ApiResponse<Void> changePassword(@Valid @RequestBody ChangePasswordRequest request) {
-        authenticationServiceImpl.changePassword(request);
+        AuthenticationService.changePassword(request);
         return ApiResponse.<Void>builder()
                 .message(ResponseMessage.CHANGE_PASSWORD_SUCCESS)
                 .build();

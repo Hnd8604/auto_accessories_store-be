@@ -5,7 +5,7 @@ import app.store.dto.request.user.UserCreationRequest;
 import app.store.dto.request.user.UserUpdateRequest;
 import app.store.dto.response.auth.ApiResponse;
 import app.store.dto.response.user.UserResponse;
-import app.store.service.impl.UserServiceImpl;
+import app.store.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -26,7 +26,7 @@ import static app.store.utils.SortUtils.buildSort;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @Tag(name = "User Management", description = "APIs for managing users including CRUD operations and profile management")
 public class UserController {
-    UserServiceImpl userServiceImpl;
+    UserService UserService;
 
     @PostMapping
     @Operation(
@@ -35,7 +35,7 @@ public class UserController {
     )
     ApiResponse<UserResponse> createUser(@RequestBody @Valid UserCreationRequest request) {
         return ApiResponse.<UserResponse>builder()
-                .result(userServiceImpl.createUser(request))
+                .result(UserService.createUser(request))
                 .message(ResponseMessage.CREATE_USER_SUCCESS)
                 .build();
     }
@@ -47,7 +47,7 @@ public class UserController {
     )
     ApiResponse<UserResponse> updateUser(@PathVariable String userId, @RequestBody UserUpdateRequest request) {
         return ApiResponse.<UserResponse>builder()
-                .result(userServiceImpl.updateUser(userId, request))
+                .result(UserService.updateUser(userId, request))
                 .message(ResponseMessage.UPDATE_USER_SUCCESS)
                 .build();
     }
@@ -58,7 +58,7 @@ public class UserController {
         description = "Permanently deletes a user by ID. Only accessible by admin users."
     )
     ApiResponse<Void> deleteUser(@PathVariable String userId) {
-        userServiceImpl.deleteUser(userId);
+        UserService.deleteUser(userId);
       return ApiResponse.<Void>builder()
                 .message(ResponseMessage.DELETE_USER_SUCCESS)
                 .build();
@@ -76,7 +76,7 @@ public class UserController {
     ) {
         Pageable pageable = PageRequest.of(page, size, buildSort(sort));
         return ApiResponse.<Page<UserResponse>>builder()
-                .result(userServiceImpl.getAllUsers(pageable))
+                .result(UserService.getAllUsers(pageable))
                 .message(ResponseMessage.GET_ALL_USERS_SUCCESS)
                 .build();
     }
@@ -89,7 +89,7 @@ public class UserController {
     )
     ApiResponse<UserResponse> getUserById(@PathVariable String userId) {
         return ApiResponse.<UserResponse>builder()
-                .result(userServiceImpl.getUserById(userId))
+                .result(UserService.getUserById(userId))
                 .message(ResponseMessage.GET_USER_SUCCESS)
                 .build();
     }
@@ -101,7 +101,7 @@ public class UserController {
     )
     ApiResponse<UserResponse> getMyInfo() {
         return ApiResponse.<UserResponse>builder()
-                .result(userServiceImpl.getMyInfo())
+                .result(UserService.getMyInfo())
                 .message(ResponseMessage.GET_MY_INFO_SUCCESS)
                 .build();
     }

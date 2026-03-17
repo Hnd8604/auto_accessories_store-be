@@ -6,7 +6,7 @@ import app.store.dto.request.OrderUpdateByAdminRequest;
 import app.store.dto.request.OrderUpdateByUserRequest;
 import app.store.dto.response.OrderResponse;
 import app.store.dto.response.auth.ApiResponse;
-import app.store.service.impl.OrderServiceImpl;
+import app.store.service.OrderService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AccessLevel;
@@ -29,7 +29,7 @@ import static app.store.utils.SortUtils.buildSort;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @Tag(name = "Order Management", description = "APIs for managing orders including creation, updates, and order tracking")
 public class OrderController {
-    OrderServiceImpl orderServiceImpl;
+    OrderService OrderService;
 
     @GetMapping
     @Operation(
@@ -42,7 +42,7 @@ public class OrderController {
     ) {
         Pageable pageable = PageRequest.of(page, size, buildSort(sort));
         return ApiResponse.<Page<OrderResponse>>builder()
-                .result(orderServiceImpl.getAllOrders(pageable))
+                .result(OrderService.getAllOrders(pageable))
                 .message(ResponseMessage.GET_ALL_ORDERS_SUCCESS)
                 .build();
     }
@@ -54,7 +54,7 @@ public class OrderController {
     )
     ApiResponse<OrderResponse> getOrder(@PathVariable String orderId) {
         return ApiResponse.<OrderResponse>builder()
-                .result(orderServiceImpl.getOrderById(orderId))
+                .result(OrderService.getOrderById(orderId))
                 .message(ResponseMessage.GET_ORDER_SUCCESS)
                 .build();
     }
@@ -66,7 +66,7 @@ public class OrderController {
     )
     ApiResponse<List<OrderResponse>> getMyOrder() {
         return ApiResponse.<List<OrderResponse>>builder()
-                .result(orderServiceImpl.getMyOrder())
+                .result(OrderService.getMyOrder())
                 .message(ResponseMessage.GET_MY_ORDER_SUCCESS)
                 .build();
     }
@@ -78,7 +78,7 @@ public class OrderController {
     )
     ApiResponse<OrderResponse> createOrderFromCart(@RequestBody OrderCreationRequest request) {
         return ApiResponse.<OrderResponse>builder()
-                .result(orderServiceImpl.createOrderFromCart(request))
+                .result(OrderService.createOrderFromCart(request))
                 .message(ResponseMessage.CREATE_ORDER_SUCCESS)
                 .build();
     }
@@ -90,7 +90,7 @@ public class OrderController {
     )
     ApiResponse<OrderResponse> updateOrderByUser(@PathVariable String orderId, @RequestBody OrderUpdateByUserRequest request) {
         return ApiResponse.<OrderResponse>builder()
-                .result(orderServiceImpl.updateOrderByUser(orderId, request))
+                .result(OrderService.updateOrderByUser(orderId, request))
                 .message(ResponseMessage.UPDATE_ORDER_BY_USER_SUCCESS)
                 .build();
     }
@@ -102,7 +102,7 @@ public class OrderController {
     )
     ApiResponse<OrderResponse> updateOrderByAdmin(@PathVariable String orderId, @RequestBody OrderUpdateByAdminRequest request) {
         return ApiResponse.<OrderResponse>builder()
-                .result(orderServiceImpl.updateOrderByAdmin(orderId, request))
+                .result(OrderService.updateOrderByAdmin(orderId, request))
                 .message(ResponseMessage.UPDATE_ORDER_BY_ADMIN_SUCCESS)
                 .build();
     }
@@ -114,7 +114,7 @@ public class OrderController {
     )
     ApiResponse<OrderResponse> cancelOrder(@PathVariable String orderId) {
         return ApiResponse.<OrderResponse>builder()
-                .result(orderServiceImpl.cancelOrder(orderId))
+                .result(OrderService.cancelOrder(orderId))
                 .message(ResponseMessage.CANCEL_ORDER_SUCCESS)
                 .build();
     }
@@ -125,7 +125,7 @@ public class OrderController {
         description = "Permanently deletes an order by ID. Only accessible by admin users."
     )
     ApiResponse<Void> deleteOrder(@PathVariable String orderId) {
-        orderServiceImpl.deleteOrder(orderId);
+        OrderService.deleteOrder(orderId);
         return ApiResponse.<Void>builder()
                 .message(ResponseMessage.DELETE_ORDER_SUCCESS)
                 .build();

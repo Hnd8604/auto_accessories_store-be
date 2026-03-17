@@ -4,7 +4,7 @@ import app.store.constant.ResponseMessage;
 import app.store.dto.request.PostCategoryRequest;
 import app.store.dto.response.auth.ApiResponse;
 import app.store.dto.response.PostCategoryResponse;
-import app.store.service.interfaces.PostCategoryService;
+import app.store.service.PostCategoryService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;

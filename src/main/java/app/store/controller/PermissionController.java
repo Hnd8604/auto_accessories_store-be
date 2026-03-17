@@ -5,7 +5,7 @@ import app.store.constant.ResponseMessage;
 import app.store.dto.request.PermissionRequest;
 import app.store.dto.response.auth.ApiResponse;
 import app.store.dto.response.PermissionResponse;
-import app.store.service.impl.PermissionServiceImpl;
+import app.store.service.PermissionService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AccessLevel;
@@ -23,7 +23,7 @@ import java.util.List;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @Tag(name = "Permission Management", description = "APIs for managing permissions (access control definitions)")
 public class PermissionController {
-    PermissionServiceImpl permissionServiceImpl;
+    PermissionService PermissionService;
     
     @PostMapping
     @Operation(
@@ -33,7 +33,7 @@ public class PermissionController {
     ApiResponse<PermissionResponse> createPermission(@RequestBody PermissionRequest request) {
         return ApiResponse.<PermissionResponse>builder()
                 .message(ResponseMessage.CREATE_PERMISSION_SUCCESS)
-                .result(permissionServiceImpl.createPermission(request))
+                .result(PermissionService.createPermission(request))
                 .build();
     }
 
@@ -47,7 +47,7 @@ public class PermissionController {
                                                       @RequestBody PermissionRequest request) {
         return ApiResponse.<PermissionResponse>builder()
                 .message(ResponseMessage.UPDATE_PERMISSION_SUCCESS)
-                .result(permissionServiceImpl.updatePermission(permissionId, request))
+                .result(PermissionService.updatePermission(permissionId, request))
                 .build();
     }
     @GetMapping
@@ -58,7 +58,7 @@ public class PermissionController {
     ApiResponse<List<PermissionResponse>> getPermissions() {
         return ApiResponse.<List<PermissionResponse>>builder()
                 .message(ResponseMessage.GET_ALL_PERMISSIONS_SUCCESS)
-                .result(permissionServiceImpl.getAllPermissions())
+                .result(PermissionService.getAllPermissions())
                 .build();
     }
 
@@ -68,7 +68,7 @@ public class PermissionController {
         description = "Permanently deletes a permission by ID. Only accessible by admin users. Cannot delete permissions that are assigned to roles."
     )
     ApiResponse<Void> deletePermission(@PathVariable String permissionId) {
-        permissionServiceImpl.deletePermission(permissionId);
+        PermissionService.deletePermission(permissionId);
         return ApiResponse.<Void>builder()
                 .message(ResponseMessage.DELETE_PERMISSION_SUCCESS)
                 .build();

@@ -3,7 +3,7 @@ package app.store.controller;
 import app.store.exception.AppException;
 import app.store.exception.ErrorCode;
 import app.store.repository.ProductRepository;
-import app.store.service.impl.SessionCartService;
+import app.store.service.SessionCartService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AccessLevel;

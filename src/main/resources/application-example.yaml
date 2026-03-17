@@ -55,6 +55,20 @@ spring:
           connectiontimeout: 5000
           timeout: 5000
           writetimeout: 5000
+  kafka:
+    bootstrap-servers: localhost:9092
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      properties:
+        spring.json.add.type.headers: false
+    consumer:
+      group-id: store-notification-group
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+    listener:
+      missing-topics-fatal: false
 
 logging:
   level:
@@ -90,3 +104,9 @@ google:
   client-id: "YOUR_GOOGLE_CLIENT_ID"
   client-secret: "YOUR_GOOGLE_CLIENT_SECRET"
   redirect-uri: "http://localhost:5173/auth/google/callback"
+
+app:
+  kafka:
+    topics:
+      order-created: order.created
+      order-status-changed: order.status.changed

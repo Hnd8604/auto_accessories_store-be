@@ -4,7 +4,7 @@ import app.store.constant.ResponseMessage;
 import app.store.dto.request.SepayWebhookRequest;
 import app.store.dto.response.PaymentResponse;
 import app.store.dto.response.auth.ApiResponse;
-import app.store.service.impl.PaymentService;
+import app.store.service.PaymentService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AccessLevel;

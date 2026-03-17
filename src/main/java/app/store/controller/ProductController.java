@@ -5,7 +5,7 @@ import app.store.dto.request.ProductRequest;
 import app.store.dto.request.ProductSearchRequest;
 import app.store.dto.response.auth.ApiResponse;
 import app.store.dto.response.ProductResponse;
-import app.store.service.impl.ProductServiceImpl;
+import app.store.service.ProductService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AccessLevel;
@@ -26,7 +26,7 @@ import static app.store.utils.SortUtils.buildSort;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @Tag(name = "Product Management", description = "APIs for managing products including CRUD operations, search, and filtering")
 public class ProductController {
-    ProductServiceImpl productServiceImpl;
+    ProductService ProductService;
     
     @PostMapping("/search")
     @Operation(
@@ -42,7 +42,7 @@ public class ProductController {
         Pageable pageable = PageRequest.of(page, size, buildSort(sort));
 
         return ApiResponse.<Page<ProductResponse>>builder()
-                .result(productServiceImpl.search(req, pageable))
+                .result(ProductService.search(req, pageable))
                 .build();
     }
     
@@ -53,7 +53,7 @@ public class ProductController {
     )
     ApiResponse<ProductResponse> createProduct(@RequestBody ProductRequest request) {
         return ApiResponse.<ProductResponse>builder()
-                .result(productServiceImpl.createProduct(request))
+                .result(ProductService.createProduct(request))
                 .message(ResponseMessage.CREATE_PRODUCT_SUCCESS)
                 .build();
     }
@@ -65,7 +65,7 @@ public class ProductController {
     )
     ApiResponse<ProductResponse> updateProduct(@PathVariable Long productId, @RequestBody ProductRequest request) {
         return ApiResponse.<ProductResponse>builder()
-                .result(productServiceImpl.updateProduct(productId, request))
+                .result(ProductService.updateProduct(productId, request))
                 .message(ResponseMessage.UPDATE_PRODUCT_SUCCESS)
                 .build();
     }
@@ -76,7 +76,7 @@ public class ProductController {
         description = "Permanently deletes a product by ID. Only accessible by admin users."
     )
     ApiResponse<Void> deleteProduct(@PathVariable Long productId) {
-        productServiceImpl.deleteProduct(productId);
+        ProductService.deleteProduct(productId);
         return ApiResponse.<Void>builder().message(ResponseMessage.DELETE_PRODUCT_SUCCESS).build();
     }
 
@@ -92,7 +92,7 @@ public class ProductController {
     ) {
         Pageable pageable = PageRequest.of(page, size, buildSort(sort));
         return ApiResponse.<Page<ProductResponse>>builder()
-                .result(productServiceImpl.getAllProducts(pageable))
+                .result(ProductService.getAllProducts(pageable))
                 .message(ResponseMessage.GET_ALL_PRODUCTS_SUCCESS)
                 .build();
     }
@@ -109,7 +109,7 @@ public class ProductController {
     ) {
         Pageable pageable = PageRequest.of(page, size, buildSort(sort));
         return ApiResponse.<Page<ProductResponse>>builder()
-                .result(productServiceImpl.getProductsByCategoryId(categoryId, pageable))
+                .result(ProductService.getProductsByCategoryId(categoryId, pageable))
                 .message(ResponseMessage.GET_ALL_PRODUCTS_BY_CATEGORY_SUCCESS)
                 .build();
     }
@@ -127,7 +127,7 @@ public class ProductController {
         Pageable pageable = PageRequest.of(page, size, buildSort(sort));
 
         return ApiResponse.<Page<ProductResponse>>builder()
-                .result(productServiceImpl.getProductsByBrandId(brandId, pageable))
+                .result(ProductService.getProductsByBrandId(brandId, pageable))
                 .message(ResponseMessage.GET_ALL_PRODUCTS_BY_BRAND_SUCCESS)
                 .build();
     }
@@ -139,7 +139,7 @@ public class ProductController {
     )
     ApiResponse<ProductResponse> getProductById(@PathVariable Long productId) {
         return ApiResponse.<ProductResponse>builder()
-                .result(productServiceImpl.getProductById(productId))
+                .result(ProductService.getProductById(productId))
                 .message(ResponseMessage.GET_PRODUCT_SUCCESS)
                 .build();
     }
@@ -151,7 +151,7 @@ public class ProductController {
     )
     ApiResponse<ProductResponse> getProductBySlug(@PathVariable String slug) {
         return ApiResponse.<ProductResponse>builder()
-                .result(productServiceImpl.getProductBySlug(slug))
+                .result(ProductService.getProductBySlug(slug))
                 .message(ResponseMessage.GET_PRODUCT_SUCCESS)
                 .build();
     }

@@ -5,7 +5,7 @@ import java.util.Objects;
 import javax.crypto.spec.SecretKeySpec;
 
 import app.store.dto.request.auth.IntrospectRequest;
-import app.store.service.impl.AuthenticationServiceImpl;
+import app.store.service.AuthenticationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.oauth2.jose.jws.MacAlgorithm;
@@ -23,7 +23,7 @@ public class CustomJwtDecoder implements JwtDecoder {
     private String signerKey;
 
     @Autowired
-    private AuthenticationServiceImpl authenticationServiceImpl;
+    private AuthenticationService AuthenticationService;
 
     private NimbusJwtDecoder nimbusJwtDecoder = null;
 
@@ -32,7 +32,7 @@ public class CustomJwtDecoder implements JwtDecoder {
 
         // check if the token is valid using introspection
         try {
-            var response = authenticationServiceImpl.introspect(
+            var response = AuthenticationService.introspect(
                     IntrospectRequest.builder().token(token).build());
 
             if (!response.isValid()) throw new JwtException("Token invalid");

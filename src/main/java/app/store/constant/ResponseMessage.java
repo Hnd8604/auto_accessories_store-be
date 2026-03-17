@@ -112,4 +112,10 @@ public final class ResponseMessage {
     public static final String GET_RELATED_POSTS_SUCCESS = "Get related posts successful";
     public static final String GET_MOST_VIEWED_POSTS_SUCCESS = "Get most viewed posts successful";
 
+    // Notification Messages
+    public static final String GET_NOTIFICATIONS_SUCCESS = "Get notifications successful";
+    public static final String GET_UNREAD_COUNT_SUCCESS = "Get unread count successful";
+    public static final String MARK_NOTIFICATION_READ_SUCCESS = "Notification marked as read";
+    public static final String MARK_ALL_NOTIFICATIONS_READ_SUCCESS = "All notifications marked as read";
+
 }

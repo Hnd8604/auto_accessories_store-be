@@ -5,7 +5,7 @@ import app.store.dto.request.PostRequest;
 import app.store.dto.request.ProductSearchRequest;
 import app.store.dto.response.auth.ApiResponse;
 import app.store.dto.response.PostResponse;
-import app.store.service.interfaces.PostService;
+import app.store.service.PostService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;

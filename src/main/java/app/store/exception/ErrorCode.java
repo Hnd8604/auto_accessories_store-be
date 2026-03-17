@@ -64,7 +64,10 @@ public enum ErrorCode {
     PASSWORD_CONFIRMATION_MISMATCH(4003, "Xác nhận mật khẩu không khớp", HttpStatus.BAD_REQUEST),
 
     // Google OAuth2
-    GOOGLE_AUTH_FAILED(5001, "Đăng nhập bằng Google thất bại", HttpStatus.UNAUTHORIZED)
+    GOOGLE_AUTH_FAILED(5001, "Đăng nhập bằng Google thất bại", HttpStatus.UNAUTHORIZED),
+
+    // Notification
+    NOTIFICATION_NOT_FOUND(6001, "Notification not found", HttpStatus.NOT_FOUND)
     ;
 
     private ErrorCode(int code, String message, HttpStatusCode statusCode) {

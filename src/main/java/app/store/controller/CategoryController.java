@@ -4,7 +4,7 @@ import app.store.constant.ResponseMessage;
 import app.store.dto.request.CategoryRequest;
 import app.store.dto.response.CategoryResponse;
 import app.store.dto.response.auth.ApiResponse;
-import app.store.service.impl.CategoryServiceImpl;
+import app.store.service.CategoryService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.*;
@@ -21,7 +21,7 @@ import java.util.List;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @Tag(name = "Category Management", description = "APIs for managing product categories including CRUD operations")
 public class CategoryController {
-    CategoryServiceImpl categoryServiceImpl;
+    CategoryService CategoryService;
 
     @PostMapping
     @Operation(
@@ -31,7 +31,7 @@ public class CategoryController {
     ApiResponse<CategoryResponse> createCategory(@RequestBody CategoryRequest request) {
 
         return ApiResponse.<CategoryResponse>builder()
-                .result(categoryServiceImpl.createCategory(request))
+                .result(CategoryService.createCategory(request))
                 .message(ResponseMessage.CREATE_CATEGORY_SUCCESS)
                 .build();
     }
@@ -44,7 +44,7 @@ public class CategoryController {
     ApiResponse<List<CategoryResponse>> getAllCategories() {
 
         return ApiResponse.<List<CategoryResponse>>builder()
-                .result(categoryServiceImpl.getAllCategories())
+                .result(CategoryService.getAllCategories())
                 .message(ResponseMessage.GET_ALL_CATEGORIES_SUCCESS)
                 .build();
     }
@@ -56,7 +56,7 @@ public class CategoryController {
     )
     ApiResponse<CategoryResponse> getCategoryById(@PathVariable Long categoryId) {
        return ApiResponse.<CategoryResponse>builder()
-                .result(categoryServiceImpl.getCategoryById(categoryId))
+                .result(CategoryService.getCategoryById(categoryId))
                .message(ResponseMessage.GET_CATEGORY_SUCCESS)
                 .build();
     }
@@ -68,7 +68,7 @@ public class CategoryController {
     )
     ApiResponse<CategoryResponse> getCategoryBySlug(@PathVariable String slug) {
         return ApiResponse.<CategoryResponse>builder()
-                .result(categoryServiceImpl.getCategoryBySlug(slug))
+                .result(CategoryService.getCategoryBySlug(slug))
                 .message(ResponseMessage.GET_CATEGORY_SUCCESS)
                 .build();
     }
@@ -79,7 +79,7 @@ public class CategoryController {
     )
     ApiResponse<CategoryResponse> updateCategory(@PathVariable Long categoryId, @RequestBody CategoryRequest request) {
         return ApiResponse.<CategoryResponse>builder()
-                .result(categoryServiceImpl.updateCategory(categoryId, request))
+                .result(CategoryService.updateCategory(categoryId, request))
                 .message(ResponseMessage.UPDATE_CATEGORY_SUCCESS)
                 .build();
     }
@@ -90,7 +90,7 @@ public class CategoryController {
         description = "Permanently deletes a product category by ID. Only accessible by admin users. Cannot delete categories with products."
     )
     ApiResponse<Void> deleteCategory(@PathVariable Long categoryId) {
-        categoryServiceImpl.deleteCategory(categoryId);
+        CategoryService.deleteCategory(categoryId);
         return ApiResponse.<Void>builder()
                 .message(ResponseMessage.DELETE_CATEGORY_SUCCESS)
                 .build();

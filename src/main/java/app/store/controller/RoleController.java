@@ -5,7 +5,7 @@ import app.store.constant.ResponseMessage;
 import app.store.dto.request.RoleRequest;
 import app.store.dto.response.auth.ApiResponse;
 import app.store.dto.response.RoleResponse;
-import app.store.service.impl.RoleServiceImpl;
+import app.store.service.RoleService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AccessLevel;
@@ -22,7 +22,7 @@ import java.util.Set;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @Tag(name = "Role Management", description = "APIs for managing roles and role-permission associations")
 public class RoleController {
-    RoleServiceImpl roleServiceImpl;
+    RoleService RoleService;
 
     @PostMapping
     @Operation(
@@ -32,7 +32,7 @@ public class RoleController {
     public ApiResponse<RoleResponse> createRole(@RequestBody RoleRequest request) {
         return ApiResponse.<RoleResponse>builder()
                 .message(ResponseMessage.CREATE_ROLE_SUCCESS)
-                .result(roleServiceImpl.createRole(request))
+                .result(RoleService.createRole(request))
                 .build();
     }
 
@@ -44,7 +44,7 @@ public class RoleController {
     public ApiResponse<List<RoleResponse>> getAllRoles() {
         return ApiResponse.<List<RoleResponse>>builder()
                 .message(ResponseMessage.GET_ALL_ROLES_SUCCESS)
-                .result(roleServiceImpl.getAllRoles())
+                .result(RoleService.getAllRoles())
                 .build();
     }
     @GetMapping("/{roleId}")
@@ -55,7 +55,7 @@ public class RoleController {
     public ApiResponse<RoleResponse> getRoleById(@PathVariable String roleId) {
         return ApiResponse.<RoleResponse>builder()
                 .message(ResponseMessage.GET_ROLE_SUCCESS)
-                .result(roleServiceImpl.getRoleById(roleId))
+                .result(RoleService.getRoleById(roleId))
                 .build();
     }
 
@@ -67,7 +67,7 @@ public class RoleController {
     public ApiResponse<RoleResponse> updateRole(@PathVariable String roleId, @RequestBody RoleRequest request) {
         return ApiResponse.<RoleResponse>builder()
                 .message(ResponseMessage.UPDATE_ROLE_SUCCESS)
-                .result(roleServiceImpl.updateRole(roleId, request))
+                .result(RoleService.updateRole(roleId, request))
                 .build();
     }
 
@@ -80,9 +80,9 @@ public class RoleController {
             @PathVariable String roleId,
             @RequestBody Set<String> permissions) {
 
-        roleServiceImpl.addPermissionsToRole(roleId, permissions);
+        RoleService.addPermissionsToRole(roleId, permissions);
         return ApiResponse.<RoleResponse>builder()
-                .result(roleServiceImpl.addPermissionsToRole(roleId, permissions))
+                .result(RoleService.addPermissionsToRole(roleId, permissions))
                 .build();
     }
 
@@ -95,9 +95,9 @@ public class RoleController {
             @PathVariable String roleId,
             @RequestBody Set<String> permissions) {
 
-        roleServiceImpl.removePermissionsFromRole(roleId, permissions);
+        RoleService.removePermissionsFromRole(roleId, permissions);
         return ApiResponse.<RoleResponse>builder()
-                .result(roleServiceImpl.removePermissionsFromRole(roleId, permissions))
+                .result(RoleService.removePermissionsFromRole(roleId, permissions))
                 .build();
     }
     @DeleteMapping("/{roleId}")
@@ -106,7 +106,7 @@ public class RoleController {
         description = "Permanently deletes a role by ID. Only accessible by admin users. Cannot delete roles that are assigned to users."
     )
     public ApiResponse<Void> deleteRole(@PathVariable String roleId) {
-        roleServiceImpl.deleteRole(roleId);
+        RoleService.deleteRole(roleId);
         return ApiResponse.<Void>builder()
                 .message(ResponseMessage.DELETE_ROLE_SUCCESS)
                 .build();

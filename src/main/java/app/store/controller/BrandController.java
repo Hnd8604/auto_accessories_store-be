@@ -4,7 +4,7 @@ import app.store.constant.ResponseMessage;
 import app.store.dto.request.BrandRequest;
 import app.store.dto.response.BrandResponse;
 import app.store.dto.response.auth.ApiResponse;
-import app.store.service.impl.BrandServiceImpl;
+import app.store.service.BrandService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AccessLevel;
@@ -27,7 +27,7 @@ import static app.store.utils.SortUtils.buildSort;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @Tag(name = "Brand Management", description = "APIs for managing product brands including CRUD operations")
 public class BrandController {
-    BrandServiceImpl BrandServiceImpl;
+    BrandService BrandService;
 
     @GetMapping
     @Operation(
@@ -36,7 +36,7 @@ public class BrandController {
     )
     ApiResponse<List<BrandResponse>> getAllBrands() {
         return ApiResponse.<List<BrandResponse>>builder()
-                .result(BrandServiceImpl.getAllBrands())
+                .result(BrandService.getAllBrands())
                 .message(ResponseMessage.GET_ALL_BRANDS_SUCCESS)
                 .build();
     }
@@ -47,7 +47,7 @@ public class BrandController {
     )
     ApiResponse<BrandResponse> getBrandById(@PathVariable Long brandId) {
         return ApiResponse.<BrandResponse>builder()
-                .result(BrandServiceImpl.getBrandById(brandId))
+                .result(BrandService.getBrandById(brandId))
                 .message(ResponseMessage.GET_BRAND_SUCCESS)
                 .build();
     }
@@ -59,7 +59,7 @@ public class BrandController {
     )
     ApiResponse<BrandResponse> getBrandBySlug(@PathVariable String slug) {
         return ApiResponse.<BrandResponse>builder()
-                .result(BrandServiceImpl.getBrandBySlug(slug))
+                .result(BrandService.getBrandBySlug(slug))
                 .message(ResponseMessage.GET_BRAND_SUCCESS)
                 .build();
     }
@@ -70,7 +70,7 @@ public class BrandController {
     )
     ApiResponse<BrandResponse> createBrand(@RequestBody BrandRequest BrandRequest) {
         return ApiResponse.<BrandResponse>builder()
-                .result(BrandServiceImpl.createBrand(BrandRequest))
+                .result(BrandService.createBrand(BrandRequest))
                 .message(ResponseMessage.CREATE_BRAND_SUCCESS)
                 .build();
     }
@@ -82,7 +82,7 @@ public class BrandController {
     )
     ApiResponse<BrandResponse> updateBrand(@PathVariable Long brandId,@RequestBody BrandRequest BrandRequest) {
         return ApiResponse.<BrandResponse>builder()
-                .result(BrandServiceImpl.updateBrand(brandId, BrandRequest))
+                .result(BrandService.updateBrand(brandId, BrandRequest))
                 .message(ResponseMessage.UPDATE_BRAND_SUCCESS)
                 .build();
     }
@@ -92,7 +92,7 @@ public class BrandController {
         description = "Permanently deletes a brand by ID. Only accessible by admin users. Cannot delete brands with products."
     )
     ApiResponse<Void> deleteBrand(@PathVariable Long brandId) {
-        BrandServiceImpl.deleteBrand(brandId);
+        BrandService.deleteBrand(brandId);
         return ApiResponse.<Void>builder()
                 .message(ResponseMessage.DELETE_BRAND_SUCCESS)
                 .build();

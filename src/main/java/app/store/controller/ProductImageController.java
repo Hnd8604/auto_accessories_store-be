@@ -4,7 +4,7 @@ import app.store.dto.request.ProductImageRequest;
 import app.store.dto.request.ProductImageUpdateRequest;
 import app.store.dto.response.ProductImageResponse;
 import app.store.dto.response.auth.ApiResponse;
-import app.store.service.impl.ProductImageServiceImpl;
+import app.store.service.ProductImageService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AccessLevel;
@@ -29,7 +29,7 @@ import static app.store.utils.SortUtils.buildSort;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @Tag(name = "Product Image Management", description = "APIs for managing product images including upload, update, and setting primary image")
 public class ProductImageController {
-    ProductImageServiceImpl productImageServiceImpl;
+    ProductImageService ProductImageService;
 
     @GetMapping
     @Operation(
@@ -43,7 +43,7 @@ public class ProductImageController {
     ) {
         Pageable pageable = PageRequest.of(page, size, buildSort(sort));
                 return ApiResponse.<Page<ProductImageResponse>>builder()
-                .result(productImageServiceImpl.getAllProductImages(pageable))
+                .result(ProductImageService.getAllProductImages(pageable))
                 .build();
     }
     @GetMapping("/{imageId}")
@@ -53,7 +53,7 @@ public class ProductImageController {
     )
     public ApiResponse<ProductImageResponse> getProductImageById(@PathVariable Long imageId) {
         return ApiResponse.<ProductImageResponse>builder()
-                .result(productImageServiceImpl.getProductImageById(imageId))
+                .result(ProductImageService.getProductImageById(imageId))
                 .build();
     }
     @GetMapping("/products/{productId}")
@@ -63,7 +63,7 @@ public class ProductImageController {
     )
     public ApiResponse<List<ProductImageResponse>> getProductImagesByProductId(@PathVariable Long productId) {
         return ApiResponse.<List<ProductImageResponse>>builder()
-                .result(productImageServiceImpl.getProductImagesByProductId(productId))
+                .result(ProductImageService.getProductImagesByProductId(productId))
                 .build();
     }
 
@@ -81,7 +81,7 @@ public class ProductImageController {
                 .isPrimary(isPrimary)
                 .build();
         return ApiResponse.<ProductImageResponse>builder()
-                .result(productImageServiceImpl.createProductImage(file, request))
+                .result(ProductImageService.createProductImage(file, request))
                 .build();
     }
 
@@ -92,7 +92,7 @@ public class ProductImageController {
     )
     public ApiResponse<ProductImageResponse> updateProductImage(@PathVariable Long imageId, @RequestBody ProductImageUpdateRequest request) {
         return ApiResponse.<ProductImageResponse>builder()
-                .result(productImageServiceImpl.updateProductImage(imageId, request))
+                .result(ProductImageService.updateProductImage(imageId, request))
                 .build();
     }
 
@@ -102,7 +102,7 @@ public class ProductImageController {
         description = "Permanently deletes a product image by ID. Only accessible by admin users."
     )
     public ApiResponse<Void> deleteProductImage(@PathVariable Long imageId) {
-        productImageServiceImpl.deleteProductImage(imageId);
+        ProductImageService.deleteProductImage(imageId);
         return ApiResponse.<Void>builder()
                 .message("Product image deleted successfully")
                 .build();
@@ -115,7 +115,7 @@ public class ProductImageController {
     public ApiResponse<Void> setPrimaryImage(
             @PathVariable Long productId,
             @PathVariable Long imageId) { // Đổi tên biến cho rõ
-        productImageServiceImpl.setPrimaryImage(imageId , productId);
+        ProductImageService.setPrimaryImage(imageId , productId);
         return ApiResponse.<Void>builder()
                 .build();
     }

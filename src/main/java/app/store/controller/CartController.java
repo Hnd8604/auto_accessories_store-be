@@ -6,7 +6,7 @@ import app.store.dto.request.CartItemUpdateRequest;
 import app.store.dto.response.CartResponse;
 import app.store.dto.response.auth.ApiResponse;
 import app.store.dto.response.CartItemResponse;
-import app.store.service.impl.CartServiceImpl;
+import app.store.service.CartService;
 
 import com.nimbusds.jose.JOSEException;
 import io.swagger.v3.oas.annotations.Operation;
@@ -26,7 +26,7 @@ import java.text.ParseException;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @Tag(name = "Cart Management", description = "APIs for managing shopping carts and cart items")
 public class CartController {
-    CartServiceImpl cartServiceImpl;
+    CartService CartService;
 
     @GetMapping("/{cartId}")
     @Operation(
@@ -35,7 +35,7 @@ public class CartController {
     )
     ApiResponse<CartResponse> getCartById(@PathVariable Long cartId) throws ParseException, JOSEException {
         return ApiResponse.<CartResponse>builder()
-                .result(cartServiceImpl.getCartById(cartId))
+                .result(CartService.getCartById(cartId))
                 .message(ResponseMessage.GET_CART_SUCCESS)
                 .build();
     }
@@ -46,7 +46,7 @@ public class CartController {
     )
     ApiResponse<CartResponse> getMyCart() throws ParseException, JOSEException {
         return ApiResponse.<CartResponse>builder()
-                .result(cartServiceImpl.getMyCart())
+                .result(CartService.getMyCart())
                 .message(ResponseMessage.GET_CART_SUCCESS)
                 .build();
     }
@@ -57,7 +57,7 @@ public class CartController {
     )
     ApiResponse<CartItemResponse> addItemToCart(@RequestBody CartItemRequest cartItemRequest) {
         return ApiResponse.<CartItemResponse>builder()
-                .result(cartServiceImpl.addItemToCart(cartItemRequest))
+                .result(CartService.addItemToCart(cartItemRequest))
                 .message(ResponseMessage.ADD_ITEM_SUCCESS)
                 .build();
     }
@@ -68,7 +68,7 @@ public class CartController {
         description = "Removes a specific item from the shopping cart. Accessible by cart owner."
     )
     ApiResponse<Void> removeItemFromCart(@PathVariable  Long cartId, @PathVariable Long itemId) {
-        cartServiceImpl.removeItemFromCart(cartId, itemId);
+        CartService.removeItemFromCart(cartId, itemId);
         return ApiResponse.<Void>builder().
                 message(ResponseMessage.REMOVE_ITEM_SUCCESS).build();
 
@@ -80,7 +80,7 @@ public class CartController {
     )
     ApiResponse<CartItemResponse> updateItemInCart(@PathVariable Long itemId, @RequestBody CartItemUpdateRequest request) {
         return ApiResponse.<CartItemResponse>builder()
-                .result(cartServiceImpl.updateItemInCart(itemId, request))
+                .result(CartService.updateItemInCart(itemId, request))
                 .message(ResponseMessage.UPDATE_ITEM_SUCCESS)
                 .build();
     }

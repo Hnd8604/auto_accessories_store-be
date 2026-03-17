@@ -4,7 +4,7 @@ import app.store.constant.ResponseMessage;
 import app.store.dto.request.BannerRequest;
 import app.store.dto.response.BannerResponse;
 import app.store.dto.response.auth.ApiResponse;
-import app.store.service.interfaces.BannerService;
+import app.store.service.BannerService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AccessLevel;

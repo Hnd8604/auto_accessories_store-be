@@ -106,6 +106,9 @@ public class SeedRolePerms implements CommandLineRunner {
         Permission postGetAll = getOrCreatePermission("POST_GET_ALL", "Get all posts");
         Permission postTogglePublish = getOrCreatePermission("POST_TOGGLE_PUBLISH", "Toggle post publish status");
 
+        // === NOTIFICATION PERMISSIONS ===
+        Permission notificationGetMy = getOrCreatePermission("NOTIFICATION_GET_MY", "Get my notifications");
+
         // === ROLES ===
         // ADMIN - Has all permissions
         getOrCreateRole("ADMIN", "Administrator",
@@ -134,7 +137,9 @@ public class SeedRolePerms implements CommandLineRunner {
                 // Post category permissions
                 postCategoryCreate, postCategoryUpdate, postCategoryDelete,
                 // Post permissions
-                postCreate, postUpdate, postDelete, postGetAll, postTogglePublish
+                postCreate, postUpdate, postDelete, postGetAll, postTogglePublish,
+                // Notification permissions
+                notificationGetMy
         );
 
         // USER - Basic permissions for customers
@@ -142,7 +147,9 @@ public class SeedRolePerms implements CommandLineRunner {
                 // Manage personal orders
                 orderCreate, orderGetMyOrder, orderUpdateByUser, orderCancel,
                 // Manage cart
-                cartGetById, cartAddItem, cartRemoveItem, cartUpdateItem
+                cartGetById, cartAddItem, cartRemoveItem, cartUpdateItem,
+                // Notification permissions
+                notificationGetMy
         );
 
         // Đồng bộ Redis
