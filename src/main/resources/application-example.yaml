@@ -7,6 +7,7 @@ server:
     context-path: /api/v1
 
 spring:
+  output.ansi.enabled: ALWAYS
   profiles:
     active: dev
   datasource:
