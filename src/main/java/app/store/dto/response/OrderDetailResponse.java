@@ -15,5 +15,8 @@ public class OrderDetailResponse {
     String id;
     String orderId;
     String productId;
+    String productName;
+    BigDecimal unitPrice;
+    String productImage;
     Integer quantity;
 }
