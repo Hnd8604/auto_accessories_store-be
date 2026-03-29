@@ -19,8 +19,8 @@ public class CorsConfig {
         // Use allowedOriginPatterns instead of allowedOrigins when using credentials
         // This allows wildcard headers with credentials
         configuration.setAllowedOriginPatterns(Arrays.asList(
-                "http://localhost:3000",
-                "http://localhost:5173"
+                "http://localhost:3000"
+//                ,"http://localhost:5173"
         ));
 
         // Allowed methods

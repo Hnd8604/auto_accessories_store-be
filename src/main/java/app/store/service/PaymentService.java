@@ -258,8 +258,11 @@ public class PaymentService {
             throw new AppException(ErrorCode.WEBHOOK_INVALID_SIGNATURE);
         }
 
-        if (!constantTimeEquals(apiKey, sepayApiKey)) {
-            log.error("❌ Invalid API key in webhook request");
+        // SePay có thể gửi header dạng "Bearer <key>" hoặc "Apikey <key>", cắt bỏ prefix nếu có
+        String cleanApiKey = apiKey.replace("Bearer ", "").replace("Apikey ", "").trim();
+
+        if (!constantTimeEquals(cleanApiKey, sepayApiKey)) {
+            log.error("❌ Invalid API key in webhook request. Expected: {}, Got: {}", sepayApiKey, cleanApiKey);
             throw new AppException(ErrorCode.WEBHOOK_INVALID_SIGNATURE);
         }
 
