@@ -37,7 +37,7 @@ public class OrderController {
         description = "Retrieves all orders with pagination and sorting. Only accessible by admin users."
     )
     ApiResponse<Page<OrderResponse>> getAllOrders( @RequestParam(value = "page", defaultValue = "0") int page,
-                                                   @RequestParam(value = "size", defaultValue = "2") int size,
+                                                   @RequestParam(value = "size", defaultValue = "10") int size,
                                                    @RequestParam(value = "sort", defaultValue = "createdAt,DESC") String sort
     ) {
         Pageable pageable = PageRequest.of(page, size, buildSort(sort));

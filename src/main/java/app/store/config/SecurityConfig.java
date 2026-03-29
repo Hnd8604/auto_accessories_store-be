@@ -41,7 +41,7 @@ public class SecurityConfig {
                 .cors(cors -> cors.configurationSource(corsConfig.corsConfigurationSource()))
                 .authorizeHttpRequests(req -> req
                 .requestMatchers(PUBLIC_ENDPOINTS).permitAll()
-                .requestMatchers(HttpMethod.GET, "/products/**", "/categories/**", "/brands/**", "/posts/**", "/post-categories/**", "/product-images/**", "/banner/**").permitAll()
+                .requestMatchers(HttpMethod.GET, "/products/**", "/categories/**", "/brands/**", "/posts/**", "/post-categories/**", "/product-images/**", "/banners/**").permitAll()
                         .requestMatchers(HttpMethod.POST,"/products/search**", "/auth/forgot-password", "/auth/reset-password", "/payments/sepay/webhook").permitAll()
                         .anyRequest().authenticated())
 
