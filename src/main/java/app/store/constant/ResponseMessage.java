@@ -118,4 +118,22 @@ public final class ResponseMessage {
     public static final String MARK_NOTIFICATION_READ_SUCCESS = "Notification marked as read";
     public static final String MARK_ALL_NOTIFICATIONS_READ_SUCCESS = "All notifications marked as read";
 
+    // Gallery Category Messages
+    public static final String CREATE_GALLERY_CATEGORY_SUCCESS = "Gallery category created successfully";
+    public static final String GET_ALL_GALLERY_CATEGORIES_SUCCESS = "Get all gallery categories successful";
+    public static final String GET_GALLERY_CATEGORY_SUCCESS = "Get gallery category successful";
+    public static final String UPDATE_GALLERY_CATEGORY_SUCCESS = "Gallery category updated successfully";
+    public static final String DELETE_GALLERY_CATEGORY_SUCCESS = "Gallery category deleted successfully";
+
+    // Gallery Item Messages
+    public static final String CREATE_GALLERY_ITEM_SUCCESS = "Gallery item created successfully";
+    public static final String GET_ALL_GALLERY_ITEMS_SUCCESS = "Get all gallery items successful";
+    public static final String GET_GALLERY_ITEM_SUCCESS = "Get gallery item successful";
+    public static final String UPDATE_GALLERY_ITEM_SUCCESS = "Gallery item updated successfully";
+    public static final String DELETE_GALLERY_ITEM_SUCCESS = "Gallery item deleted successfully";
+    public static final String DELETE_GALLERY_IMAGE_SUCCESS = "Gallery image deleted successfully";
+    public static final String TOGGLE_GALLERY_ITEM_PUBLISH_SUCCESS = "Gallery item publish status toggled successfully";
+    public static final String GET_GALLERY_ITEMS_BY_CATEGORY_SUCCESS = "Get gallery items by category successful";
+    public static final String SEARCH_GALLERY_ITEMS_SUCCESS = "Search gallery items successful";
+
 }

@@ -109,6 +109,12 @@ public class SeedRolePerms implements CommandLineRunner {
         // === NOTIFICATION PERMISSIONS ===
         Permission notificationGetMy = getOrCreatePermission("NOTIFICATION_GET_MY", "Get my notifications");
 
+        // === GALLERY PERMISSIONS ===
+        Permission galleryCreate = getOrCreatePermission("GALLERY_CREATE", "Create gallery item");
+        Permission galleryUpdate = getOrCreatePermission("GALLERY_UPDATE", "Update gallery item");
+        Permission galleryDelete = getOrCreatePermission("GALLERY_DELETE", "Delete gallery item");
+        Permission galleryTogglePublish = getOrCreatePermission("GALLERY_TOGGLE_PUBLISH", "Toggle gallery item publish status");
+
         // === ROLES ===
         // ADMIN - Has all permissions
         getOrCreateRole("ADMIN", "Administrator",
@@ -138,6 +144,8 @@ public class SeedRolePerms implements CommandLineRunner {
                 postCategoryCreate, postCategoryUpdate, postCategoryDelete,
                 // Post permissions
                 postCreate, postUpdate, postDelete, postGetAll, postTogglePublish,
+                // Gallery permissions
+                galleryCreate, galleryUpdate, galleryDelete, galleryTogglePublish,
                 // Notification permissions
                 notificationGetMy
         );
