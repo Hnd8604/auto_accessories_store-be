@@ -3,6 +3,8 @@ package app.store.dto.response;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.time.LocalDateTime;
+
 @Getter
 @Setter
 @Builder
@@ -12,9 +14,13 @@ import lombok.experimental.FieldDefaults;
 public class BannerResponse {
     Long id;
     String title;
+    String subtitle;
     String imageUrl;
     String redirectUrl;
     String altText;
+    String buttonText;
     Integer displayOrder;
     Boolean isActive;
+    LocalDateTime createdAt;
+    LocalDateTime updatedAt;
 }

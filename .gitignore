@@ -43,11 +43,24 @@ src/main/resources/application-*.yml
 .env
 .env.*
 !.env.example
+!.env.template
 
 ### OS files ###
 .DS_Store
 Thumbs.db
+ehthumbs.db
+Desktop.ini
 
 ### Logs ###
 *.log
 logs/
+
+### SSL / Certificates ###
+*.pem
+*.key
+*.crt
+*.p12
+*.pfx
+*.jks
+*.keystore
+*.truststore
