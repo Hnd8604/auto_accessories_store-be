@@ -3,8 +3,11 @@ services:
   # ======================== Infrastructure ========================
 
   mysql:
+    container_name: mysql
     image: mysql:8.0
     restart: unless-stopped
+    profiles:
+      - infra
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
       MYSQL_DATABASE: ${MYSQL_DATABASE}
@@ -34,8 +37,11 @@ services:
           memory: 1G
 
   redis:
+    container_name: redis
     image: redis:7.4-alpine
     restart: unless-stopped
+    profiles:
+      - infra
     environment:
       REDIS_PASSWORD: ${REDIS_PASSWORD}
     command: >
@@ -67,8 +73,11 @@ services:
           memory: 512M
 
   kafka:
+    container_name: kafka
     image: apache/kafka-native:3.9.0
     restart: unless-stopped
+    profiles:
+      - infra
     user: "0:0"
     environment:
       # KRaft mode (no Zookeeper needed)
@@ -112,10 +121,13 @@ services:
   # ======================== Application ========================
 
   backend:
+    container_name: store-backend
     build:
       context: .
       dockerfile: Dockerfile
-    restart: unless-stopped
+    restart: "no"
+    profiles:
+      - app
     depends_on:
       mysql:
         condition: service_healthy
@@ -146,10 +158,13 @@ services:
           memory: 512M
 
   frontend:
+    container_name: store-frontend
     build:
       context: ../store-fe
       dockerfile: Dockerfile
-    restart: unless-stopped
+    restart: "no"
+    profiles:
+      - app
     depends_on:
       - backend
     ports:
@@ -170,6 +185,7 @@ services:
   # Start with: docker compose --profile tools up -d
 
   redisinsight:
+    container_name: redisinsight
     image: redis/redisinsight:latest
     restart: unless-stopped
     depends_on:
@@ -185,6 +201,7 @@ services:
       - tools
 
   kafka-ui:
+    container_name: kafka-ui
     image: provectuslabs/kafka-ui:latest
     restart: unless-stopped
     depends_on:
@@ -194,7 +211,7 @@ services:
       KAFKA_CLUSTERS_0_NAME: local
       KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka:29092
     ports:
-      - "127.0.0.1:8090:8080"
+      - "127.0.0.1:8090:8090"
     networks:
       - backend
     profiles:
