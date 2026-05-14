@@ -18,7 +18,7 @@ public class ProductResponse {
     String description;
     BigDecimal unitPrice;
     String categoryName;
-    String brandName;
+    String brandName; // Optional - can be null
     Integer stockQuantity;
     String slug;
 }

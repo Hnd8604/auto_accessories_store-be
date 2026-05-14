@@ -40,8 +40,11 @@ public class ProductService {
         Product product = productMapper.toProduct(request);
         Category category = categoryRepository.findById(request.getCategoryId())
                 .orElseThrow(() -> new AppException(ErrorCode.CATEGORY_NOT_EXISTED));
-        Brand brand = brandRepository.findById(request.getBrandId())
-                .orElseThrow(() -> new AppException(ErrorCode.BRAND_NOT_EXISTED));
+        Brand brand = null;
+        if (request.getBrandId() != null) {
+            brand = brandRepository.findById(request.getBrandId())
+                    .orElseThrow(() -> new AppException(ErrorCode.BRAND_NOT_EXISTED));
+        }
         String baseSlug = slugUtil.toSlug(request.getName());
         String uniqueSlug = slugUtil.createUniqueSlug(baseSlug, productRepository::existsBySlug);
 
@@ -60,8 +63,11 @@ public class ProductService {
                 productMapper.updateProduct(product, request);
         Category category = categoryRepository.findById(request.getCategoryId())
                 .orElseThrow(() -> new AppException(ErrorCode.CATEGORY_NOT_EXISTED));
-        Brand brand = brandRepository.findById(request.getBrandId())
-                .orElseThrow(() -> new AppException(ErrorCode.BRAND_NOT_EXISTED));
+        Brand brand = null;
+        if (request.getBrandId() != null) {
+            brand = brandRepository.findById(request.getBrandId())
+                    .orElseThrow(() -> new AppException(ErrorCode.BRAND_NOT_EXISTED));
+        }
 
         // Cập nhật slug nếu tiêu đề thay đổi
         if (!product.getName().equals(request.getName())) {

@@ -17,6 +17,6 @@ public class ProductRequest {
     String description;
     BigDecimal unitPrice;
     Long categoryId;
-    Long brandId;
+    Long brandId; // Optional - can be null
     Integer stockQuantity;
 }

@@ -1,6 +1,7 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="StoreApplication" type="Application" factoryName="Application" nameIsGenerated="true">
     <option name="MAIN_CLASS_NAME" value="app.store.StoreApplication" />
+    <module name="store" />
     <extension name="coverage">
       <pattern>
         <option name="PATTERN" value="app.store.*" />
